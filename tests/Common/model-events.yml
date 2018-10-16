@@ -1,0 +1,450 @@
+ISTD Medal Exams:
+  - proficiency:
+      Pre Bronze:
+        - tag: Introductory Tests
+          style:
+            American:
+              disposition: multiple-events
+              substyle:
+                Rhythm: [[Cha Cha,Rumba]]
+                Smooth: [[Waltz,Tango]]
+            International:
+              disposition: multiple-events
+              substyle:
+                Latin: [[Cha Cha,Rumba]]
+                Standard: [[Waltz,Tango], [Foxtrot,Quickstep]]
+        - tag: One Dance Tests
+          style:
+            American:
+              disposition: multiple-events
+              substyle:
+                Rhythm: [[Cha Cha],[Rumba],[Bolero],[Swing],[West Coast Swing],[Night Club],[Hustle],[Merengue],[Salsa]]
+                Smooth: [[Waltz],[Tango],[Foxtrot],[Viennese Waltz],[Peabody]]
+            International:
+              disposition: multiple-events
+              substyle:
+                Latin: [[Cha Cha],[Samba],[Paso Doble],[Rumba],[Jive]]
+                Standard: [[Waltz],[Tango],[Viennese Waltz],[Foxtrot],[Quickstep]]
+      Bronze:
+        - tag: Medal Series
+          style:
+            American:
+              disposition: multiple-events
+              substyle:
+                Rhythm: [[Cha Cha,Rumba],[Bolero,Swing],[Night Club,West Coast Swing]]
+                Smooth: [[Waltz,Tango],[Foxtrot,Viennese Waltz]]
+            International:
+              disposition: multiple-events
+              substyle:
+                Latin: [[Cha Cha,Rumba],[Samba,Jive]]
+                Standard: [[Waltz,Tango], [Foxtrot,Quickstep]]
+        - tag: One Dance Tests
+          style:
+            American:
+              disposition: multiple-events
+              substyle:
+                Rhythm: [[Cha Cha],[Rumba],[Bolero],[Swing],[West Coast Swing],[Night Club],[Hustle],[Merengue],[Salsa]]
+                Smooth: [[Waltz],[Tango],[Foxtrot],[Viennese Waltz],[Peabody]]
+            International:
+              disposition: multiple-events
+              substyle:
+                Latin:  [[Cha Cha],[Samba],[Paso Doble],[Rumba],[Jive]]
+                Standard: [[Waltz],[Tango],[Viennese Waltz],[Foxtrot],[Quickstep]]
+      Silver:
+        - tag: Medal Series
+          style:
+            American:
+              disposition: multiple-events
+              substyle:
+                Rhythm: [[Cha Cha, Rumba, Swing]]
+                Smooth: [[Waltz, Tango, Foxtrot]]
+            International:
+              disposition: multiple-events
+              substyle:
+                Latin: [[Cha Cha,Rumba,Jive]]
+                Standard: [[Waltz,Tango,Foxtrot]]
+        - tag: One Dance Tests
+          style:
+            American:
+              disposition: multiple-events
+              substyle:
+                Rhythm: [[Cha Cha],[Rumba],[Bolero],[Swing],[West Coast Swing],[Night Club],[Hustle],[Merengue],[Salsa]]
+                Smooth: [[Waltz],[Tango],[Foxtrot],[Viennese Waltz],[Peabody]]
+            International:
+              disposition: multiple-events
+              substyle:
+                Latin: [[Cha Cha],[Samba],[Paso Doble],[Rumba],[Jive]]
+                Standard: [[Waltz],[Tango],[Viennese Waltz],[Foxtrot],[Quickstep]]
+      Gold:
+        - tag: Medal Series
+          style:
+            American:
+              disposition: multiple-events
+              substyle:
+                Rhythm: [[Cha Cha,Rumba,Bolero,Swing]]
+                Smooth: [[Waltz, Tango, Viennese Waltz, Foxtrot]]
+            International:
+              disposition: multiple-events
+              substyle:
+                Latin:  [[Cha Cha,Samba,Rumba,Jive]]
+                Standard: [[Waltz,Tango,Foxtrot,Quickstep]]
+    age: [Under 6, Under 8,Under 12,Junior 12-16,Adult 16-50,Senior 50]
+    type:
+      Amateur: {grouping: Couple: sex: [Unspecified]}
+      Teacher-Student: {grouping: Solo, sex: [Unspecified]}
+
+Georgia DanceSport Amateur:
+##############Couple events Newcomer through Gold for  all ages
+  - proficiency:
+      Newcomer:
+        - tag: Qualifier
+          style:
+            American:
+              disposition: multiple-events
+              substyle:
+                Rhythm: [[Rumba,Swing]]
+                Smooth: [[Waltz,Tango]]
+            International:
+              disposition: multiple-events
+              substyle:
+                Latin: [[Cha Cha,Rumba]]
+                Standard: [[Waltz,Quickstep]]
+      Bronze:
+        - tag: Qualifier
+          style:
+            American:
+              disposition: multiple-events
+              substyle:
+                Rhythm: [[Cha Cha,Rumba],[Swing]]
+                Smooth: [[Waltz,Foxtrot],[Tango,Viennese Waltz]]
+            International:
+              disposition: multiple-events
+              substyle:
+                Latin: [[Cha Cha,Rumba]]
+                Standard: [[Waltz,Quickstep]]
+      Silver:
+        - tag: Qualifier
+          style:
+            American:
+              disposition: multiple-events
+              substyle:
+                Rhythm: [[Cha Cha,Rumba,Swing]]
+                Smooth: [[Waltz,Tango,Foxtrot]]
+            International:
+              disposition: multiple-events
+              substyle:
+                Latin: [[Cha Cha,Samba,Rumba]]
+                Standard: [[Waltz,Foxtrot,Quickstep]]
+      Gold:
+        - tag: Qualifier
+          style:
+            American:
+              disposition: multiple-events
+              substyle:
+                Rhythm: [[Cha Cha,Rumba,Swing,Bolero]]
+                Smooth:  [[Waltz,Tango,Foxtrot]]
+            International:
+                disposition: multiple-events
+                substyle:
+                  Latin: [[Samba,Cha Cha,Rumba,Jive]]
+                  Standard: [[Waltz,Tango,Foxtrot,Quickstep]]
+    age:
+      - Baby
+      - Juvenile
+      - Preteen 1
+      - Preteen 2
+      - Junior 1
+      - Junior 2
+      - Youth
+      - Adult
+      - Senior 1
+      - Senior 2
+      - Senior 3
+      - Senior 4
+      - Senior 5
+    type:
+      Amateur: {grouping: Couple, sex: [Unspecified]}
+############Solo International events for youth Newcomer through Gold
+  - proficiency:
+      Newcomer:
+      - tag: Qualifier
+        style:
+          International:
+            disposition: multiple-events
+            substyle:
+              Latin: [[Cha Cha],[Samba],[Rumba],[Paso Doble],[Jive]]
+              Standard: [[Waltz],[Tango],[Viennese Waltz],[Foxtrot],[Quickstep],[Polka]]
+      Bronze:
+      -  tag: Qualifier
+         style:
+           International:
+             disposition: multiple-events
+             substyle:
+               Latin: [[Cha Cha],[Samba],[Rumba],[Paso Doble],[Jive]]
+               Standard: [[Waltz],[Tango],[Viennese Waltz],[Foxtrot],[Quickstep],[Polka]]
+      Silver:
+      - tag: Qualifier
+        style:
+          International:
+            disposition: multiple-events
+            substyle:
+              Latin: [[Cha Cha],[Samba],[Rumba],[Paso Doble],[Jive]]
+              Standard: [[Waltz],[Tango],[Viennese Waltz],[Foxtrot],[Quickstep],[Polka]]
+      Gold:
+      - tag: Qualifier
+        style:
+          International:
+            disposition: multiple-events
+            substyle:
+              Latin: [[Cha Cha],[Samba],[Rumba],[Paso Doble],[Jive]]
+              Standard: [[Waltz],[Tango],[Viennese Waltz],[Foxtrot],[Quickstep],[Polka]]
+    age: [Baby,Juvenile,Preteen 1,Preteen 2,Junior 1,Junior 2,Youth]
+    type:
+      Amateur: {grouping: Solo, sex: [Unspecified]}
+################Novice through Pre Championship for Adult through Senior 5
+  - proficiency:
+      Novice:
+      - tag: Qualifier
+      style:
+        American:
+          disposition: multiple-events
+          substyle:
+            Rhythm: [[Cha Cha,Rumba,Swing]]
+            Smooth: [[Waltz,Tango,Foxtrot]]
+        International:
+          disposition: multiple-events
+          substyle:
+            Latin: [[Samba,Cha Cha,Rumba]]
+            Standard: [[Waltz,Tango,Foxtrot]]
+      Pre Championship:
+      - tag: Qualifier
+        style:
+          American:
+            disposition: multiple-events
+            substyle:
+              Rhythm: [[Cha Cha,Rumba,Swing,Bolero]]
+              Smooth: [[Waltz,Tango,Foxtrot,Viennese Waltz]]
+          International:
+            disposition: multiple-events
+            substyle:
+              Latin: [[Samba,Cha Cha,Rumba,Jive]]
+              Standard: [[Waltz,Tango,Foxtrot,Quickstep]]
+      Championship:
+      - tag: Qualifier
+        style:
+          American:
+            disposition: multiple-events
+            substyle:
+              Rhythm: [[Cha Cha,Rumba,Swing,Bolero,Mambo]]
+              Smooth: [[Waltz,Tango,Foxtrot,Viennese Waltz]]
+          International:
+            disposition: multiple-events
+              substyle:
+              Latin: [[Samba,Cha Cha,Rumba,Paso Doble,Jive]]
+              Standard: [[Waltz,Tango,Viennese Waltz,Foxtrot,Quickstep]]
+    age: [Adult,Senior 1,Senior 2,Senior 3,Senior 4,Senior 5]
+    type:
+      Amateur: {grouping: Couple, sex: [Unspecified]}
+###################Fun Events
+  - proficiency:
+      Social:
+      - tag: Family
+        style:
+          Fun Events:
+            disposition: single-event
+            substyle: {Smooth: [Foxtrot], Rhythm: [Swing]}
+    age: {Adult-Youngster: Adult-Youngster}
+    type:
+      Amateur: {grouping: Couple, sex: [Unspecified]}
+  - proficiency:
+      Social:
+      - tag: Family
+        style:
+          Fun Events:
+            disposition: single-event
+            substyle: {Smooth: [Waltz], Rhythm: [Rumba]}
+    age: [Senior-Youngster: Senior-Youngster]
+    type:
+      Amateur: {grouping: Couple, sex: [Unspecified]}
+  - proficiency:
+      Social:
+      - tag: Family
+        style:
+          Fun Events:
+            displostion: single-event
+            substyle: {Novelty: [Chicken Dance]}
+    age: [Baby,Juvenile,Preteen 1,Preteen 2]
+    type:
+      Amateur: {grouping: Solo, sex: [Unspecified]}
+###########################ProAm
+Georgia DanceSport ProAm:
+  - proficiency:
+      Pre Bronze:
+        style:
+          American:
+            disposition: multiple-events
+            substyle:
+              Rhythm: [[Rumba,Swing]]
+              Smooth: [Waltz,Tango]]
+
+          International:
+            disposition: multiple-events
+            substyle:
+              Latin: [[Cha Cha,Rumba]]
+              Standard: [[Waltz,Quickstep]]
+
+      Intermediate Bronze:
+        style:
+          American:
+            disposition: multiple-events
+            substyle:
+              Rhythm: [[Rumba,Swing]]
+              Smooth: [[Waltz,Tango]]
+
+          International:
+            disposition: multiple-events
+            substyle:
+              Latin: [[Cha Cha,Rumba]]
+              Standard: [[Waltz,Quickstep]]
+
+      Full Bronze:
+        style:
+          American:
+            disposition: multiple-events
+            substyle:
+              Rhythm: [[Rumba,Swing]]
+              Smooth: [[Waltz,Tango]]
+
+          International:
+            disposition: multiple-events
+            substyle:
+              Latin: [[Cha Cha,Rumba]]
+              Standard: [[Waltz,Quickstep]]
+
+      Open Bronze:
+        style:
+          American:
+            disposition: multiple-events
+            substyle:
+              Rhythm: [[Rumba,Swing]]
+              Smooth: [[Waltz,Tango]]
+
+          International:
+            disposition: multiple-events
+            substyle:
+              Latin: [[Cha Cha,Rumba]]
+              Standard: [[Waltz,Quickstep]]
+
+      Pre Silver:
+        style:
+          American:
+            disposition: multiple-events
+            substyle:
+              Rhythm: [[Cha Cha,Rumba,Swing]]
+              Smooth: [[Waltz,Tango,Foxtrot]]
+
+          International:
+            disposition: multiple-events
+            substyle:
+              Latin: [[Samba,Cha Cha,Rumba]]
+              Standard:  [[Waltz,Foxtrot,Quickstep]]
+
+      Intermediate Silver:
+        style:
+          American:
+            disposition: multiple-events
+            substyle:
+              Rhythm: [[Cha Cha,Rumba,Swing]]
+              Smooth: [[Waltz,Tango,Foxtrot]]
+
+          International:
+            disposition: multiple-events
+            substyle:
+              Latin: [[Samba,Cha Cha,Rumba]]
+              Standard: [[Waltz,Foxtrot,Quickstep]]
+
+      Full Silver:
+        style:
+          American:
+            disposition: multiple-events
+            substyle:
+              Rhythm: [[Cha Cha,Rumba,Swing]]
+              Smooth: [[Waltz,Tango,Foxtrot]]
+
+          International:
+            disposition: multiple-events
+            substyle:
+              Latin: [[Samba,Cha Cha,Rumba]]
+              Standard: [[Waltz,Foxtrot,Quickstep]]
+
+      Open Silver:
+        style:
+          American:
+            disposition: multiple-events
+            substyle:
+              Rhythm: [[Cha Cha,Rumba,Swing]]
+              Smooth: [[Waltz,Tango,Foxtrot]]
+
+          International:
+            disposition: multiple-events
+            substyle:
+              Latin: [[Samba,Cha Cha,Rumba]]
+              Standard: [[Waltz,Foxtrot,Quickstep]]
+
+      Pre Gold:
+        style:
+          American:
+            disposition: multiple-events
+            substyle:
+              Rhythm: [[Cha Cha,Rumba,Swing,Bolero]]
+              Smooth: [[Waltz,Tango,Foxtrot,Viennese Waltz]]
+
+          International:
+            disposition: multiple-events
+            substyle:
+              Latin: [[Samba,Cha Cha,Rumba,Jive]]
+              Standard: [[Waltz,Tango,Foxtrot,Quickstep]]
+
+      Intermediate Gold:
+        style:
+          American:
+            disposition: multiple-events
+            substyle:
+              Rhythm: [[Cha Cha,Rumba,Swing,Bolero]]
+              Smooth: [[Waltz,Tango,Foxtrot,Viennese Waltz]]
+
+          International:
+            disposition: multiple-events
+            substyle:
+              Latin: [[Samba,Cha Cha,Rumba,Jive]]
+              Standard: [[Waltz,Tango,Foxtrot,Quickstep]]
+
+      Full Gold:
+        style:
+          American:
+            disposition: multiple-events
+            substyle:
+              Rhythm: [[Cha Cha,Rumba,Swing,Bolero]]
+              Smooth: [[Waltz,Tango,Foxtrot,Viennese Waltz]]
+
+          International:
+            disposition: multiple-events
+            substyle:
+              Latin: [[Samba,Cha Cha,Rumba,Jive]]
+              Standard: [[Waltz,Tango,Foxtrot,Quickstep]]
+
+      Open Gold:
+        style:
+          American:
+            disposition: multiple-events
+            substyle:
+              Rhythm: [[Cha Cha,Rumba,Swing,Bolero,Mambo]]
+              Smooth: [[Waltz,Tango,Foxtrot,Viennese Waltz]]
+
+          International:
+            disposition: multiple-events
+            substyle:
+              Latin: [[Samba,Cha Cha,Rumba,Paso Doble,Jive]]
+              Standard: [[Waltz,Tango,Viennese Waltz,Foxtrot,Quickstep]]
+
+
