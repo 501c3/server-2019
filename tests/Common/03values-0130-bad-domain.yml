@@ -1,0 +1,38 @@
+style:
+  International: {abbr: I}
+  American: {abbr: A}
+  Country: {abbr: C}
+  Fun Events: {abbr: F}
+bad_domain:
+  Rhythm: {abbr: AR}
+  Smooth: {abbr: AS}
+status:
+  Student: {abbr: S}
+  Teacher: { abbr: T}
+type:
+  Amateur: {abbr: Am}
+grouping:
+  Solo: {abbr: S}
+sex:
+  Male: {abbr: M}
+proficiency:
+  Social: {abbr: S}
+  Newcomer: {abbr: NC}
+age:
+  Over 46: {abbr: 46+, note: NDCA}
+  Senior 65+: {abbr: 65+, note: NDCA}
+  Under 21: {abbr: 21-, note: NDCA}
+tag:
+  Scholarship: {abbr: S}
+  Jack & Jill: {abbr: JJ}
+dance:
+  Triple Two: {abbr: TT}
+genre:
+  International: {domain: style}
+  American: {domain: style}
+  Standard: {domain: substyle}
+  Smooth: {domain: substyle}
+  Latin: {domain: subtyle}
+  Rhythm: {domain: substyle}
+  Fun Events: {domain: style}
+  Novelty: {domain: substyle}

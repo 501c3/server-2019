@@ -8,12 +8,12 @@
 
 namespace Tests\Utils;
 
-use App\Common\YamlArray;
+use App\Common\YamlPosition;
 use App\Common\AppException;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\Yaml\Yaml;
 
-class YamlArrayTest extends KernelTestCase
+class Yaml00XXPositionTest extends KernelTestCase
 {
     //    BY_TEN      = '0        10        20        30        40        50        60        70'
     //    RULER       = '1234567890123456789012345678901234567890123456789012345678901234567890123456789'
@@ -28,47 +28,60 @@ class YamlArrayTest extends KernelTestCase
      * @expectedExceptionMessage No yaml string to parse
      * @expectedExceptionCode 255
      */
-    public function testEmptyString()
+    public function test0000EmptyString()
     {
-        YamlArray::yamlToStringPosition( "" );
+        YamlPosition::yamlAddPosition( "" );
     }
 
-     public function testParseLineA()
+    /**
+     * @throws \Exception
+     */
+    public function test0000Parse()
     {
-        $result = YamlArray::position( 1, self::TEST_LINE_A );
+        $actual = YamlPosition::strToPos('R10C25');
+        $this->assertEquals(10, $actual['row']);
+        $this->assertEquals(25, $actual['col']);
+    }
+
+    /**
+     *
+     */
+     public function test0000LineA()
+    {
+        $result = YamlPosition::position( 1, self::TEST_LINE_A );
         $this->assertSame( self::POSITION_A, $result );
     }
 
 
-    public function testParseLineB()
+    public function test0000LineB()
     {
-        $result = YamlArray::position( 1, self::TEST_LINE_B );
+        $result = YamlPosition::position( 1, self::TEST_LINE_B );
         $this->assertSame(self::POSITION_B, $result);
     }
 
     /**
      * @throws \Exception
      */
-    public function test10Correct()
+    public function test0010PositionCorrect()
     {
-        $string = file_get_contents(__DIR__ . '/10-test-input.yml');
-        $actual = YamlArray::yamlToStringPosition($string);
-        $expected = Yaml::parse(file_get_contents(__DIR__ . '/10-test-position.yml'));
+        $string = file_get_contents(__DIR__ . '/test-0010-position-isolate.yml');
+        $actual = YamlPosition::yamlAddPosition($string);
+        $expected = Yaml::parse(file_get_contents(__DIR__ . '/test-0010-position-correct.yml'));
         $this->assertEquals($expected,$actual);
         $expectedIsolatedData = Yaml::parse($string);
-        $actualIsolatedData = YamlArray::isolateStringOrPosition($actual);
+        $actualIsolatedData = YamlPosition::isolate($actual);
         $this->assertEquals($expectedIsolatedData, $actualIsolatedData);
     }
 
     /**
      * @throws AppException
      */
-    public function test20ForKey()
+    public function test0020PositionKey()
     {
         $testArray = ['key1', 'key2', 'key3'];
-        $actualKey1TrueInCollection = YamlArray::isInCollection('key1', $testArray);
-        $actualKey3TrueInCollection = YamlArray::isInCollection('key3', $testArray);
-        $actualKey99FalseInCollection = YamlArray::isInCollection('key99', $testArray);
+        $actualKey1TrueInCollection = YamlPosition::inCollection('key1', $testArray);
+        $actualKey3TrueInCollection = YamlPosition::inCollection('key3', $testArray);
+        $actualKey99FalseInCollection = YamlPosition::inCollection('key99', $testArray);
         $this->assertTrue($actualKey1TrueInCollection);
         $this->assertTrue($actualKey3TrueInCollection);
         $this->assertFalse($actualKey99FalseInCollection);
@@ -80,12 +93,12 @@ class YamlArrayTest extends KernelTestCase
      * @expectedExceptionCode \App\Common\AppExceptionCodes::NOT_IN_COLLECTION
      * @throws AppException
      */
-    public function test30KeyValuePairs()
+    public function test0030PositionInCollection()
     {
         $testArray = ['key1', 'key2', 'key3'];
-        $actualKey1TrueInCollection = YamlArray::isInCollection('key1|R2C1', $testArray);
-        $actualKey3TrueInCollection = YamlArray::isInCollection('key3|R4C1', $testArray);
-        YamlArray::isInCollection('key99|R10C10', $testArray); #Throws exception
+        $actualKey1TrueInCollection = YamlPosition::inCollection('key1|R2C1', $testArray);
+        $actualKey3TrueInCollection = YamlPosition::inCollection('key3|R4C1', $testArray);
+        YamlPosition::inCollection('key99|R10C10', $testArray); #Throws exception
         $this->assertTrue($actualKey1TrueInCollection);
         $this->assertTrue($actualKey3TrueInCollection);
     }
@@ -93,14 +106,16 @@ class YamlArrayTest extends KernelTestCase
     /**
      * @throws \Exception
      */
-    public function test40IsolateStringOrPosition()
+    public function test0040PositionIsolate()
     {
-        $string = file_get_contents(__DIR__ . '/10-test-input.yml');
+        $string = file_get_contents(__DIR__ . '/test-0010-position-isolate.yml');
         $expected = Yaml::parse($string);
-        $dataPosition = YamlArray::yamlToStringPosition($string);
-        $actual = YamlArray::isolateStringOrPosition($dataPosition);
+        $dataPosition = YamlPosition::yamlAddPosition($string);
+        $actual = YamlPosition::isolate($dataPosition);
         $this->assertEquals($expected,$actual);
     }
+
+
 
 
 

@@ -3,14 +3,14 @@
 /.env
 /.idea
 /.gitignore
-/public/bundles/
+/public/
 /var/
 /vendor/
 /composer.lock
 /symfony.lock
 /phpunit.phar
 /tests/.gitignore
-
+/bin
 ###< symfony/framework-bundle ###
 
 ###> symfony/web-server-bundle ###

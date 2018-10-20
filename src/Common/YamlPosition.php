@@ -9,11 +9,34 @@
 namespace App\Common;
 use Symfony\Component\Yaml\Yaml;
 
-class YamlArray
+class YamlPosition
 {
+    const
+        POSITION = false,
+        STRING = true;
+
     private static $positions;
 
     private static $lineCount;
+
+
+    /**
+     * Expected string is of form 'R\d+C\d+'
+     * Returns ['row'=> <int>, 'col'=> <int> ]
+     *
+     * @param string $string
+     * @return array
+     * @throws \Exception
+     */
+    public static function strToPos(string $string) {
+        $pos=[];
+        $result = preg_match('/R(?P<row>\d+)C(?P<col>\d+)/',$string, $pos);
+        if(!$result) {
+            $message = sprintf('"%s" passed to exception.  Expected string of form "R\d+C\d+" where \d in [0-9]',$string);
+            throw new \Exception($message, AppExceptionCodes::INVALID_POSITION);
+        }
+        return $pos;
+    }
 
 
     /**
@@ -21,7 +44,7 @@ class YamlArray
      * @return array|string
      * @throws \Exception
      */
-    public static function yamlToStringPosition(string $string)
+    public static function yamlAddPosition(string $string)
     {
         $data=Yaml::parse($string);
         if(is_null($data)) {
@@ -39,7 +62,7 @@ class YamlArray
      * @return bool
      * @throws AppException
      */
-    public static function isInCollection(string $string, array $collection)
+    public static function inCollection(string $string, array $collection) : bool
     {
         if(strpos( $string, '|')) {
             list($str,$pos) = explode('|', $string);
@@ -60,7 +83,7 @@ class YamlArray
      * @param array $arr
      * @return bool
      */
-    private static function isAssoc(array $arr)
+    private static function isAssoc(array $arr) : bool
     {
         if (is_array($arr)) {
             return array_keys($arr) !== range(0, count($arr) - 1);
@@ -71,30 +94,30 @@ class YamlArray
 
     /**
      * @param $mixed
-     * @param bool $returnPosition
-     * @return array
+     * @param bool $return
+     * @return array|string
      * @throws \Exception
      */
-    public static function isolateStringOrPosition($mixed, bool $returnPosition = false)
+    public static function isolate($mixed, bool $return = self::STRING)
     {
         if(is_array($mixed)){
             if(self::isAssoc($mixed)){
                 $result = [];
                 foreach($mixed as $key=>$value) {
                     list($string,$position)=explode('|',$key);
-                    $result[$returnPosition?$position:$string] = self::isolateStringOrPosition($value);
+                    $result[$return?$string:$position] = self::isolate($value);
                 }
                 return $result;
             } else {
                 $result = [];
                 foreach($mixed as $value) {
-                    $result[]=self::isolateStringOrPosition($value, $returnPosition);
+                    $result[]=self::isolate($value, $return);
                 }
                 return $result;
             }
         } elseif (is_string($mixed)) {
             list($string,$position) = explode('|',$mixed);
-            return $returnPosition?$position:$string;
+            return $return?$string:$position;
         }
         throw new \Exception('Error in parsing');
     }
@@ -171,7 +194,12 @@ class YamlArray
             if(in_array($char, [' ',',','{','}','[',']','-',':'])){
                 $col++;
                 array_push($array,$char);
-            }elseif (preg_match('/[\<]*\w+([\s\-\.\@\<\>\+]*\w?)*/',$rest, $match)) {
+            }elseif (preg_match('/#.*/', $rest, $match)){
+                $size = strlen( $match[0] );
+                $position = sprintf( 'R%dC%d',$row,$col+1);
+                array_push( $array, $position );
+                $col += $size;
+            }elseif (preg_match('/[\<]*\w+([\s\-\.\@\<\>\+\&]*\w?)*/',$rest, $match)) {
                 $size = strlen( $match[0] );
                 $position = sprintf( 'R%dC%d',$row,$col+1);
                 array_push( $array, $position );

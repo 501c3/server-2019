@@ -94,7 +94,6 @@ ISTD Medal Exams:
       Teacher-Student: {grouping: Solo, sex: [Unspecified]}
 
 Georgia DanceSport Amateur:
-##############Couple events Newcomer through Gold for  all ages
   - proficiency:
       Newcomer:
         - tag: Qualifier
@@ -164,7 +163,6 @@ Georgia DanceSport Amateur:
       - Senior 5
     type:
       Amateur: {grouping: Couple, sex: [Unspecified]}
-############Solo International events for youth Newcomer through Gold
   - proficiency:
       Newcomer:
       - tag: Qualifier

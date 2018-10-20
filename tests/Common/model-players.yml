@@ -17,21 +17,10 @@ ISTD Medal Exams:
       - Adult 16-50
       - Senior 50
     type:
-      Amateur:
-        grouping:
-          Couple:
-            sex:
-              - Male-Female
-              - Male-Male
-              - Female-Female
-      Teacher-Student:
-        grouping:
-          Solo:
-            sex:
-              - Male
-              - Female
+      Amateur: {grouping: Couple, sex: [Male-Female,Male-Male,Female-Female]}
+      Teacher-Student: {grouping: Solo, sex: [Male,Female]}
 
-Georgia DanceSport Amateur:
+Georgia DanceSport Amateur-2019:
   - genre:
       - Rhythm
       - Smooth
@@ -117,16 +106,24 @@ Georgia DanceSport Amateur:
   - genre:
       - Fun Events
     proficiency:
-
+      - Social
     age:
-
+      - Baby
+      - Juvenile
+      - Preteen 1
+      - Preteen 2
+     type:
+       grouping: Solo
+       sex:
+         - Male
+         - Female
   - genre:
       - Fun Events
     proficiency:
       - Social
     age:
-      - Adult Youngster
-      - Senior Youngster
+      - Adult-Youngster
+      - Senior-Youngster
     type:
       grouping: Couple
       sex:
