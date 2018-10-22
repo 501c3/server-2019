@@ -16,8 +16,6 @@ ISTD Medal Exams-2019:
     sex:
       - Male
       - Female
-    status: Student
-    type: Amateur
   - proficiency:
     - Professional
     age:

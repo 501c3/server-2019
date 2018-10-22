@@ -6,7 +6,7 @@ ISTD Medal Exams-2019:
     - Gold
     - Gold Star 1
     - Gold Star 2
-    age:
+    invalid key:
       1-6: Under 6
       7-8: Under 8
       9-12: Under 12
@@ -21,7 +21,7 @@ ISTD Medal Exams-2019:
   - proficiency:
     - Professional
     age:
-      16-99: Adult
+      16-65: Adult
     status: Teacher
     type: Professional
     sex:

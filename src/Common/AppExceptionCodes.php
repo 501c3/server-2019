@@ -16,13 +16,12 @@ class AppExceptionCodes
     UNHANDLED_MESSAGE = 0020,
     NOT_IN_COLLECTION = 1000,
     INVALID_PARAMETER = 1010,
+    UNRECOGNIZED_VALUE = 1020,
+    MISSING_KEYS = 1030,
+    INVALID_RANGE = 1040,
+    OVERLAPPING_RANGE = 1050,
     PARAMETER_MISSING = 9999;
 
-    public static $messages =
-        [self::INVALID_POSITION => 'Invalid Position',
-         self::NOT_IN_COLLECTION => 'Not in collection',
-         self::INVALID_PARAMETER => 'Invalid parameter',
-         self::UNHANDLED_MESSAGE => 'Unhandled message'];
 
 
     /**
@@ -63,6 +62,15 @@ class AppExceptionCodes
                 return self::notInCollectionMessage($found,$position,$expected);
             case self::INVALID_PARAMETER:
                 return self::invalidParameterMessage($found,$expected);
+            case self::UNRECOGNIZED_VALUE:
+                return self::unrecognizedValueMessage($found,$position);
+            case self::INVALID_RANGE:
+                return self::invalidRangeMessage($found,$position);
+            case self::OVERLAPPING_RANGE:
+                return self::overlappingRangeMessage($found,$position);
+            case self::MISSING_KEYS:
+                return self::missingKeysMessage($found, $expected);
+
 
         }
         throw new \Exception('Unhandled message',self::UNHANDLED_MESSAGE);
@@ -91,10 +99,50 @@ class AppExceptionCodes
         return $message;
     }
 
-    private static function invalidParameterMessage(string $found, $expected) : string
+    private static function invalidParameterMessage(string $found, array $expected) : string
     {
         $message = sprintf("Found '$found'");
         $message.= $expected?'. Expected ['.join(', ', $expected).'].':'';
         return $message;
     }
+
+
+    private static function unrecognizedValueMessage(string $found, string $position) : string
+    {
+        $pos = self::strToPos($position);
+        $message = sprintf("Found '$found' at (row:%d,col:%d) which is not a recognized value.",
+                            $pos['row'],$pos['col']);
+        return $message;
+    }
+
+    private static function invalidRangeMessage(string $found, string $position) : string
+    {
+        $pos = self::strToPos($position);
+        $message = sprintf("Found '$found' at (row:%d,col:%d) which is not a valid range.",
+            $pos['row'],$pos['col']);
+        return $message;
+    }
+
+    private static function overlappingRangeMessage(string $found, string $position) : string
+    {
+        $pos = self::strToPos($position);
+        $message = sprintf("Found '$found' at (row:%d,col:%d) which is an overlapping range.",
+            $pos['row'],$pos['col']);
+        return $message;
+    }
+
+    private static function missingKeysMessage(string $missing, array $positions)
+    {
+        $lines = [];
+        foreach($positions as $position) {
+            $pos=self::strToPos($position);
+            $lines[] = $pos['row'];
+        }
+        $max = max($lines);
+        $min = min($lines);
+        $message = sprintf("Missing %s between rows %s and %s",$missing,$min,$max);
+        return $message;
+    }
+
+
 }
