@@ -1,4 +1,4 @@
-ISTD Medal Exams:
+ISTD Medal Exams-2019:
   - proficiency:
       Pre Bronze:
         - tag: Introductory Tests
@@ -89,11 +89,10 @@ ISTD Medal Exams:
                 Latin:  [[Cha Cha,Samba,Rumba,Jive]]
                 Standard: [[Waltz,Tango,Foxtrot,Quickstep]]
     age: [Under 6, Under 8,Under 12,Junior 12-16,Adult 16-50,Senior 50]
-    type:
-      Amateur: {grouping: Couple: sex: [Unspecified]}
-      Teacher-Student: {grouping: Solo, sex: [Unspecified]}
-
-Georgia DanceSport Amateur:
+    sex: [Male-Female,Male-Male,Female-Female]
+    type: Amateur
+    status: Teacher-Student
+Georgia DanceSport Amateur-2019:
   - proficiency:
       Newcomer:
         - tag: Qualifier
@@ -161,8 +160,8 @@ Georgia DanceSport Amateur:
       - Senior 3
       - Senior 4
       - Senior 5
-    type:
-      Amateur: {grouping: Couple, sex: [Unspecified]}
+    type: Amateur
+    status: Student-Student
   - proficiency:
       Newcomer:
       - tag: Qualifier
@@ -197,9 +196,8 @@ Georgia DanceSport Amateur:
               Latin: [[Cha Cha],[Samba],[Rumba],[Paso Doble],[Jive]]
               Standard: [[Waltz],[Tango],[Viennese Waltz],[Foxtrot],[Quickstep],[Polka]]
     age: [Baby,Juvenile,Preteen 1,Preteen 2,Junior 1,Junior 2,Youth]
-    type:
-      Amateur: {grouping: Solo, sex: [Unspecified]}
-################Novice through Pre Championship for Adult through Senior 5
+    type: Amateur
+    status: Student-Student
   - proficiency:
       Novice:
       - tag: Qualifier
@@ -241,9 +239,8 @@ Georgia DanceSport Amateur:
               Latin: [[Samba,Cha Cha,Rumba,Paso Doble,Jive]]
               Standard: [[Waltz,Tango,Viennese Waltz,Foxtrot,Quickstep]]
     age: [Adult,Senior 1,Senior 2,Senior 3,Senior 4,Senior 5]
-    type:
-      Amateur: {grouping: Couple, sex: [Unspecified]}
-
+    type: Amateur
+    status: Student-Student
   - proficiency:
       Social:
       - tag: Family
@@ -251,9 +248,10 @@ Georgia DanceSport Amateur:
           Fun Events:
             disposition: single-event
             substyle: {Smooth: [Foxtrot], Rhythm: [Swing]}
-    age: {Adult-Youngster: Adult-Youngster}
-    type:
-      Amateur: {grouping: Couple, sex: [Unspecified]}
+    age:
+      - Adult-Youth
+    type: Amateur
+    status: Student-Student
   - proficiency:
       Social:
       - tag: Family
@@ -261,20 +259,21 @@ Georgia DanceSport Amateur:
           Fun Events:
             disposition: single-event
             substyle: {Smooth: [Waltz], Rhythm: [Rumba]}
-    age: [Senior-Youngster: Senior-Youngster]
-    type:
-      Amateur: {grouping: Couple, sex: [Unspecified]}
+    age:
+    - Senior-Youth
+    type: Amateur
+    status: Student-Student
   - proficiency:
       Social:
       - tag: Family
         style:
           Fun Events:
-            displostion: single-event
+            disposition: single-event
             substyle: {Novelty: [Chicken Dance]}
     age: [Baby,Juvenile,Preteen 1,Preteen 2]
-    type:
-      Amateur: {grouping: Solo, sex: [Unspecified]}
-Georgia DanceSport ProAm:
+    type: Amateur
+    status: Student
+Georgia DanceSport ProAm-2019:
   - proficiency:
       Pre Bronze:
         style:
@@ -443,5 +442,48 @@ Georgia DanceSport ProAm:
             substyle:
               Latin: [[Samba,Cha Cha,Rumba,Paso Doble,Jive]]
               Standard: [[Waltz,Tango,Viennese Waltz,Foxtrot,Quickstep]]
-
-
+    age:
+    - Baby
+    - Juvenile
+    - Preteen 1
+    - Preteen 2
+    - Junior 1
+    - Junior 2
+    - Youth
+    - Adult
+    - Senior 1
+    - Senior 2
+    - Senior 3
+    - Senior 4
+    - Senior 5
+    type: Professional-Amateur
+    status: Teacher-Student
+  - proficiency:
+      Rising Star:
+        style:
+          American:
+            disposition: multiple-events
+            substyle:
+              Rhythm: [[Cha Cha,Rumba,Swing,Bolero]]
+              Smooth: [[Waltz,Tango,Foxtrot,Viennese Waltz]]
+          International:
+            disposition: multiple-events
+            substyle:
+              Latin: [[Samba,Cha Cha,Rumba,Paso Doble,Jive]]
+              Standard: [[Waltz,Tango,Viennese Waltz,Foxtrot,Quickstep]]
+      Professional:
+        style:
+          American:
+            disposition: multiple-events
+            substyle:
+              Rhythm: [[Cha Cha,Rumba,Swing,Bolero]]
+              Smooth: [[Waltz,Tango,Foxtrot,Viennese Waltz]]
+          International:
+            disposition: multiple-events
+            substyle:
+              Latin: [[Samba,Cha Cha,Rumba,Paso Doble,Jive]]
+              Standard: [[Waltz,Tango,Viennese Waltz,Foxtrot,Quickstep]]
+    age:
+    - Adult
+    type: Professional
+    status: Teacher-Teacher

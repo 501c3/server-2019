@@ -6,7 +6,7 @@ ISTD Medal Exams-2019:
     - Gold
     - Gold Star 1
     - Gold Star 2
-    age:
+    invalid key:
       1-6: Under 6
       7-8: Under 8
       9-12: Under 12
@@ -16,12 +16,12 @@ ISTD Medal Exams-2019:
     sex:
       - Male
       - Female
-    status: Invalid Status
+    status: Student
     type: Amateur
   - proficiency:
     - Professional
     age:
-      16-99: Adult
+      16-65: Adult
     status: Teacher
     type: Professional
     sex:
@@ -72,7 +72,7 @@ Georgia DanceSport Amateur-2019:
   - proficiency:
       Social
     age:
-      1-18: Youngster
+      1-18: Youth
       19-50: Adult
       50-99: Senior
     status: Student

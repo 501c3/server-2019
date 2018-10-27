@@ -16,12 +16,13 @@ class AppException extends \Exception
 
 
     public function __construct(int $code = 0,
+                                string $file,
                                 string $found=null,
                                 string $position=null,
                                 array $expected=null,
                                 Throwable $previous = null)
     {
-        $message = AppExceptionCodes::getMessage($code,$found,$position,$expected);
+        $message = AppExceptionCodes::getMessage($code,$file,$found,$position,$expected);
         parent::__construct($message, $code, $previous);
     }
 }

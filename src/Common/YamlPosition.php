@@ -59,10 +59,11 @@ class YamlPosition
     /**
      * @param string $string
      * @param array $collection
+     * @param string|null $file
      * @return bool
      * @throws AppException
      */
-    public static function inCollection(string $string, array $collection) : bool
+    public static function inCollection(string $string, array $collection, string $file=null) : bool
     {
         if(strpos( $string, '|')) {
             list($str,$pos) = explode('|', $string);
@@ -70,7 +71,7 @@ class YamlPosition
                 return true;
             }
             if ($pos) {
-                throw new AppException(AppExceptionCodes::NOT_IN_COLLECTION,$str,$pos,$collection);
+                throw new AppException(AppExceptionCodes::NOT_IN_COLLECTION,"No file specified.", $str,$pos,$collection);
             }
         }
         if(in_array($string, $collection)) {

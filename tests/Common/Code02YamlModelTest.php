@@ -13,7 +13,7 @@ use App\Common\AppException;
 use App\Common\YamlModel;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 
-class Yaml02XXModelTest  extends KernelTestCase
+class Code02YamlModelTest  extends KernelTestCase
 {
     /**
      * @var YamlModel
@@ -26,9 +26,10 @@ class Yaml02XXModelTest  extends KernelTestCase
     public function setUp()
     {
         $this->yamlModel = new YamlModel();
-        $this->yamlModel->declareModels(__DIR__ . '/01models.yml');
-        $this->yamlModel->declareDomains(__DIR__ . '/02domains.yml');
-        $this->yamlModel->declareValues(__DIR__.'/03values.yml');
+        $this->yamlModel->declareModels(__DIR__ . '/data-01-models.yml');
+        $this->yamlModel->declareDomains(__DIR__ . '/data-01-domains.yml');
+        $this->yamlModel->declareValues(__DIR__ . '/data-01-values.yml');
+        $this->yamlModel->declarePersons(__DIR__.'/data-02-persons.yml');
     }
 
     /**
@@ -41,7 +42,7 @@ class Yaml02XXModelTest  extends KernelTestCase
      */
     public function test0210PersonModelUnrecognized()
     {
-        $this->yamlModel->declarePersons(__DIR__.'/04model-person-0210-unrecognized.yml');
+        $this->yamlModel->declarePersons(__DIR__ . '/data-02-persons-0210-unrecognized.yml');
     }
 
 
@@ -53,7 +54,7 @@ class Yaml02XXModelTest  extends KernelTestCase
      */
     public function test0220PersonInvalidKey()
     {
-        $this->yamlModel->declarePersons(__DIR__.'/04model-person-0220-invalid-key.yml');
+        $this->yamlModel->declarePersons(__DIR__ . '/data-02-persons-0220-invalid-key.yml');
     }
 
     /**
@@ -67,7 +68,7 @@ class Yaml02XXModelTest  extends KernelTestCase
 
     public function test0230PersonKeysMissing()
     {
-        $this->yamlModel->declarePersons(__DIR__ . '/04model-person-0230-keys-missing.yml');
+        $this->yamlModel->declarePersons(__DIR__ . '/data-02-persons-0230-keys-missing.yml');
     }
 
     /**
@@ -80,7 +81,7 @@ class Yaml02XXModelTest  extends KernelTestCase
      */
     public function test0240PersonInvalidType()
     {
-        $this->yamlModel->declarePersons(__DIR__ . '/04model-person-0240-invalid-type.yml');
+        $this->yamlModel->declarePersons(__DIR__ . '/data-02-persons-0240-invalid-type.yml');
     }
 
 
@@ -94,7 +95,7 @@ class Yaml02XXModelTest  extends KernelTestCase
      */
     public function test0250PersonInvalidStatus()
     {
-        $this->yamlModel->declarePersons(__DIR__ . '/04model-person-0250-invalid-status.yml');
+        $this->yamlModel->declarePersons(__DIR__ . '/data-02-persons-0250-invalid-status.yml');
     }
 
     /**
@@ -107,7 +108,7 @@ class Yaml02XXModelTest  extends KernelTestCase
      */
     public function test0260PersonInvalidSex()
     {
-        $this->yamlModel->declarePersons(__DIR__ . '/04model-person-0260-invalid-sex.yml');
+        $this->yamlModel->declarePersons(__DIR__ . '/data-02-persons-0260-invalid-sex.yml');
     }
 
 
@@ -121,7 +122,7 @@ class Yaml02XXModelTest  extends KernelTestCase
      */
     public function test0270PersonInvalidYears()
     {
-        $this->yamlModel->declarePersons(__DIR__ . '/04model-person-0270-invalid-years.yml');
+        $this->yamlModel->declarePersons(__DIR__ . '/data-02-persons-0270-invalid-years.yml');
     }
 
     /**
@@ -134,7 +135,7 @@ class Yaml02XXModelTest  extends KernelTestCase
      */
     public function test0280PersonInvalidRange()
     {
-        $this->yamlModel->declarePersons(__DIR__ . '/04model-person-0280-invalid-range.yml');
+        $this->yamlModel->declarePersons(__DIR__ . '/data-02-persons-0280-invalid-range.yml');
     }
 
     /**
@@ -146,7 +147,7 @@ class Yaml02XXModelTest  extends KernelTestCase
      */
     public function test0290PersonOverlappingRange()
     {
-        $this->yamlModel->declarePersons(__DIR__ . '/04model-person-0290-overlapping-range.yml');
+        $this->yamlModel->declarePersons(__DIR__ . '/data-02-persons-0290-overlapping-range.yml');
     }
 
     /**
@@ -157,7 +158,7 @@ class Yaml02XXModelTest  extends KernelTestCase
      */
     public function test0300PersonMissingRange()
     {
-        $this->yamlModel->declarePersons(__DIR__ . '/04model-person-0300-missing-range.yml');
+        $this->yamlModel->declarePersons(__DIR__ . '/data-02-persons-0300-missing-range.yml');
     }
 
 
@@ -169,7 +170,7 @@ class Yaml02XXModelTest  extends KernelTestCase
      */
     public function test0310PersonInvalidAge()
     {
-        $this->yamlModel->declarePersons(__DIR__ . '/04model-person-0310-invalid-age.yml');
+        $this->yamlModel->declarePersons(__DIR__ . '/data-02-persons-0310-invalid-age.yml');
     }
 
     /**
@@ -181,14 +182,42 @@ class Yaml02XXModelTest  extends KernelTestCase
      */
     public function test0320PersonInvalidProficiency()
     {
-        $this->yamlModel->declarePersons(__DIR__ . '/04model-person-0320-invalid-proficiency.yml');
+        $this->yamlModel->declarePersons(__DIR__ . '/data-02-persons-0320-invalid-proficiency.yml');
     }
 
 
-    public function test0330PersonAgeStruct()
+    /**
+     * @expectedException \App\Common\AppException
+     * @expectedExceptionMessage Found 'Social' at (row:73,col:7) but expected an array ie dash '-'.
+     * @expectedExceptionCode \App\Common\AppExceptionCodes::ARRAY_EXPECTED
+     * @throws AppException
+     */
+    public function test0330PersonExpectedArray()
     {
-        //TODO: Verify structure
-        $this->yamlModel->declarePersons(__DIR__ . '/04model-person-0330-person-age-struct.yml');
+
+        $this->yamlModel->declarePersons(__DIR__ . '/data-02-persons-0330-expected-array.yml');
+
+    }
+
+    /**
+     * @throws AppException
+     */
+
+    public function test0340PersonVerify()
+    {
+        $result=$this->yamlModel->declarePersons(__DIR__ . '/data-02-persons-0340-verify.yml');
+        $actual = $result['Professional']['Teacher']['Male']['Georgia DanceSport ProAm-2019'][20]['Professional'];
+
+        $expected = [
+        'type' =>"Professional",
+        'status' =>"Teacher",
+        'sex' =>"Male",
+        'model' =>"Georgia DanceSport ProAm-2019",
+        'years' => 20,
+        'age' =>"Adult",
+        'proficiency' =>"Professional"
+        ];
+        $this->assertEquals($expected,$actual);
     }
 
 }

@@ -13,7 +13,7 @@ use App\Common\AppException;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\Yaml\Yaml;
 
-class Yaml00XXPositionTest extends KernelTestCase
+class Code00YamlPositionTest extends KernelTestCase
 {
     //    BY_TEN      = '0        10        20        30        40        50        60        70'
     //    RULER       = '1234567890123456789012345678901234567890123456789012345678901234567890123456789'
@@ -64,9 +64,9 @@ class Yaml00XXPositionTest extends KernelTestCase
      */
     public function test0010PositionCorrect()
     {
-        $string = file_get_contents(__DIR__ . '/test-0010-position-isolate.yml');
+        $string = file_get_contents(__DIR__ . '/data-00-position-0010-isolate.yml');
         $actual = YamlPosition::yamlAddPosition($string);
-        $expected = Yaml::parse(file_get_contents(__DIR__ . '/test-0010-position-correct.yml'));
+        $expected = Yaml::parse(file_get_contents(__DIR__ . '/data-00-position-0010-correct.yml'));
         $this->assertEquals($expected,$actual);
         $expectedIsolatedData = Yaml::parse($string);
         $actualIsolatedData = YamlPosition::isolate($actual);
@@ -108,7 +108,7 @@ class Yaml00XXPositionTest extends KernelTestCase
      */
     public function test0040PositionIsolate()
     {
-        $string = file_get_contents(__DIR__ . '/test-0010-position-isolate.yml');
+        $string = file_get_contents(__DIR__ . '/data-00-position-0010-isolate.yml');
         $expected = Yaml::parse($string);
         $dataPosition = YamlPosition::yamlAddPosition($string);
         $actual = YamlPosition::isolate($dataPosition);

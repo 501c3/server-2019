@@ -20,9 +20,11 @@ class AppExceptionCodes
     MISSING_KEYS = 1030,
     INVALID_RANGE = 1040,
     OVERLAPPING_RANGE = 1050,
+    ARRAY_EXPECTED = 1060,
     PARAMETER_MISSING = 9999;
 
 
+    private static $file;
 
     /**
      * @param string $string
@@ -53,10 +55,12 @@ class AppExceptionCodes
      */
 
     public static function getMessage(int $code,
+                                      string $file,
                                       string $found = null,
                                       string $position = null,
                                       array $expected = null)
     {
+        self::$file = $file;
         switch($code) {
             case self::NOT_IN_COLLECTION:
                 return self::notInCollectionMessage($found,$position,$expected);
@@ -70,6 +74,8 @@ class AppExceptionCodes
                 return self::overlappingRangeMessage($found,$position);
             case self::MISSING_KEYS:
                 return self::missingKeysMessage($found, $expected);
+            case self::ARRAY_EXPECTED:
+                return self::arrayExpectedMessage($found,$position);
 
 
         }
@@ -96,6 +102,7 @@ class AppExceptionCodes
         $pos = self::strToPos($position);
         $message = sprintf("Found '$found' at (row:%d,col:%d)", $pos['row'],$pos['col']);
         $message.= $expected?'. Expected ['.join(', ', $expected).'].':'';
+        $message.= ' File: '.self::$file;
         return $message;
     }
 
@@ -103,34 +110,77 @@ class AppExceptionCodes
     {
         $message = sprintf("Found '$found'");
         $message.= $expected?'. Expected ['.join(', ', $expected).'].':'';
+        $message.= ' File: '.self::$file;
         return $message;
     }
 
 
+    /**
+     * @param string $found
+     * @param string $position
+     * @return string
+     * @throws \Exception
+     */
     private static function unrecognizedValueMessage(string $found, string $position) : string
     {
         $pos = self::strToPos($position);
         $message = sprintf("Found '$found' at (row:%d,col:%d) which is not a recognized value.",
                             $pos['row'],$pos['col']);
+        $message.= ' File: '.self::$file;
         return $message;
     }
 
+    /**
+     * @param string $found
+     * @param string $position
+     * @return string
+     * @throws \Exception
+     */
     private static function invalidRangeMessage(string $found, string $position) : string
     {
         $pos = self::strToPos($position);
         $message = sprintf("Found '$found' at (row:%d,col:%d) which is not a valid range.",
             $pos['row'],$pos['col']);
+        $message.= ' File: '.self::$file;
         return $message;
     }
 
+    /**
+     * @param string $found
+     * @param string $position
+     * @return string
+     * @throws \Exception
+     */
     private static function overlappingRangeMessage(string $found, string $position) : string
     {
         $pos = self::strToPos($position);
         $message = sprintf("Found '$found' at (row:%d,col:%d) which is an overlapping range.",
             $pos['row'],$pos['col']);
+        $message.= ' File: '.self::$file;
         return $message;
     }
 
+    /**
+     * @param string $found
+     * @param string $position
+     * @return string
+     * @throws \Exception
+     */
+    private static function arrayExpectedMessage(string $found, string $position) : string
+    {
+        $pos = self::strToPos($position);
+        $message = sprintf("Found '$found' at (row:%d,col:%d) but expected an array ie dash '-'.",
+            $pos['row'],$pos['col']);
+        $message.= ' File: '.self::$file;
+        return $message;
+    }
+
+    /**
+     * @param string $missing
+     * @param array $positions
+     * @return string
+     * @throws \Exception
+     */
     private static function missingKeysMessage(string $missing, array $positions)
     {
         $lines = [];
@@ -141,6 +191,7 @@ class AppExceptionCodes
         $max = max($lines);
         $min = min($lines);
         $message = sprintf("Missing %s between rows %s and %s",$missing,$min,$max);
+        $message.= ' File: '.self::$file;
         return $message;
     }
 

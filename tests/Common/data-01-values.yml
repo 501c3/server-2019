@@ -18,9 +18,13 @@ status:
   Teacher: {abbr: T}
   Student: {abbr: S}
   Teacher-Student: {abbr: TS}
+  Student-Student: {abbr: SS}
 type:
   Amateur: {abbr: Am}
   Professional: {abbr: Pro}
+  Social: {abbr: Soc}
+  Amateur-Amateur: {abbr: Am-Am}
+  Professional-Amateur: {abbr: Pro-Am}
 grouping:
   Solo: {abbr: S}
   Couple: {abbr: C}
@@ -102,10 +106,10 @@ age:
   Youth-Senior 5: {abbr: YS5, note: Georgia DanceSport}
   Adult-Senior 2: {abbr: AS2, note: Georgia DanceSport}
   Senior 3-Senior 5: {abbr: S35, note: Georgia DanceSport}
-  Adult Youngster: {abbr: AY, note: Georgia DanceSport}
-  Senior Youngster: {abbr: SY, note: Georgia DanceSport}
-  College: {abbr: C, note: Georgia DanceSport}
-  Youngster: {abbr: Y, note: Georgia DanceSport}
+  Adult-Youth: {abbr: AY, note: Georgia DanceSport}
+  Senior-Youth: {abbr: SY, note: Georgia DanceSport}
+  College-College: {abbr: C, note: Georgia DanceSport}
+  Adult-College: {abbr: AC, note: Georgia DanceSport}
   Baby-Preteen 2: {abbr: BPT, note: Georgia DanceSport}
   JV 8: {abbr: JV, note: NDCA}
   PT 9-11: {abbr: PT, note: NDCA}

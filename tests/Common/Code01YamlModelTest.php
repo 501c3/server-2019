@@ -11,7 +11,7 @@ namespace App\Tests\Common;
 use App\Common\YamlModel;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 
-class Yaml01XXModelTest extends KernelTestCase
+class Code01YamlModelTest extends KernelTestCase
 {
     const TEST_VALUE
         = [
@@ -34,7 +34,7 @@ class Yaml01XXModelTest extends KernelTestCase
 
    public function test0110Model()
    {
-       $this->yamlModel->declareModels(__DIR__ . '/01models.yml');
+       $this->yamlModel->declareModels(__DIR__ . '/data-01-models.yml');
        $structure = $this->yamlModel->getStructure();
        $count=count($structure);
        $this->assertEquals(3,$count);
@@ -42,7 +42,7 @@ class Yaml01XXModelTest extends KernelTestCase
 
    public function test0120Domain()
    {
-       $this->yamlModel->declareDomains(__DIR__ . '/02domains.yml');
+       $this->yamlModel->declareDomains(__DIR__ . '/data-01-domains.yml');
        $structure = $this->yamlModel->fetchDomains();
        $count=count($structure);
        $this->assertEquals(11,$count);
@@ -55,8 +55,8 @@ class Yaml01XXModelTest extends KernelTestCase
     */
    public function test0130ValuesBadDomain()
    {
-       $this->yamlModel->declareDomains(__DIR__ . '/02domains.yml');
-       $this->yamlModel->declareValues(__DIR__.'/03values-0130-bad-domain.yml');
+       $this->yamlModel->declareDomains(__DIR__ . '/data-01-domains.yml');
+       $this->yamlModel->declareValues(__DIR__ . '/data-01-values-0130-bad-domain.yml');
 
    }
 
@@ -67,8 +67,8 @@ class Yaml01XXModelTest extends KernelTestCase
      */
    public function test0140ValueBadKey()
    {
-       $this->yamlModel->declareDomains(__DIR__ . '/02domains.yml');
-       $this->yamlModel->declareValues(__DIR__.'/03values-0140-bad-key.yml');
+       $this->yamlModel->declareDomains(__DIR__ . '/data-01-domains.yml');
+       $this->yamlModel->declareValues(__DIR__ . '/data-01-values-0140-bad-key.yml');
    }
 
 
@@ -79,8 +79,8 @@ class Yaml01XXModelTest extends KernelTestCase
      */
    public function test0150ValueBadDomain()
    {
-       $this->yamlModel->declareDomains(__DIR__ . '/02domains.yml');
-       $this->yamlModel->declareValues(__DIR__.'/03values.yml');
+       $this->yamlModel->declareDomains(__DIR__ . '/data-01-domains.yml');
+       $this->yamlModel->declareValues(__DIR__ . '/data-01-values.yml');
        $this->yamlModel->fetchValues('bad_style');
    }
 
@@ -90,8 +90,8 @@ class Yaml01XXModelTest extends KernelTestCase
      */
     public function test0160ValueConfirm()
    {
-       $this->yamlModel->declareDomains(__DIR__ . '/02domains.yml');
-       $this->yamlModel->declareValues(__DIR__.'/03values.yml');
+       $this->yamlModel->declareDomains(__DIR__ . '/data-01-domains.yml');
+       $this->yamlModel->declareValues(__DIR__ . '/data-01-values.yml');
        $values=$this->yamlModel->fetchValues('style');
        $this->assertArraySubset(self::TEST_VALUE, $values);
    }
