@@ -19,6 +19,8 @@ status:
   Student: {abbr: S}
   Teacher-Student: {abbr: TS}
   Student-Student: {abbr: SS}
+  Teacher-Teacher: {abbr: TT}
+  Team 8 Person: {abbr: T8}
 type:
   Amateur: {abbr: Am}
   Professional: {abbr: Pro}
@@ -35,6 +37,7 @@ sex:
   Male-Male: {abbr: MM}
   Female-Female: {abbr: FF}
   Male-Female: {abbr: MF}
+  Same-Sex: {abbr: SS}
   Unspecified: {abbr: U}
 proficiency:
   Social: {abbr: S}

@@ -15,11 +15,25 @@ class YamlModel
 {
     const
         VALUE_KEYS = ['abbr', 'note', 'domain'],
-        PLAYER_DOMAINS = ['type', 'status', 'sex', 'age', 'proficiency'];
+        PLAYER_DOMAINS = ['type', 'status', 'sex', 'age', 'proficiency'],
+        EVENT_DOMAINS = ['type','status','sex','genre','style','substyle','proficiency','age','tag','dance'];
 
 
+    /**
+     * @var array
+     */
     private $model;
+    /**
+     * @var array
+     * $this->domain[<domain>][<value>]=[abbr=><abbr>]
+     */
     private $domain;
+
+    /**
+     * @var array
+     * $this->value[<model>][<domain>]=[<value list>]
+     */
+    private $value;
     private $competition;
 
     /**
@@ -38,7 +52,7 @@ class YamlModel
      *
      * $team[<type>][<sex>][<model>][<age>][<proficiency>]=<record>
      * <record> = ['type'=><value>, 'status'=><value>, 'sex'=><value>,
-     *              'model'=><model>, 'age'=><value>, 'proficiency'=><value>
+                     'model'=> <model> ,'age'=><value>, 'proficiency'=><value>
      *               'people'=>[person_records], 'events'=>['event_list']
      * <type>:=Amateur|Professional
      * <sex>:=Male|Femal|Male-Male|Male-Female|Female-Female
@@ -48,10 +62,16 @@ class YamlModel
 
     /**
      * @var array
-     * $event[<type>][<grouping>][<status>][<sex>][<model>][<age>][<proficiency>][<tag>]=<record>
+     * $event[<type>][<status>][<sex>][<model>][<age>][<proficiency>][<style>]=<record>
+     * <record> := [type=> <value> 'status'=><value>, 'sex'=><value>
+     *              'model'=> <model>, 'age'=> <value>, 'proficiency'=><value>
+     *              'style'=> <value>, 'events' => <event-list>]
      *
+     * <event-list> := [<event-record_0>,..<event-record_n>]
+     * <event-record-n> := ['substyle' => [dance-list], 'tag' => <value> ]
      */
-   // private $event;
+
+    private $event;
 
     /**
      * @param string $file
@@ -94,14 +114,14 @@ class YamlModel
 
     /**
      * @param string $file
+     * @return array
      * @throws AppException
      * @throws Exception
      */
     public function declareValues(string $file)
     {
         $this->file = $file;
-        $str = file_get_contents($file);
-        $domainValuePositionArray = YamlPosition::yamlAddPosition($str);
+        $domainValuePositionArray = YamlPosition::yamlAddPosition($file);
         $domainPositionArray = array_keys($domainValuePositionArray);
         $validKeys = array_keys($this->domain);
         foreach ($domainPositionArray as $domainPosition) {
@@ -134,11 +154,15 @@ class YamlModel
      * @throws AppException
      * @throws Exception
      */
-    protected function declare(string $file, string $methodFor, array $domains, string $check, string $build) : array
+    protected function declare(string $file,
+                               string $methodFor,
+                               array $domains,
+                               string $check,
+                               string $build,
+                               string $return) : array
     {
         $this->file = $file;
-        $str = file_get_contents($file);
-        $modelsPositions = YamlPosition::yamlAddPosition($str);
+        $modelsPositions = YamlPosition::yamlAddPosition($file);
         foreach ($modelsPositions as $modelPos => $records) {
             list($model, $position) = explode('|', $modelPos);
             if (!in_array($model, $this->model)) {
@@ -146,7 +170,7 @@ class YamlModel
             }
             $this->$methodFor($model, $records, $domains, $check, $build);
         }
-        return $this->person;
+        return $this->$return;
     }
 
     /**
@@ -157,12 +181,13 @@ class YamlModel
      */
     public function declarePersons(string $file) : array
     {
-        $this->declare($file,
-            'entitiesFor',
-            self::PLAYER_DOMAINS,
-            'personsCheck',
-            'personsBuild');
-        return $this->person;
+        return $this->declare($file,
+                'entitiesFor',
+                self::PLAYER_DOMAINS,
+                'personsCheck',
+                'personsBuild',
+                 'person');
+
     }
 
     /**
@@ -173,12 +198,34 @@ class YamlModel
      */
     public function declareTeams(string $file) : array
     {
-        $this->declare($file,
+        return $this->declare($file,
             'entitiesFor',
             self::PLAYER_DOMAINS,
             'teamsCheck',
-            'teamsBuild');
-        return $this->team;
+            'teamsBuild',
+            'team');
+
+    }
+
+
+    public function declareEvents(string $file) : array
+    {
+        return $this->declare($file,
+            'entitiesFor',
+            self::PLAYER_DOMAINS,
+            'eventsCheck',
+            'eventsBuild',
+            'event');
+    }
+
+    public function declareModelValues(string $file) : array
+    {
+        return $this->declare($file,
+            'entitiesFor',
+            self::EVENT_DOMAINS,
+            'valuesCheck',
+            'valuesBuild',
+            'value');
     }
 
     /**
@@ -213,7 +260,16 @@ class YamlModel
             $cache = [];
             foreach ($record as $keyPosition => $dataPosition) {
                 list($key) = explode('|', $keyPosition);
-                $cache[$key] = $this->$checkFn($key,$dataPosition);
+                switch($checkFn) {
+                    case 'valuesCheck':
+                    case 'personsCheck':
+                    case 'teamsCheck':
+                        $cache[$key] = $this->$checkFn($key,$dataPosition);
+                        break;
+                    case 'eventsCheck':
+                        $cache[$key] = $this->$checkFn($model,$key,$dataPosition);
+
+                }
             }
             $this->$buildFn($model, $cache);
         }
@@ -269,6 +325,11 @@ class YamlModel
         switch ($key) {
             case 'status':
             case 'type':
+                //var_dump($key, $dataPosition);die;
+                if(!is_scalar($dataPosition))
+                {
+                    var_dump($key, $dataPosition,$this->file);die;
+                }
                 list($value, $pos) = explode('|', $dataPosition);
                 if (!isset($this->domain[$key][$value])) {
                     throw new AppException(AppExceptionCodes::UNRECOGNIZED_VALUE, $this->file, $value, $pos);
@@ -290,18 +351,19 @@ class YamlModel
                 }
                 return YamlPosition::isolate($dataPosition);
         }
+        //TODO: Throw exception here.
         return null;
-
     }
 
+
     /**
+     * @param string $model
      * @param string $key
      * @param $dataPosition
      * @return array|null|string
      * @throws AppException
-     * @throws Exception
      */
-    protected function eventsCheck(string $key, $dataPosition)
+    protected function eventsCheck(string $model, string $key, $dataPosition)
     {
         switch ($key) {
             case 'type':
@@ -312,7 +374,6 @@ class YamlModel
                 }
                 return YamlPosition::isolate($dataPosition);
             case 'sex':
-            case 'proficiency':
             case 'age':
                 if(!is_array($dataPosition)) {
                     list($value, $pos) = explode('|', $dataPosition);
@@ -326,13 +387,151 @@ class YamlModel
                     }
                 }
                 return YamlPosition::isolate($dataPosition);
+            case 'proficiency':
+               $this->eventDanceCheck($model, $dataPosition);
+               return YamlPosition::isolate($dataPosition);
+
         }
         return null;
-
     }
 
 
+    private function eventDanceCheck(string $model, array $dataPosition)
+    {
+        foreach($dataPosition as $proficiencyPos=>$styleDances) {
+            list($proficiency, $position) = explode('|',$proficiencyPos);
+            if(!isset($this->domain['proficiency'][$proficiency])) {
+                throw new AppException(AppExceptionCodes::UNRECOGNIZED_VALUE,
+                    $this->file,$proficiency,$position);
+            }
+            foreach($styleDances as $section) {
+                foreach($section as $keyPos=>$subsectionPos) {
+                    list($key,$pos) = explode('|',$keyPos);
+                    if(!in_array($key,['tag','style'])) {
+                        throw new AppException(AppExceptionCodes::NOT_IN_COLLECTION,
+                            $this->file,$key,$pos,['tag','style']);
+                    }
+                    switch($key){
+                        case 'tag':
+                            list($tag,$tagPos) = explode('|',$subsectionPos);
+                            if(!isset($this->domain['tag'][$tag])){
+                                throw new AppException(AppExceptionCodes::UNRECOGNIZED_VALUE,
+                                    $this->file,$tag,$tagPos);
+                            }
+                            if(!isset($this->value[$model]['tag'][$tag])){
+                                $collection=array_keys($this->value[$model]['tag']);
+                                throw new AppException(AppExceptionCodes::NOT_IN_COLLECTION,
+                                    $this->file,$tag,$tagPos,$collection);
+                            }
+                            break;
+                        case 'style':
+                            $this->eventDanceSubstyleCheck($model,$subsectionPos);
+                    }
+                }
+            }
+        }
+    }
 
+
+    public function eventDanceSubstyleCheck(string $model,array $subsectionPos)
+    {
+        foreach($subsectionPos as $stylePosition=>$eventsPositions){
+            list($style,$stylePos) = explode('|',$stylePosition);
+            if(!isset($this->domain['style'][$style])) {
+                throw new AppException(AppExceptionCodes::UNRECOGNIZED_VALUE,
+                    $this->file,$style,$stylePos);
+            }
+            if(!isset($this->value[$model]['style'][$style])){
+                $collection=array_keys($this->value[$model]['style']);
+                throw new AppException(AppExceptionCodes::NOT_IN_COLLECTION,
+                    $this->file,$style,$stylePos,$collection);
+            }
+            $tmp = [];
+            $collection=['disposition','substyle'];
+            foreach($eventsPositions as $keyPos=>$dataPositions){
+                list($key,$pos) = explode('|',$keyPos);
+                if(!in_array($key,$collection)) {
+                    throw new AppException(AppExceptionCodes::NOT_IN_COLLECTION,
+                        $this->file,$key,$pos,$collection);
+                }
+                switch($key){
+                    case 'disposition':
+                        $dispositionCollection = ['multiple-events','single-event'];
+                        list($disposition,$dispositionPos) = explode('|',$dataPositions);
+                        if(!in_array($disposition,$dispositionCollection)){
+                            throw new AppException(AppExceptionCodes::NOT_IN_COLLECTION,
+                                $this->file,$disposition,$dispositionPos,$dispositionCollection);
+                        }
+                        $tmp['disposition']=$disposition;
+                        break;
+                    case 'substyle':
+                        if(!isset($tmp['substyle'])) {
+                            $tmp['substyle']=[];
+                        }
+                        foreach($dataPositions as $substylePos=>$eventsDancesPos) {
+                            list($substyle,$position) = explode('|',$substylePos);
+                            if(!isset($this->domain['substyle'][$substyle])) {
+                                throw new AppException(AppExceptionCodes::UNRECOGNIZED_VALUE,
+                                    $this->file,$substyle,$position);
+                            }
+                            $collection = array_keys($this->value[$model]['substyle']);
+                            if(!isset($this->value[$model]['substyle'][$substyle])) {
+                                throw new AppException(AppExceptionCodes::NOT_IN_COLLECTION,
+                                    $this->file,$substyle,$position,$collection);
+                            }
+                            $tmp['substyle'][$substyle]=$eventsDancesPos;
+                        }
+                }
+
+            }
+            switch($tmp['disposition']) {
+                case 'multiple-events':
+                    foreach($tmp['substyle'] as $substyle=>$dancesPositions) {
+                        foreach ($dancesPositions as $collectionPositions) {
+                            if (is_scalar($collectionPositions)) {
+                                list($scaler, $scalerPos) = explode('|', $collectionPositions);
+                                throw new AppException(AppExceptionCodes::ARRAY_EXPECTED,
+                                    $this->file, $scaler, $scalerPos);
+                            }
+                            foreach ($collectionPositions as $dancePosition) {
+                                list($dance, $dancePos) = explode('|', $dancePosition);
+                                if (!isset($this->domain['dance'][$dance])) {
+                                    throw new AppException(AppExceptionCodes::UNRECOGNIZED_VALUE,
+                                        $this->file, $dance, $dancePos);
+                                }
+                                if (!isset($this->value[$model]['dance'][$dance])) {
+                                    $danceCollection = array_keys($this->value[$model]['dance']);
+                                    throw new AppException(AppExceptionCodes::NOT_IN_COLLECTION,
+                                        $this->file, $dance, $dancePos, $danceCollection);
+                                }
+                            }
+                        }
+                    }
+                   break;
+                case 'single-event':
+
+                    foreach($tmp['substyle'] as $substsyle=>$collectionPositions){
+                        if(is_array($collectionPositions[0])) {
+                            list($scaler,$scalerPos) = explode('|',$collectionPositions[0]);
+                            throw new AppException(AppExceptionCodes::SCALER_EXPECTED,
+                                $this->file,$scaler,$scalerPos);
+                        }
+                        foreach($collectionPositions as $dancePos) {
+                            list($dance,$dancePos) = explode('|', $dancePos);
+                            if(!isset($this->domain['dance'][$dance])) {
+                                throw new AppException(AppExceptionCodes::UNRECOGNIZED_VALUE,
+                                    $this->file,$dance,$dancePos);
+                            }
+                            if(!isset($this->value[$model]['dance'][$dance])) {
+                                $danceCollection = array_keys($this->value[$model]['dance']);
+                                throw new AppException(AppExceptionCodes::NOT_IN_COLLECTION,
+                                    $this->file,$dance,$dancePos,$danceCollection);
+                            }
+                        }
+                    }
+            }
+        }
+    }
 
     /**
      * @param array $dataPosition
@@ -384,6 +583,20 @@ class YamlModel
         }
         return $yearAge;
 
+    }
+
+    protected function valuesCheck(string $key, $valuesPositions)
+    {
+        foreach($valuesPositions as $valuePos) {
+            list($value,$position)=explode('|',$valuePos);
+            if(!isset($this->domain[$key][$value])) {
+                throw new AppException(AppExceptionCodes::UNRECOGNIZED_VALUE,
+                                    $this->file,
+                                     $value,
+                                     $position);
+            }
+        }
+        return YamlPosition::isolate($valuesPositions);
     }
 
     /**
@@ -468,6 +681,99 @@ class YamlModel
             }
         }
     }
+
+    protected function valuesBuild(string $model, $values)
+    {
+       if(!isset($this->value[$model])) {
+           $this->value[$model]=[];
+       }
+       foreach($values as $domain=>$valueList) {
+           if (!isset($this->value[$model][$domain])) {
+               $this->value[$model][$domain] = [];
+           }
+           foreach($valueList as $value){
+               if(!isset($this->value[$model][$domain][$value])){
+                   $this->value[$model][$domain][$value]=[];
+               }
+           }
+       }
+    }
+
+    /**
+     * @param string $model
+     * @param $cache
+     */
+    protected function eventsBuild(string $model, $cache)
+    {
+        if (!isset($this->event[$cache['type']])) {
+            $this->event[$cache['type']] = [];
+        }
+        if (!isset($this->event[$cache['type']][$cache['status']])) {
+            $this->event[$cache['type']][$cache['status']] = [];
+        }
+        $descriptionL0 = ['type' => $cache['type'], 'status' => $cache['status']];
+        $sexPtr = & $this->event[$cache['type']][$cache['status']];
+        foreach ($cache['sex'] as $sex) {
+            $descriptionL1 = $descriptionL0;
+            if (!isset($sexPtr[$sex])) {
+                $sexPtr[$sex] = [];
+            }
+            $descriptionL1['sex'] = $sex;
+            if (!isset($sexPtr[$sex][$model])) {
+                $sexPtr[$sex][$model] = [];
+            }
+            $descriptionL1['model'] = $model;
+            foreach ($cache['age'] as  $age) {
+                $descriptionL2 = $descriptionL1;
+                if (!isset($sexPtr[$sex][$model][$age])) {
+                    $sexPtr[$sex][$model][$age] = [];
+                }
+                $descriptionL2['age'] = $age;
+                foreach ($cache['proficiency'] as $proficiency=>$styleDancesTag) {
+                    $descriptionL3 = $descriptionL2;
+                    if(!isset($sexPtr[$sex][$model][$age][$proficiency])){
+                        $sexPtr[$sex][$model][$age][$proficiency]=[];
+                    }
+                    $descriptionL3['proficiency'] = $proficiency;
+                    $this->buildEventSpecifics(
+                        $sexPtr[$sex][$model][$age][$proficiency],
+                          $styleDancesTag, $descriptionL3);
+                }
+            }
+        }
+    }
+
+    private function buildEventSpecifics(& $prfPtr, array $styleDancesTag, array $description)
+    {
+        foreach($styleDancesTag as $record){
+            $descriptionL1 = $description;
+            foreach($record['style'] as $style=>$rec) {
+                if(!isset($prfPtr[$style])) {
+                    $prfPtr[$style] = ['events'=>[]];
+                }
+                $descriptionL2 = $descriptionL1;
+                $descriptionL2['style']=$style;
+                switch($rec['disposition']){
+                    case 'multiple-events':
+                        foreach($rec['substyle'] as $substyle=>$danceCollections){
+                            $descriptionL3 = $descriptionL2;
+                            $substyleDances=[];
+                            foreach($danceCollections as $dances) {
+                                $substyleDances[$substyle]=$dances;
+                                $descriptionL4=$descriptionL3;
+                                $descriptionL4['dances']=$substyleDances;
+                                $prfPtr[$style]['events'][]=$descriptionL4;
+                            }
+                        }
+                        break;
+                    case 'single-event':
+                        $descriptionL2['dances']=$rec['substyle'];
+                        $prfPtr[$style]['events'][]=$descriptionL2;
+                }
+            }
+        }
+    }
+
 
 
     /**

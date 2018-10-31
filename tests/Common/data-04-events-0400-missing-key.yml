@@ -89,7 +89,6 @@ ISTD Medal Exams-2019:
             Latin:  [[Cha Cha,Samba,Rumba,Jive]]
             Standard: [[Waltz,Tango,Foxtrot,Quickstep]]
   age: [Under 6, Under 8,Under 12,Junior 12-16,Adult 16-50,Senior 50]
-  sex: [Male-Female,Male-Male,Female-Female]
   type: Amateur
   status: Teacher-Student
 Georgia DanceSport Amateur-2019:
@@ -160,7 +159,6 @@ Georgia DanceSport Amateur-2019:
   - Senior 3
   - Senior 4
   - Senior 5
-  sex: [Male-Female,Male-Male,Female-Female]
   type: Amateur
   status: Student-Student
 - proficiency:
@@ -197,23 +195,22 @@ Georgia DanceSport Amateur-2019:
             Latin: [[Cha Cha],[Samba],[Rumba],[Paso Doble],[Jive]]
             Standard: [[Waltz],[Tango],[Viennese Waltz],[Foxtrot],[Quickstep],[Polka]]
   age: [Baby,Juvenile,Preteen 1,Preteen 2,Junior 1,Junior 2,Youth]
-  sex: [Male-Female,Male-Male,Female-Female]
   type: Amateur
   status: Student-Student
 - proficiency:
     Novice:
     - tag: Qualifier
-      style:
-        American:
-          disposition: multiple-events
-          substyle:
-            Rhythm: [[Cha Cha,Rumba,Swing]]
-            Smooth: [[Waltz,Tango,Foxtrot]]
-        International:
-          disposition: multiple-events
-          substyle:
-            Latin: [[Samba,Cha Cha,Rumba]]
-            Standard: [[Waltz,Tango,Foxtrot]]
+    style:
+      American:
+        disposition: multiple-events
+        substyle:
+          Rhythm: [[Cha Cha,Rumba,Swing]]
+          Smooth: [[Waltz,Tango,Foxtrot]]
+      International:
+        disposition: multiple-events
+        substyle:
+          Latin: [[Samba,Cha Cha,Rumba]]
+          Standard: [[Waltz,Tango,Foxtrot]]
     Pre Championship:
     - tag: Qualifier
       style:
@@ -241,48 +238,43 @@ Georgia DanceSport Amateur-2019:
             Latin: [[Samba,Cha Cha,Rumba,Paso Doble,Jive]]
             Standard: [[Waltz,Tango,Viennese Waltz,Foxtrot,Quickstep]]
   age: [Adult,Senior 1,Senior 2,Senior 3,Senior 4,Senior 5]
-  sex: [Male-Female,Male-Male,Female-Female]
   type: Amateur
   status: Student-Student
 - proficiency:
     Social:
-    - tag: Parent-Child
+    - tag: Family
       style:
         Fun Events:
           disposition: single-event
           substyle: {Smooth: [Foxtrot], Rhythm: [Swing]}
   age:
   - Adult-Youth
-  sex: [Male-Female,Male-Male,Female-Female]
   type: Amateur
   status: Student-Student
 - proficiency:
     Social:
-    - tag: Grandparent-Child
+    - tag: Family
       style:
         Fun Events:
           disposition: single-event
           substyle: {Smooth: [Waltz], Rhythm: [Rumba]}
   age:
   - Senior-Youth
-  sex: [Male-Female,Male-Male,Female-Female]
   type: Amateur
   status: Student-Student
 - proficiency:
     Social:
-    - tag: Qualifier
+    - tag: Family
       style:
         Fun Events:
           disposition: single-event
           substyle: {Novelty: [Chicken Dance]}
   age: [Baby,Juvenile,Preteen 1,Preteen 2]
-  sex: [Male,Female]
   type: Amateur
   status: Student
 Georgia DanceSport ProAm-2019:
 - proficiency:
     Pre Bronze:
-    - tag: Qualifier
       style:
         American:
           disposition: multiple-events
@@ -295,7 +287,6 @@ Georgia DanceSport ProAm-2019:
             Latin: [[Cha Cha,Rumba]]
             Standard: [[Waltz,Quickstep]]
     Intermediate Bronze:
-    - tag: Qualifier
       style:
         American:
           disposition: multiple-events
@@ -308,7 +299,6 @@ Georgia DanceSport ProAm-2019:
             Latin: [[Cha Cha,Rumba]]
             Standard: [[Waltz,Quickstep]]
     Full Bronze:
-    - tag: Qualifier
       style:
         American:
           disposition: multiple-events
@@ -323,7 +313,6 @@ Georgia DanceSport ProAm-2019:
             Standard: [[Waltz,Quickstep]]
 
     Open Bronze:
-    - tag: Qualifier
       style:
         American:
           disposition: multiple-events
@@ -338,7 +327,6 @@ Georgia DanceSport ProAm-2019:
             Standard: [[Waltz,Quickstep]]
 
     Pre Silver:
-    - tag: Qualifier
       style:
         American:
           disposition: multiple-events
@@ -353,7 +341,6 @@ Georgia DanceSport ProAm-2019:
             Standard:  [[Waltz,Foxtrot,Quickstep]]
 
     Intermediate Silver:
-    - tag: Qualifier
       style:
         American:
           disposition: multiple-events
@@ -368,7 +355,6 @@ Georgia DanceSport ProAm-2019:
             Standard: [[Waltz,Foxtrot,Quickstep]]
 
     Full Silver:
-    - tag: Qualifier
       style:
         American:
           disposition: multiple-events
@@ -383,7 +369,6 @@ Georgia DanceSport ProAm-2019:
             Standard: [[Waltz,Foxtrot,Quickstep]]
 
     Open Silver:
-    - tag: Qualifier
       style:
         American:
           disposition: multiple-events
@@ -396,8 +381,8 @@ Georgia DanceSport ProAm-2019:
           substyle:
             Latin: [[Samba,Cha Cha,Rumba]]
             Standard: [[Waltz,Foxtrot,Quickstep]]
+
     Pre Gold:
-    - tag: Qualifier
       style:
         American:
           disposition: multiple-events
@@ -410,8 +395,8 @@ Georgia DanceSport ProAm-2019:
           substyle:
             Latin: [[Samba,Cha Cha,Rumba,Jive]]
             Standard: [[Waltz,Tango,Foxtrot,Quickstep]]
+
     Intermediate Gold:
-    - tag: Qualifier
       style:
         American:
           disposition: multiple-events
@@ -424,7 +409,6 @@ Georgia DanceSport ProAm-2019:
             Latin: [[Samba,Cha Cha,Rumba,Jive]]
             Standard: [[Waltz,Tango,Foxtrot,Quickstep]]
     Full Gold:
-    - tag: Qualifier
       style:
         American:
           disposition: multiple-events
@@ -439,7 +423,6 @@ Georgia DanceSport ProAm-2019:
             Standard: [[Waltz,Tango,Foxtrot,Quickstep]]
 
     Open Gold:
-    - tag: Qualifier
       style:
         American:
           disposition: multiple-events
@@ -466,12 +449,10 @@ Georgia DanceSport ProAm-2019:
   - Senior 3
   - Senior 4
   - Senior 5
-  sex: [Male-Female,Male-Male,Female-Female]
   type: Professional-Amateur
   status: Teacher-Student
 - proficiency:
     Rising Star:
-    - tag: Qualifier
       style:
         American:
           disposition: multiple-events
@@ -484,7 +465,6 @@ Georgia DanceSport ProAm-2019:
             Latin: [[Samba,Cha Cha,Rumba,Paso Doble,Jive]]
             Standard: [[Waltz,Tango,Viennese Waltz,Foxtrot,Quickstep]]
     Professional:
-    - tag: Qualifier
       style:
         American:
           disposition: multiple-events
@@ -498,6 +478,5 @@ Georgia DanceSport ProAm-2019:
             Standard: [[Waltz,Tango,Viennese Waltz,Foxtrot,Quickstep]]
   age:
   - Adult
-  sex: [Male-Female]
   type: Professional
   status: Teacher-Teacher

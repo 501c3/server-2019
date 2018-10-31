@@ -40,15 +40,22 @@ class YamlPosition
 
 
     /**
-     * @param string $string
+     * @param string $file
      * @return array|string
      * @throws \Exception
      */
-    public static function yamlAddPosition(string $string)
+    public static function yamlAddPosition(string $file)
     {
-        $data=Yaml::parse($string);
+        try{
+            $string=file_get_contents($file);
+            $data=Yaml::parse($string);
+        } catch(\Exception $e) {
+            $message = $e->getMessage();
+            $message.=' File: '.$file;
+            throw new \Exception($message, $e->getCode());
+        }
         if(is_null($data)) {
-            throw new \Exception("No yaml string to parse", 255);
+            throw new \Exception("No yaml string to parse in $file", 255);
         }
         $rowColumns=self::rowColumn($string);
         $positions=Yaml::parse($rowColumns);

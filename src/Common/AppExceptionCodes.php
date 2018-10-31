@@ -14,6 +14,7 @@ class AppExceptionCodes
     const
     INVALID_POSITION = 0010,
     UNHANDLED_MESSAGE = 0020,
+    UNHANDLED_CONDITION=0030,
     NOT_IN_COLLECTION = 1000,
     INVALID_PARAMETER = 1010,
     UNRECOGNIZED_VALUE = 1020,
@@ -21,6 +22,7 @@ class AppExceptionCodes
     INVALID_RANGE = 1040,
     OVERLAPPING_RANGE = 1050,
     ARRAY_EXPECTED = 1060,
+    SCALER_EXPECTED = 1070,
     PARAMETER_MISSING = 9999;
 
 
@@ -36,7 +38,7 @@ class AppExceptionCodes
         $result = preg_match('/R(?P<row>\d+)C(?P<col>\d+)/',$string, $pos);
         if(!$result) {
           $message = sprintf('"%s" passed to exception.  Expected string of form "R\d+C\d+" where \d in [0-9]',$string);
-          throw new \Exception($message, self::INVALID_POSITION);
+          throw new AppException(self::UNHANDLED_MESSAGE, self::$file);
         }
         return $pos;
     }
@@ -47,6 +49,7 @@ class AppExceptionCodes
      * $position = 'RXXCXX' where RXXCXX is a (row,column) position e.g. R3C22 == row:3, column=22
      *
      * @param int $code
+     * @param string $file
      * @param string|null $found
      * @param string|null $position
      * @param array|null $expected
@@ -76,6 +79,10 @@ class AppExceptionCodes
                 return self::missingKeysMessage($found, $expected);
             case self::ARRAY_EXPECTED:
                 return self::arrayExpectedMessage($found,$position);
+            case self::SCALER_EXPECTED:
+                return self::scalerExpectedMessage($found,$position);
+            case self::UNHANDLED_CONDITION:
+                return self::unhandledConditionMessage($file,$found,$position);
 
 
         }
@@ -175,6 +182,16 @@ class AppExceptionCodes
         return $message;
     }
 
+    private static function scalerExpectedMessage(string $found, string $position) : string
+    {
+        $pos = self::strToPos($position);
+        $message = sprintf("Found array near $found (row:%d,col:%d) but expected scaler.",
+            $pos['row'],$pos['col']);
+        $message.= ' File: '.self::$file;
+        return $message;
+
+    }
+
     /**
      * @param string $missing
      * @param array $positions
@@ -196,4 +213,8 @@ class AppExceptionCodes
     }
 
 
+    private function unhandledConditionMessage($file,$method,$line)
+    {
+        return "Unhandled condition in $file::$method at line:$line." ;
+    }
 }

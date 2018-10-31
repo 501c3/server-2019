@@ -1,0 +1,206 @@
+ISTD Medal Exams-2019:
+  - genre: [Rhythm,Smooth,Latin,Standard]
+    style: [International,American]
+    substyle: [Rhythm,Smooth,Latin,Standard]
+    type: [Amateur,Professional,Professional-Amateur]
+    status: [Teacher-Teacher,Teacher-Student,Student-Student]
+    sex: [Male-Female,Male-Male,Female-Female]
+    proficiency: [Pre Bronze,Bronze,Silver,Gold]
+    age: [Under 6,Under 8,Under 12,Junior 12-16,Adult 16-50,Senior 50]
+    tag: [Introductory Tests,One Dance Tests,Medal Series,Opposite]
+    dance:
+    - Cha Cha
+    - Samba
+    - Rumba
+    - Paso Doble
+    - Jive
+    - Swing
+    - Bolero
+    - Mambo
+    - Salsa
+    - West Coast Swing
+    - Merengue
+    - Night Club
+    - Hustle
+    - Chicken Dance
+    - Waltz
+    - Tango
+    - Viennese Waltz
+    - Foxtrot
+    - Quickstep
+    - Argentine Tango
+    - Peabody
+    - Valtz
+    - Melonga
+    - 2-Step
+    - Nightclub
+    - Polka
+    - Triple Two
+Georgia DanceSport Amateur-2019:
+  - genre: [Rhythm,Smooth,Latin,Standard,International,American]
+    style: [International,American,Fun Events]
+    substyle: [Rhythm,Smooth,Latin,Standard,Novelty]
+    sex:
+    - Male
+    - Female
+    - Male-Female
+    - Male-Male
+    - Female-Female
+    proficiency:
+    - Newcomer
+    - Intermediate Bronze
+    - Full Bronze
+    - Open Bronze
+    - Bronze
+    - Pre Silver
+    - Intermediate Silver
+    - Full Silver
+    - Open Silver
+    - Silver
+    - Pre Gold
+    - Intermediate Gold
+    - Full Gold
+    - Open Gold
+    - Gold
+    - Pre Novice
+    - Novice
+    - Gold Star 1
+    - Pre Championship
+    - Gold Star 2
+    - Championship
+    - Rising Star
+    - Professional
+    age:
+    - Preteen 1
+    - Preteen 2
+    - Junior 1
+    - Junior 2
+    - Youth
+    - Adult
+    - Senior 1
+    - Senior 2
+    - Senior 3
+    - Senior 4
+    - Senior 5
+    - Senior
+    - Baby
+    - Juvenile
+    - Youth-Senior
+    - Youth-Senior 5
+    - Adult-Senior 2
+    - Senior 3-Senior 5
+    - Adult-Youth
+    - Senior-Youth
+    - Youth
+    - Baby-Preteen 2
+    type: [Amateur]
+    status: [Student-Student]
+    tag:
+    - Qualifier
+    - Scholarship
+    - Parent-Child
+    - Grandparent-Child
+    dance:
+    - Cha Cha
+    - Samba
+    - Rumba
+    - Paso Doble
+    - Jive
+    - Swing
+    - Bolero
+    - Mambo
+    - Salsa
+    - West Coast Swing
+    - Merengue
+    - Night Club
+    - Hustle
+    - Chicken Dance
+    - Waltz
+    - Tango
+    - Viennese Waltz
+    - Foxtrot
+    - Quickstep
+    - Argentine Tango
+    - Peabody
+    - Valtz
+    - Melonga
+    - 2-Step
+    - Nightclub
+    - Polka
+    - Triple Two
+Georgia DanceSport ProAm-2019:
+  - genre: [Rhythm,Smooth,Latin,Standard]
+    style: [International,American]
+    substyle: [Rhythm,Smooth,Latin,Standard]
+    status:
+    - Teacher-Student
+    type:
+    - Professional-Amateur
+    sex:
+    - Male-Female
+    - Male-Male
+    - Female-Female
+    proficiency:
+    - Newcomer
+    - Intermediate Bronze
+    - Full Bronze
+    - Open Bronze
+    - Pre Silver
+    - Intermediate Silver
+    - Full Silver
+    - Open Silver
+    - Pre Gold
+    - Intermediate Gold
+    - Full Gold
+    - Open Gold
+    - Pre Novice
+    - Gold Star 1
+    - Pre Championship
+    - Gold Star 2
+    - Championship
+    - Rising Star
+    - Professional
+    age:
+    - Baby
+    - Juvenile
+    - Preteen 1
+    - Preteen 2
+    - Junior 1
+    - Junior 2
+    - Youth
+    - Adult
+    - Senior 1
+    - Senior 2
+    - Senior 3
+    - Senior 4
+    - Senior 5
+    tag:
+    - Qualifier
+    - Scholarship
+    dance:
+    - Cha Cha
+    - Samba
+    - Rumba
+    - Paso Doble
+    - Jive
+    - Swing
+    - Bolero
+    - Mambo
+    - Salsa
+    - West Coast Swing
+    - Merengue
+    - Night Club
+    - Hustle
+    - Waltz
+    - Tango
+    - Viennese Waltz
+    - Foxtrot
+    - Quickstep
+    - Argentine Tango
+    - Peabody
+    - Valtz
+    - Melonga
+    - 2-Step
+    - Nightclub
+    - Polka
+    - Triple Two

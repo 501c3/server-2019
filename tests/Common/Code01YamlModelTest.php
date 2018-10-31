@@ -96,5 +96,14 @@ class Code01YamlModelTest extends KernelTestCase
        $this->assertArraySubset(self::TEST_VALUE, $values);
    }
 
+   public function test0170ModelValue()
+   {
+       $this->yamlModel->declareModels(__DIR__ . '/data-01-models.yml');
+       $this->yamlModel->declareDomains(__DIR__ . '/data-01-domains.yml');
+       $this->yamlModel->declareValues(__DIR__ . '/data-01-values.yml');
+       $modelValues = $this->yamlModel->declareModelValues(__DIR__ . '/data-01-values-0000-model.yml');
+       var_dump($modelValues);die;
+   }
+
 
 }

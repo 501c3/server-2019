@@ -125,24 +125,14 @@ Georgia DanceSport Amateur-2019:
   - proficiency:
     - Social
     age:
-    - Baby
-    - Juvenile
-    - Preteen 1
-    - Preteen 2
-    type: Amateur
-    sex:
-    - Male
-    - Female
-  - proficiency:
-    - Social
-    age:
     - Adult-Youth
     - Senior-Youth
-    type: Amateur
     sex:
     - Male-Female
     - Male-Male
     - Female-Female
+    type: Amateur
+    status: Student-Student
   - proficiency:
     - Social
     - Newcomer
@@ -152,10 +142,11 @@ Georgia DanceSport Amateur-2019:
     - Juvenile
     - Preteen 1
     - Preteen 2
-    type: Amateur
     sex:
     - Male
     - Female
+    type: Amateur
+    status: Student
 Georgia DanceSport ProAm-2019:
   - proficiency:
     - Newcomer
@@ -193,16 +184,18 @@ Georgia DanceSport ProAm-2019:
     - Senior 3
     - Senior 4
     - Senior 5
-    type: Teacher-Student
     sex:
     - Male-Female
     - Male-Male
     - Female-Female
+    type: Professional-Amateur
+    status: Teacher-Student
   - proficiency:
     - Rising Star
     - Professional;
     age:
     - Adult
-    type: Professional
     sex:
     - Male-Female
+    type: Professional
+    status: Teacher-Teacher

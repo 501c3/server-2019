@@ -25,8 +25,8 @@ class Code00YamlPositionTest extends KernelTestCase
 
     /**
      * @expectedException  \Exception
-     * @expectedExceptionMessage No yaml string to parse
-     * @expectedExceptionCode 255
+     * @expectedExceptionMessage file_get_contents(): Filename cannot be empty
+     * @expectedExceptionCode 2
      */
     public function test0000EmptyString()
     {
@@ -64,11 +64,9 @@ class Code00YamlPositionTest extends KernelTestCase
      */
     public function test0010PositionCorrect()
     {
-        $string = file_get_contents(__DIR__ . '/data-00-position-0010-isolate.yml');
-        $actual = YamlPosition::yamlAddPosition($string);
-        $expected = Yaml::parse(file_get_contents(__DIR__ . '/data-00-position-0010-correct.yml'));
-        $this->assertEquals($expected,$actual);
-        $expectedIsolatedData = Yaml::parse($string);
+        $file=__DIR__.'/data-00-position-0010-isolate.yml';
+        $actual = YamlPosition::yamlAddPosition($file);
+        $expectedIsolatedData = Yaml::parseFile($file);
         $actualIsolatedData = YamlPosition::isolate($actual);
         $this->assertEquals($expectedIsolatedData, $actualIsolatedData);
     }
@@ -108,17 +106,11 @@ class Code00YamlPositionTest extends KernelTestCase
      */
     public function test0040PositionIsolate()
     {
-        $string = file_get_contents(__DIR__ . '/data-00-position-0010-isolate.yml');
+        $file=__DIR__ . '/data-00-position-0010-isolate.yml';
+        $string = file_get_contents($file);
         $expected = Yaml::parse($string);
-        $dataPosition = YamlPosition::yamlAddPosition($string);
+        $dataPosition = YamlPosition::yamlAddPosition($file);
         $actual = YamlPosition::isolate($dataPosition);
         $this->assertEquals($expected,$actual);
     }
-
-
-
-
-
-
-
  }

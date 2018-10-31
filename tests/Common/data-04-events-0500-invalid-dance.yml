@@ -495,7 +495,7 @@ Georgia DanceSport ProAm-2019:
           disposition: multiple-events
           substyle:
             Latin: [[Samba,Cha Cha,Rumba,Paso Doble,Jive]]
-            Standard: [[Waltz,Tango,Viennese Waltz,Foxtrot,Quickstep]]
+            Standard: [[Waltz,Tango,Viennese Waltz,Foxtrot,Invalid Dance]]
   age:
   - Adult
   sex: [Male-Female]
