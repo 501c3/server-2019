@@ -11,8 +11,6 @@ status:
   Teacher: { abbr: T}
 type:
   Amateur: {abbr: Am}
-grouping:
-  Solo: {abbr: S}
 sex:
   Male: {abbr: M}
 proficiency:

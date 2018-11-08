@@ -1,11 +1,9 @@
-Georgia DanceSport ProAm-2019:
-  - proficiency:
-    - Rising Star
-    - Professional
-    age:
-      16-80: Adult
-    sex:
-    - Male
-    - Female
-    status: Teacher
-    type: Professional
+- proficiency:
+  - Rising Star
+  - Professional
+  age: 16-80
+  sex:
+  - Male
+  - Female
+  status: Teacher
+  type: Professional

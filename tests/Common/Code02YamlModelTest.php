@@ -26,29 +26,17 @@ class Code02YamlModelTest  extends KernelTestCase
     public function setUp()
     {
         $this->yamlModel = new YamlModel();
-        $this->yamlModel->declareModels(__DIR__ . '/data-01-models.yml');
-        $this->yamlModel->declareDomains(__DIR__ . '/data-01-domains.yml');
-        $this->yamlModel->declareValues(__DIR__ . '/data-01-values.yml');
-        $this->yamlModel->declarePersons(__DIR__.'/data-02-persons.yml');
+        $this->yamlModel->declareModels(__DIR__ . '/models.yml');
+        $this->yamlModel->declareDomains(__DIR__ . '/domains.yml');
+        $this->yamlModel->declareValues(__DIR__ . '/values.yml');
+        $this->yamlModel->declarePersons(__DIR__.'/persons.yml');
     }
 
-    /**
-     * @expectedException \App\Common\AppException
-     * @expectedExceptionMessage Found 'Unrecognized Model' at (row:30,col:1) which is not a recognized value.
-     * @expectedExceptionCode \App\Common\AppExceptionCodes::UNRECOGNIZED_VALUE
-     * @throws \Exception
-     *
-     * Thrown in YamlModel:line 124
-     */
-    public function test0210PersonModelUnrecognized()
-    {
-        $this->yamlModel->declarePersons(__DIR__ . '/data-02-persons-0210-unrecognized.yml');
-    }
 
 
     /**
      * @expectedException \App\Common\AppException
-     * @expectedExceptionMessage  Found 'invalid key' at (row:9,col:5). Expected [type, status, sex, age, proficiency].
+     * @expectedExceptionMessage  Found 'invalid_key' at (row:3,col:3). Expected [type, status, sex, age, proficiency].
      * @expectedExceptionCode \App\Common\AppExceptionCodes::NOT_IN_COLLECTION
      * @throws \Exception
      */
@@ -59,7 +47,7 @@ class Code02YamlModelTest  extends KernelTestCase
 
     /**
      * @expectedException \App\Common\AppException
-     * @expectedExceptionMessage Missing type,status between rows 2 and 16
+     * @expectedExceptionMessage Missing sex,age between rows 1 and 3.
      * @expectedExceptionCode \App\Common\AppExceptionCodes::MISSING_KEYS
      * @throws \Exception
      *
@@ -73,7 +61,7 @@ class Code02YamlModelTest  extends KernelTestCase
 
     /**
      * @expectedException \App\Common\AppException
-     * @expectedExceptionMessage  Found 'Invalid Type' at (row:20,col:11) which is not a recognized value.
+     * @expectedExceptionMessage  Found 'Invalid Type' at (row:1,col:9) which is not a recognized value.
      * @expectedExceptionCode \App\Common\AppExceptionCodes::UNRECOGNIZED_VALUE
      * @throws \Exception
      *
@@ -87,7 +75,7 @@ class Code02YamlModelTest  extends KernelTestCase
 
     /**
      * @expectedException \App\Common\AppException
-     * @expectedExceptionMessage Found 'Invalid Status' at (row:19,col:13) which is not a recognized value.
+     * @expectedExceptionMessage Found 'Invalid Status' at (row:2,col:11) which is not a recognized value.
      * @expectedExceptionCode \App\Common\AppExceptionCodes::UNRECOGNIZED_VALUE
      * @throws \Exception
      *
@@ -100,7 +88,7 @@ class Code02YamlModelTest  extends KernelTestCase
 
     /**
      * @expectedException \App\Common\AppException
-     * @expectedExceptionMessage Found 'Invalid Sex' at (row:17,col:9) which is not a recognized value.
+     * @expectedExceptionMessage Found 'Invalid Sex' at (row:5,col:7) which is not a recognized value.
      * @expectedExceptionCode \App\Common\AppExceptionCodes::UNRECOGNIZED_VALUE
      * @throws \Exception
      *
@@ -114,7 +102,7 @@ class Code02YamlModelTest  extends KernelTestCase
 
     /**
      * @expectedException \App\Common\AppException
-     * @expectedExceptionMessage Found '9-Invalid' at (row:12,col:7) which is not a recognized value.
+     * @expectedExceptionMessage Found '16-Invalid' at (row:6,col:8) which is not a recognized value.
      * @expectedExceptionCode \App\Common\AppExceptionCodes::UNRECOGNIZED_VALUE
      * @throws \Exception
      *
@@ -127,7 +115,7 @@ class Code02YamlModelTest  extends KernelTestCase
 
     /**
      * @expectedException \App\Common\AppException
-     * @expectedExceptionMessage Found '6-1' at (row:10,col:7) which is not a valid range.
+     * @expectedExceptionMessage Found '16-13' at (row:6,col:8) which is not a valid range.
      * @expectedExceptionCode \App\Common\AppExceptionCodes::INVALID_RANGE
      * @throws \Exception
      *
@@ -138,44 +126,11 @@ class Code02YamlModelTest  extends KernelTestCase
         $this->yamlModel->declarePersons(__DIR__ . '/data-02-persons-0280-invalid-range.yml');
     }
 
-    /**
-     * @expectedException \App\Common\AppException
-     * @expectedExceptionMessage  Found '6-8' at (row:11,col:7) which is an overlapping range.
-     * @expectedExceptionCode \App\Common\AppExceptionCodes::OVERLAPPING_RANGE
-     * @throws \Exception
-     *
-     */
-    public function test0290PersonOverlappingRange()
-    {
-        $this->yamlModel->declarePersons(__DIR__ . '/data-02-persons-0290-overlapping-range.yml');
-    }
-
-    /**
-     * @expectedException \App\Common\AppException
-     * @expectedExceptionMessage Missing 16,17,18 between rows 10 and 15
-     * @expectedExceptionCode \App\Common\AppExceptionCodes::MISSING_KEYS
-     * @throws \Exception
-     */
-    public function test0300PersonMissingRange()
-    {
-        $this->yamlModel->declarePersons(__DIR__ . '/data-02-persons-0300-missing-range.yml');
-    }
 
 
     /**
      * @expectedException \App\Common\AppException
-     * @expectedExceptionMessage  Found 'Invalid Age' at (row:12,col:13) which is not a recognized value.
-     * @expectedExceptionCode \App\Common\AppExceptionCodes::UNRECOGNIZED_VALUE
-     * @throws \Exception
-     */
-    public function test0310PersonInvalidAge()
-    {
-        $this->yamlModel->declarePersons(__DIR__ . '/data-02-persons-0310-invalid-age.yml');
-    }
-
-    /**
-     * @expectedException \App\Common\AppException
-     * @expectedExceptionMessage Found 'Invalid Proficiency' at (row:6,col:7) which is not a recognized value.
+     * @expectedExceptionMessage Found 'Invalid Proficiency' at (row:23,col:5) which is not a recognized value.
      * @expectedExceptionCode \App\Common\AppExceptionCodes::UNRECOGNIZED_VALUE
      * @throws \Exception
      *
@@ -187,34 +142,18 @@ class Code02YamlModelTest  extends KernelTestCase
 
 
     /**
-     * @expectedException \App\Common\AppException
-     * @expectedExceptionMessage Found 'Social' at (row:73,col:7) but expected an array ie dash '-'.
-     * @expectedExceptionCode \App\Common\AppExceptionCodes::ARRAY_EXPECTED
-     * @throws AppException
-     */
-    public function test0330PersonExpectedArray()
-    {
-
-        $this->yamlModel->declarePersons(__DIR__ . '/data-02-persons-0330-expected-array.yml');
-
-    }
-
-    /**
      * @throws AppException
      */
 
     public function test0340PersonVerify()
     {
         $result=$this->yamlModel->declarePersons(__DIR__ . '/data-02-persons-0340-verify.yml');
-        $actual = $result['Professional']['Teacher']['Male']['Georgia DanceSport ProAm-2019'][20]['Professional'];
-
+        $actual = $result['Professional']['Teacher']['Male'][20]['Professional'];
         $expected = [
         'type' =>"Professional",
         'status' =>"Teacher",
         'sex' =>"Male",
-        'model' =>"Georgia DanceSport ProAm-2019",
         'years' => 20,
-        'age' =>"Adult",
         'proficiency' =>"Professional"
         ];
         $this->assertEquals($expected,$actual);

@@ -23,6 +23,8 @@ class AppExceptionCodes
     OVERLAPPING_RANGE = 1050,
     ARRAY_EXPECTED = 1060,
     SCALER_EXPECTED = 1070,
+    EMPTY_ARRAY_EXPECTED = 1080,
+    PARTNER_VALUES = 1090,
     PARAMETER_MISSING = 9999;
 
 
@@ -38,7 +40,7 @@ class AppExceptionCodes
         $result = preg_match('/R(?P<row>\d+)C(?P<col>\d+)/',$string, $pos);
         if(!$result) {
           $message = sprintf('"%s" passed to exception.  Expected string of form "R\d+C\d+" where \d in [0-9]',$string);
-          throw new AppException(self::UNHANDLED_MESSAGE, self::$file);
+          throw new AppException(self::UNHANDLED_MESSAGE, self::$file, $message);
         }
         return $pos;
     }
@@ -77,14 +79,16 @@ class AppExceptionCodes
                 return self::overlappingRangeMessage($found,$position);
             case self::MISSING_KEYS:
                 return self::missingKeysMessage($found, $expected);
+            case self::EMPTY_ARRAY_EXPECTED:
+                return self::emptyArrayMessage($found,$position);
             case self::ARRAY_EXPECTED:
                 return self::arrayExpectedMessage($found,$position);
             case self::SCALER_EXPECTED:
                 return self::scalerExpectedMessage($found,$position);
+            case self::PARTNER_VALUES:
+                return self::missingPartnerValueMessage($found,$position);
             case self::UNHANDLED_CONDITION:
                 return self::unhandledConditionMessage($file,$found,$position);
-
-
         }
         throw new \Exception('Unhandled message',self::UNHANDLED_MESSAGE);
     }
@@ -182,11 +186,34 @@ class AppExceptionCodes
         return $message;
     }
 
+    /**
+     * @param string $found
+     * @param string $position
+     * @return string
+     * @throws \Exception
+     */
+
     private static function scalerExpectedMessage(string $found, string $position) : string
     {
         $pos = self::strToPos($position);
         $message = sprintf("Found array near $found (row:%d,col:%d) but expected scaler.",
             $pos['row'],$pos['col']);
+        $message.= ' File: '.self::$file;
+        return $message;
+
+    }
+
+    /**
+     * @param string $found
+     * @param string $position
+     * @return string
+     * @throws \Exception
+     */
+    private static function missingPartnerValueMessage(string $found, string $position): string
+    {
+        $pos = self::strToPos($position);
+        $message = sprintf("Missing partner values near $found (row:%d,col:%d).",
+                            $pos['row'],$pos['col']);
         $message.= ' File: '.self::$file;
         return $message;
 
@@ -207,13 +234,27 @@ class AppExceptionCodes
         }
         $max = max($lines);
         $min = min($lines);
-        $message = sprintf("Missing %s between rows %s and %s",$missing,$min,$max);
+        $message = sprintf("Missing %s between rows %s and %s. ",$missing,$min,$max);
         $message.= ' File: '.self::$file;
         return $message;
     }
 
+    /**
+     * @param string $found
+     * @param string $position
+     * @return string
+     * @throws \Exception
+     */
+    private static function emptyArrayMessage(string $found, string $position)
+    {
+        /** @var array $pos */
+        $pos = self::strToPos($position);
+        $message = sprintf("Empty array expected near %s at (row:%d,col:%d). ",$found,$pos['row'],$pos['col']);
+        $message.= ' File: '.self::$file;
+        return $message;
+    }
 
-    private function unhandledConditionMessage($file,$method,$line)
+    private static function unhandledConditionMessage($file,$method,$line)
     {
         return "Unhandled condition in $file::$method at line:$line." ;
     }

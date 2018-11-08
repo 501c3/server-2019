@@ -24,12 +24,12 @@ class Code04YamlModelTest extends KernelTestCase
    public function setUp()
    {
        $this->yamlModel = new YamlModel();
-       $this->yamlModel->declareModels(__DIR__ . '/data-01-models.yml');
-       $this->yamlModel->declareDomains(__DIR__ . '/data-01-domains.yml');
-       $this->yamlModel->declareValues(__DIR__ . '/data-01-values.yml');
-       $this->yamlModel->declareModelValues(__DIR__.'/data-01-values-0000-model.yml');
-       $this->yamlModel->declarePersons(__DIR__.'/data-02-persons.yml');
-       $this->yamlModel->declareTeams(__DIR__.'/data-03-teams.yml');
+       $this->yamlModel->declareModels(__DIR__ . '/models.yml');
+       $this->yamlModel->declareDomains(__DIR__ . '/domains.yml');
+       $this->yamlModel->declareValues(__DIR__ . '/values.yml');
+       $this->yamlModel->declarePersons(__DIR__ . '/persons.yml');
+       $this->yamlModel->declareTeams(__DIR__.'/teams.yml');
+       $this->yamlModel->declareEventValues(__DIR__.'/event-values.yml');
    }
    /**
     * @expectedException  \App\Common\AppException
@@ -39,27 +39,27 @@ class Code04YamlModelTest extends KernelTestCase
 
    public function test0380EventsInvalidModel()
    {
-       $result=$this->yamlModel->declareEvents(__DIR__ . '/data-04-events-0380-invalid-model.yml');
+       $this->yamlModel->declareEvents(__DIR__ . '/data-04-events-0380-invalid-model.yml');
    }
 
     /**
      * @expectedException \App\Common\AppException
-     * @expectedExceptionMessage  Found 'Invalid Key' at (row:91,col:3). Expected [type, status, sex, age, proficiency].
+     * @expectedExceptionMessage  Found 'Invalid Key' at (row:2,col:3).
      * @expectedExceptionCode  \App\Common\AppExceptionCodes::NOT_IN_COLLECTION
      */
     public function test0390EventsInvalidKey()
     {
-        $result=$this->yamlModel->declareEvents(__DIR__ . '/data-04-events-0390-invalid-key.yml');
+        $this->yamlModel->declareEvents(__DIR__ . '/data-04-events-0390-invalid-key.yml');
     }
 
     /**
      * @expectedException \App\Common\AppException
-     * @expectedExceptionMessage  Missing sex between rows 2 and 93
+     * @expectedExceptionMessage  Missing sex between rows 2 and 30.
      * @expectedExceptionCode \App\Common\AppExceptionCodes::MISSING_KEYS
      */
     public function test0400EventsMissingKey()
     {
-        $result=$this->yamlModel->declareEvents(__DIR__ . '/data-04-events-0400-missing-key.yml');
+        $this->yamlModel->declareEvents(__DIR__ . '/data-04-events-0400-missing-key.yml');
     }
 
     /**
@@ -96,7 +96,7 @@ class Code04YamlModelTest extends KernelTestCase
 
     /**
      * @expectedException \App\Common\AppException
-     * @expectedExceptionMessage Found 'Invalid Style' at (row:6,col:9) which is not a recognized value.
+     * @expectedExceptionMessage Found 'Invalid Style' at (row:11,col:9) which is not a recognized value.
      * @expectedExceptionCode \App\Common\AppExceptionCodes::UNRECOGNIZED_VALUE
      */
     public function test0440EventsInvalidStyle()
@@ -106,7 +106,7 @@ class Code04YamlModelTest extends KernelTestCase
 
     /**
      * @expectedException \App\Common\AppException
-     * @expectedExceptionMessage Found 'invalid key' at (row:8,col:11). Expected [disposition, substyle].
+     * @expectedExceptionMessage Found 'Invalid Key' at (row:8,col:11). Expected [disposition, substyle].
      * @expectedExceptionCode \App\Common\AppExceptionCodes::NOT_IN_COLLECTION
      */
     public function test0450EventsInvalidKey()
@@ -157,7 +157,7 @@ class Code04YamlModelTest extends KernelTestCase
 
     /**
      * @expectedException \App\Common\AppException
-     * @expectedExceptionMessage Found 'Invalid Dance' at (row:498,col:60) which is not a recognized value.
+     * @expectedExceptionMessage Invalid Dance' at (row:10,col:60) which is not a recognized value.
      * @expectedExceptionCode \App\Common\AppExceptionCodes::UNRECOGNIZED_VALUE
      */
     public function test0500EventsInvalidDance()

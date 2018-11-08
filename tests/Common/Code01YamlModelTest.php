@@ -34,7 +34,7 @@ class Code01YamlModelTest extends KernelTestCase
 
    public function test0110Model()
    {
-       $this->yamlModel->declareModels(__DIR__ . '/data-01-models.yml');
+       $this->yamlModel->declareModels(__DIR__ . '/models.yml');
        $structure = $this->yamlModel->getStructure();
        $count=count($structure);
        $this->assertEquals(3,$count);
@@ -42,7 +42,7 @@ class Code01YamlModelTest extends KernelTestCase
 
    public function test0120Domain()
    {
-       $this->yamlModel->declareDomains(__DIR__ . '/data-01-domains.yml');
+       $this->yamlModel->declareDomains(__DIR__ . '/domains.yml');
        $structure = $this->yamlModel->fetchDomains();
        $count=count($structure);
        $this->assertEquals(11,$count);
@@ -50,38 +50,25 @@ class Code01YamlModelTest extends KernelTestCase
 
    /**
     * @expectedException \App\Common\AppException
-    * @expectedExceptionMessage Found 'bad_domain' at (row:6,col:1). Expected [style, substyle, status, type, grouping, sex, proficiency, age, tag, dance, genre].
+    * @expectedExceptionMessage Found 'bad_domain' at (row:6,col:1).
     * @expectedExceptionCode \App\Common\AppExceptionCodes::NOT_IN_COLLECTION
     */
    public function test0130ValuesBadDomain()
    {
-       $this->yamlModel->declareDomains(__DIR__ . '/data-01-domains.yml');
+       $this->yamlModel->declareDomains(__DIR__ . '/domains.yml');
        $this->yamlModel->declareValues(__DIR__ . '/data-01-values-0130-bad-domain.yml');
 
    }
 
     /**
      * @expectedException \App\Common\AppException
-     * @expectedExceptionMessage Found 'bad_key' at (row:10,col:13). Expected [abbr, note, domain].
+     * @expectedExceptionMessage Found 'bad_key' at (row:10,col:13). Expected [abbr, note, domain, label].
      * @expectedExceptionCode \App\Common\AppExceptionCodes::NOT_IN_COLLECTION
      */
    public function test0140ValueBadKey()
    {
-       $this->yamlModel->declareDomains(__DIR__ . '/data-01-domains.yml');
+       $this->yamlModel->declareDomains(__DIR__ . '/domains.yml');
        $this->yamlModel->declareValues(__DIR__ . '/data-01-values-0140-bad-key.yml');
-   }
-
-
-    /**
-     * @expectedException \App\Common\AppException
-     * @expectedExceptionMessage Found 'bad_style'. Expected [style, substyle, status, type, grouping, sex, proficiency, age, tag, dance, genre].
-     * @expectedExceptionCode \App\Common\AppExceptionCodes::INVALID_PARAMETER
-     */
-   public function test0150ValueBadDomain()
-   {
-       $this->yamlModel->declareDomains(__DIR__ . '/data-01-domains.yml');
-       $this->yamlModel->declareValues(__DIR__ . '/data-01-values.yml');
-       $this->yamlModel->fetchValues('bad_style');
    }
 
 
@@ -90,19 +77,22 @@ class Code01YamlModelTest extends KernelTestCase
      */
     public function test0160ValueConfirm()
    {
-       $this->yamlModel->declareDomains(__DIR__ . '/data-01-domains.yml');
-       $this->yamlModel->declareValues(__DIR__ . '/data-01-values.yml');
+       $this->yamlModel->declareDomains(__DIR__ . '/domains.yml');
+       $this->yamlModel->declareValues(__DIR__ . '/values.yml');
        $values=$this->yamlModel->fetchValues('style');
        $this->assertArraySubset(self::TEST_VALUE, $values);
    }
 
    public function test0170ModelValue()
    {
-       $this->yamlModel->declareModels(__DIR__ . '/data-01-models.yml');
-       $this->yamlModel->declareDomains(__DIR__ . '/data-01-domains.yml');
-       $this->yamlModel->declareValues(__DIR__ . '/data-01-values.yml');
-       $modelValues = $this->yamlModel->declareModelValues(__DIR__ . '/data-01-values-0000-model.yml');
-       var_dump($modelValues);die;
+       $models= $this->yamlModel->declareModels(__DIR__ . '/models.yml');
+       $this->yamlModel->declareDomains(__DIR__ . '/domains.yml');
+       $this->yamlModel->declareValues(__DIR__ . '/values.yml');
+       $modelValues = $this->yamlModel->declareEventValues(__DIR__ . '/event-values.yml');
+       foreach($models as $model) {
+           $this->assertArrayHasKey($model,$modelValues);
+       }
+
    }
 
 

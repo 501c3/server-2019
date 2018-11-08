@@ -8,8 +8,6 @@ substyle:
   Smooth: {abbr: AS}
 type:
   Amateur: {bad_key: Am}
-grouping:
-  Solo: {abbr: S}
 sex:
   Male: {abbr: M}
 proficiency:

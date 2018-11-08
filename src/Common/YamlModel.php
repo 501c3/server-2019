@@ -5,7 +5,6 @@
  * Date: 10/20/18
  * Time: 12:40 PM
  */
-
 namespace App\Common;
 
 use Exception;
@@ -14,7 +13,7 @@ use Symfony\Component\Yaml\Yaml;
 class YamlModel
 {
     const
-        VALUE_KEYS = ['abbr', 'note', 'domain'],
+        VALUE_KEYS = ['abbr', 'note', 'domain','label'],
         PLAYER_DOMAINS = ['type', 'status', 'sex', 'age', 'proficiency'],
         EVENT_DOMAINS = ['type','status','sex','genre','style','substyle','proficiency','age','tag','dance'];
 
@@ -27,38 +26,39 @@ class YamlModel
      * @var array
      * $this->domain[<domain>][<value>]=[abbr=><abbr>]
      */
-    private $domain;
+    protected $domain;
 
     /**
      * @var array
      * $this->value[<model>][<domain>]=[<value list>]
      */
-    private $value;
+    protected $value;
+
     private $competition;
 
     /**
      * @var array
      *
-     * $person[<type>][<status>][<sex>][<model>][<years>][<proficiency>]=<record>
+     * $person[<type>][<status>][<sex>][<years>][<proficiency>]=<record>
      *
      * <type>:=Amateur|Professional
      * <status>:=Teacher|Student
      * <sex>:=Male|Female
      * <years>:= number
      */
-    private $person;
+    protected $person;
     /**
      * @var array
      *
-     * $team[<type>][<sex>][<model>][<age>][<proficiency>]=<record>
+     * $team[<type>][status][sex][<age>][<proficiency>]=<record>
      * <record> = ['type'=><value>, 'status'=><value>, 'sex'=><value>,
-                     'model'=> <model> ,'age'=><value>, 'proficiency'=><value>
+                     'age'=><value>, 'proficiency'=><value>
      *               'people'=>[person_records], 'events'=>['event_list']
      * <type>:=Amateur|Professional
      * <sex>:=Male|Femal|Male-Male|Male-Female|Female-Female
      *
      */
-    private $team;
+    protected $team;
 
     /**
      * @var array
@@ -71,14 +71,14 @@ class YamlModel
      * <event-record-n> := ['substyle' => [dance-list], 'tag' => <value> ]
      */
 
-    private $event;
+    protected $event;
 
     /**
      * @param string $file
      * @return array|string
      */
 
-    private $file;
+    protected $file;
 
     public function declareModels(string $file)
     {
@@ -150,6 +150,7 @@ class YamlModel
      * @param array $domains
      * @param string $check
      * @param string $build
+     * @param string $return
      * @return array
      * @throws AppException
      * @throws Exception
@@ -168,7 +169,7 @@ class YamlModel
             if (!in_array($model, $this->model)) {
                 throw new AppException(AppExceptionCodes::UNRECOGNIZED_VALUE, $this->file, $model, $position);
             }
-            $this->$methodFor($model, $records, $domains, $check, $build);
+            $this->$methodFor($records, $domains, $check, $build, $model);
         }
         return $this->$return;
     }
@@ -181,12 +182,14 @@ class YamlModel
      */
     public function declarePersons(string $file) : array
     {
-        return $this->declare($file,
-                'entitiesFor',
-                self::PLAYER_DOMAINS,
-                'personsCheck',
-                'personsBuild',
-                 'person');
+        $this->file = $file;
+        $records = YamlPosition::yamlAddPosition($file);
+        $this->entitiesFor($records,
+            self::PLAYER_DOMAINS,
+            'personsCheck',
+            'personsBuild');
+
+        return $this->person;
 
     }
 
@@ -198,34 +201,59 @@ class YamlModel
      */
     public function declareTeams(string $file) : array
     {
-        return $this->declare($file,
-            'entitiesFor',
+        $this->file = $file;
+        $records = YamlPosition::yamlAddPosition($file);
+        $this->entitiesFor($records,
             self::PLAYER_DOMAINS,
             'teamsCheck',
-            'teamsBuild',
-            'team');
-
+            'teamsBuild');
+        return $this->team;
     }
 
 
+    /**
+     * @param string $file
+     * @return array
+     * @throws AppException
+     * @throws Exception
+     */
     public function declareEvents(string $file) : array
     {
-        return $this->declare($file,
-            'entitiesFor',
-            self::PLAYER_DOMAINS,
-            'eventsCheck',
-            'eventsBuild',
-            'event');
+        $this->file = $file;
+        $modelsPositions = YamlPosition::yamlAddPosition($file);
+        foreach ($modelsPositions as $modelPos => $records) {
+            list($model, $position) = explode('|', $modelPos);
+            if (!in_array($model, $this->model)) {
+                throw new AppException(AppExceptionCodes::UNRECOGNIZED_VALUE,
+                    $this->file, $model, $position);
+            }
+            $this->entitiesFor($records,
+                self::PLAYER_DOMAINS,
+                'eventsCheck',
+                'eventsBuild',
+                $model);
+        }
+        return $this->event;
     }
 
-    public function declareModelValues(string $file) : array
+    /**
+     * @param string $file
+     * @return array
+     * @throws AppException
+     * @throws Exception
+     */
+    public function declareEventValues(string $file) : array
     {
-        return $this->declare($file,
-            'entitiesFor',
-            self::EVENT_DOMAINS,
-            'valuesCheck',
-            'valuesBuild',
-            'value');
+        $this->file = $file;
+        $modelsPositions = YamlPosition::yamlAddPosition($file);
+        foreach ($modelsPositions as $modelPos => $records) {
+            list($model, $position) = explode('|', $modelPos);
+            if (!in_array($model, $this->model)) {
+                throw new AppException(AppExceptionCodes::UNRECOGNIZED_VALUE, $this->file, $model, $position);
+            }
+            $this->entitiesFor($records, self::EVENT_DOMAINS, 'valuesCheck', 'valuesBuild', $model);
+        }
+        return $this->value;
     }
 
     /**
@@ -237,7 +265,7 @@ class YamlModel
      * @throws AppException
      * @throws Exception
      */
-    protected function entitiesFor(string $model, array $records, array $domains, string $checkFn, string $buildFn)
+    protected function entitiesFor(array $records, array $domains, string $checkFn, string $buildFn, string $model=null)
     {
         foreach ($records as $record) {
             $keysPositions = array_keys($record);
@@ -267,11 +295,16 @@ class YamlModel
                         $cache[$key] = $this->$checkFn($key,$dataPosition);
                         break;
                     case 'eventsCheck':
-                        $cache[$key] = $this->$checkFn($model,$key,$dataPosition);
+                        $cache[$key] = $this->$checkFn($key,$dataPosition,$model);
 
                 }
             }
-            $this->$buildFn($model, $cache);
+            if(is_null($model)){
+                $this->$buildFn($cache);
+            } else {
+                $this->$buildFn($cache,$model);
+            }
+
         }
     }
 
@@ -310,6 +343,7 @@ class YamlModel
                 return YamlPosition::isolate($dataPosition);
 
         }
+        // TODO: Throw exception when this is reached.
         return null;
     }
 
@@ -325,11 +359,6 @@ class YamlModel
         switch ($key) {
             case 'status':
             case 'type':
-                //var_dump($key, $dataPosition);die;
-                if(!is_scalar($dataPosition))
-                {
-                    var_dump($key, $dataPosition,$this->file);die;
-                }
                 list($value, $pos) = explode('|', $dataPosition);
                 if (!isset($this->domain[$key][$value])) {
                     throw new AppException(AppExceptionCodes::UNRECOGNIZED_VALUE, $this->file, $value, $pos);
@@ -362,8 +391,9 @@ class YamlModel
      * @param $dataPosition
      * @return array|null|string
      * @throws AppException
+     * @throws Exception
      */
-    protected function eventsCheck(string $model, string $key, $dataPosition)
+    protected function eventsCheck(string $key, $dataPosition,string $model)
     {
         switch ($key) {
             case 'type':
@@ -388,15 +418,19 @@ class YamlModel
                 }
                 return YamlPosition::isolate($dataPosition);
             case 'proficiency':
-               $this->eventDanceCheck($model, $dataPosition);
+               $this->eventDanceCheck($dataPosition,$model);
                return YamlPosition::isolate($dataPosition);
 
         }
         return null;
     }
 
-
-    private function eventDanceCheck(string $model, array $dataPosition)
+    /**
+     * @param string $model
+     * @param array $dataPosition
+     * @throws AppException
+     */
+    private function eventDanceCheck(array $dataPosition,string $model)
     {
         foreach($dataPosition as $proficiencyPos=>$styleDances) {
             list($proficiency, $position) = explode('|',$proficiencyPos);
@@ -425,7 +459,7 @@ class YamlModel
                             }
                             break;
                         case 'style':
-                            $this->eventDanceSubstyleCheck($model,$subsectionPos);
+                            $this->eventDanceSubstyleCheck($subsectionPos,$model);
                     }
                 }
             }
@@ -433,7 +467,12 @@ class YamlModel
     }
 
 
-    public function eventDanceSubstyleCheck(string $model,array $subsectionPos)
+    /**
+     * @param string $model
+     * @param array $subsectionPos
+     * @throws AppException
+     */
+    private function eventDanceSubstyleCheck(array $subsectionPos,string $model)
     {
         foreach($subsectionPos as $stylePosition=>$eventsPositions){
             list($style,$stylePos) = explode('|',$stylePosition);
@@ -509,10 +548,9 @@ class YamlModel
                     }
                    break;
                 case 'single-event':
-
                     foreach($tmp['substyle'] as $substsyle=>$collectionPositions){
                         if(is_array($collectionPositions[0])) {
-                            list($scaler,$scalerPos) = explode('|',$collectionPositions[0]);
+                            list($scaler,$scalerPos) = explode('|',$collectionPositions[0][0]);
                             throw new AppException(AppExceptionCodes::SCALER_EXPECTED,
                                 $this->file,$scaler,$scalerPos);
                         }
@@ -534,57 +572,34 @@ class YamlModel
     }
 
     /**
-     * @param array $dataPosition
+     * @param string $dataPosition
      * @return array
+     * @throws AppException
+     */
+    private function personCheckAge(string $dataPosition) : array
+    {
+        /** @var array $allYears */
+        list($yearRange, $rangePos) = explode('|', $dataPosition);
+        if (preg_match('/(?P<lb>\d+)\-(?P<ub>\d+)/', $yearRange, $matches)) {
+            if ($matches['lb'] > $matches['ub']) {
+                throw new AppException(AppExceptionCodes::INVALID_RANGE, $this->file,
+                    $yearRange, $rangePos);
+            }
+        } else {
+            throw new AppException(AppExceptionCodes::UNRECOGNIZED_VALUE, $this->file,
+                $yearRange, $rangePos);
+        }
+        $years = range($matches['lb'], $matches['ub']);
+        return $years;
+    }
+
+    /**
+     * @param string $key
+     * @param $valuesPositions
+     * @return array|string
      * @throws AppException
      * @throws Exception
      */
-    private function personCheckAge(array $dataPosition) : array
-    {
-        /** @var array $allYears */
-        $allYears = [];
-        $yearAge = [];
-        foreach ($dataPosition as $keyPosition => $valuePosition) {
-            list($yearRange, $rangePos) = explode('|', $keyPosition);
-            if (preg_match('/(?P<lb>\d+)\-(?P<ub>\d+)/', $yearRange, $matches)) {
-                if ($matches['lb'] > $matches['ub']) {
-                    throw new AppException(AppExceptionCodes::INVALID_RANGE, $this->file,
-                        $yearRange, $rangePos);
-                }
-                $more = range($matches['lb'], $matches['ub']);
-                $overlap = array_intersect($allYears, $more);
-                $allYears = array_merge($allYears, $more);
-                if (count($overlap)) {
-                    throw new AppException(AppExceptionCodes::OVERLAPPING_RANGE, $this->file,
-                        $yearRange, $rangePos);
-                }
-                list($age, $agePos) = explode('|', $valuePosition);
-                if(!isset($this->domain['age'][$age])) {
-                    throw new AppException(AppExceptionCodes::UNRECOGNIZED_VALUE, $this->file,
-                        $age, $agePos);
-                }
-                foreach($more as $year) {
-                    $yearAge[$year]=$age;
-                }
-            } else {
-                throw new AppException(AppExceptionCodes::UNRECOGNIZED_VALUE, $this->file,
-                    $yearRange, $rangePos);
-            }
-        }
-        $min = min($allYears);
-        $max = max($allYears);
-        $every = range($min, $max);
-        $missing = array_diff($every, $allYears);
-        $keysPositions = array_keys($dataPosition);
-        $positions = YamlPosition::isolate($keysPositions, YamlPosition::POSITION);
-        if (count($missing)) {
-            throw new AppException(AppExceptionCodes::MISSING_KEYS, $this->file,
-                join(',', $missing), null, $positions);
-        }
-        return $yearAge;
-
-    }
-
     protected function valuesCheck(string $key, $valuesPositions)
     {
         foreach($valuesPositions as $valuePos) {
@@ -600,12 +615,10 @@ class YamlModel
     }
 
     /**
-     * @param string $model
      * @param $cache
-     * @throws Exception
      */
 
-    protected function personsBuild(string $model, $cache)
+    protected function personsBuild($cache)
     {
         if (!isset($this->person[$cache['type']])) {
             $this->person[$cache['type']] = [];
@@ -620,23 +633,18 @@ class YamlModel
             if (!isset($sexPtr[$sex])) {
                 $sexPtr[$sex] = [];
             }
-            $descriptionL1['sex'] = $sex;
-            if (!isset($sexPtr[$sex][$model])) {
-                $sexPtr[$sex][$model] = [];
-            }
-            $descriptionL1['model'] = $model;
-            foreach ($cache['age'] as $years => $age) {
+            $descriptionL1['sex']=$sex;
+            foreach ($cache['age'] as $years) {
                 $descriptionL2 = $descriptionL1;
                 if (!isset($modelPtr[$years])) {
-                    $sexPtr[$sex][$model][$years] = [];
+                    $sexPtr[$sex][$years] = [];
                 }
                 $descriptionL2['years'] = $years;
-                $descriptionL2['age'] = $age;
                 foreach ($cache['proficiency'] as $proficiency) {
                     $descriptionL3 = $descriptionL2;
                     $descriptionL3['proficiency'] = $proficiency;
-                    if (!isset($sexPtr[$sex][$model][$years][$proficiency])) {
-                        $sexPtr[$sex][$model][$years][$proficiency] = $descriptionL3;
+                    if (!isset($sexPtr[$sex][$years][$proficiency])) {
+                        $sexPtr[$sex][$years][$proficiency] = $descriptionL3;
                     }
                 }
             }
@@ -644,7 +652,7 @@ class YamlModel
     }
 
 
-    protected function teamsBuild(string $model, $cache)
+    protected function teamsBuild($cache)
     {
         if (!isset($this->team[$cache['type']])) {
             $this->team[$cache['type']] = [];
@@ -660,29 +668,24 @@ class YamlModel
                 $sexPtr[$sex] = [];
             }
             $descriptionL1['sex'] = $sex;
-            if (!isset($sexPtr[$sex][$model])) {
-                $sexPtr[$sex][$model] = [];
-            }
-            $descriptionL1['model'] = $model;
-
             foreach ($cache['age'] as  $age) {
                 $descriptionL2 = $descriptionL1;
                 if (!isset($modelPtr[$age])) {
-                    $sexPtr[$sex][$model][$age] = [];
+                    $sexPtr[$sex][$age] = [];
                 }
                 $descriptionL2['age'] = $age;
                 foreach ($cache['proficiency'] as $proficiency) {
                     $descriptionL3 = $descriptionL2;
                     $descriptionL3['proficiency'] = $proficiency;
-                    if (!isset($sexPtr[$sex][$model][$age][$proficiency])) {
-                        $sexPtr[$sex][$model][$age][$proficiency] = $descriptionL3;
+                    if (!isset($sexPtr[$sex][$age][$proficiency])) {
+                        $sexPtr[$sex][$age][$proficiency] = $descriptionL3;
                     }
                 }
             }
         }
     }
 
-    protected function valuesBuild(string $model, $values)
+    protected function valuesBuild($values,string $model)
     {
        if(!isset($this->value[$model])) {
            $this->value[$model]=[];
@@ -703,7 +706,7 @@ class YamlModel
      * @param string $model
      * @param $cache
      */
-    protected function eventsBuild(string $model, $cache)
+    protected function eventsBuild(array $cache,string $model)
     {
         if (!isset($this->event[$cache['type']])) {
             $this->event[$cache['type']] = [];
@@ -812,10 +815,8 @@ class YamlModel
             return $this->domain;
         }
         if(!isset($this->domain[$domain])) {
-            throw new AppException(AppExceptionCodes::INVALID_PARAMETER, $this->file,
-                                    $domain,
-                                    null,
-                                    array_keys($this->domain));
+            throw new AppException(AppExceptionCodes::INVALID_PARAMETER,
+                $this->file, $domain,null,array_keys($this->domain));
         }
         return $this->domain[$domain];
     }
@@ -824,5 +825,4 @@ class YamlModel
     {
         return $this->model;
     }
-
 }

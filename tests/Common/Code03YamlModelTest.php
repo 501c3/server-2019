@@ -25,15 +25,15 @@ class Code03YamlModelTest extends KernelTestCase
     public function setUp()
     {
         $this->yamlModel = new YamlModel();
-        $this->yamlModel->declareModels(__DIR__ . '/data-01-models.yml');
-        $this->yamlModel->declareDomains(__DIR__ . '/data-01-domains.yml');
-        $this->yamlModel->declareValues(__DIR__ . '/data-01-values.yml');
-        $this->yamlModel->declarePersons(__DIR__.'/data-02-persons.yml');
+        $this->yamlModel->declareModels(__DIR__ . '/models.yml');
+        $this->yamlModel->declareDomains(__DIR__ . '/domains.yml');
+        $this->yamlModel->declareValues(__DIR__ . '/values.yml');
+        $this->yamlModel->declarePersons(__DIR__ . '/persons.yml');
     }
 
     /**
      * @expectedException  \App\Common\AppException
-     * @expectedExceptionMessage Found 'invalid_key' at (row:16,col:5). Expected [type, status, sex, age, proficiency].
+     * @expectedExceptionMessage Found 'invalid_key' at (row:7,col:3). Expected [type, status, sex, age, proficiency].
      * @expectedExceptionCode \App\Common\AppExceptionCodes::NOT_IN_COLLECTION
      * @throws \App\Common\AppException
      */
@@ -45,7 +45,7 @@ class Code03YamlModelTest extends KernelTestCase
 
     /**
      * @expectedException  \App\Common\AppException
-     * @expectedExceptionMessage Missing sex between rows 101 and 115
+     * @expectedExceptionMessage Missing sex,age between rows 1 and 3.
      # @expectedExceptionMessage \App\Common\AppExceptionCode::MISSING_KEYS
      * @throws \App\Common\AppException
      */
@@ -56,7 +56,7 @@ class Code03YamlModelTest extends KernelTestCase
 
     /**
      * @expectedException  \App\Common\AppException
-     * @expectedExceptionMessage Found 'Invalid Value' at (row:18,col:7) which is not a recognized value.
+     * @expectedExceptionMessage Found 'Invalid Value' at (row:8,col:5) which is not a recognized value.
      * @expectedExceptionCode \App\Common\AppExceptionCodes::UNRECOGNIZED_VALUE
      * @throws \App\Common\AppException
      */
