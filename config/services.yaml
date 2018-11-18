@@ -4,6 +4,7 @@
 # Put parameters here that don't need to change on each machine where the app is deployed
 # https://symfony.com/doc/current/best_practices/configuration.html#application-related-configuration
 parameters:
+    locale: 'en'
 
 services:
     # default configuration for services in *this* file
@@ -28,3 +29,13 @@ services:
 
     # add more service definitions when explicit configuration is needed
     # please note that last definitions always *replace* previous ones
+
+    App\Signal\ProcessSubscriber:
+        public: true
+        tags:
+          - {name: 'process.update', event: '\App\Signal\ProcessEvent' }
+
+    Symfony\Component\HttpFoundation\Session\Storage\Handler\PdoSessionHandler:
+        arguments:
+        - 'mysql:dbname=access, host=localhost'
+        - { db_username: myuser, db_password: mypassword }

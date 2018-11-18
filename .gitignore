@@ -1,6 +1,6 @@
 
 ###> symfony/framework-bundle ###
-/.env
+/.env.dist
 /.idea
 /.gitignore
 /public/
@@ -9,6 +9,7 @@
 /composer.lock
 /symfony.lock
 /phpunit.phar
+/phpunit.xml.dist
 /tests/.gitignore
 /bin
 ###< symfony/framework-bundle ###

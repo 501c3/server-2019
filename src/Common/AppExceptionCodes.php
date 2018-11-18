@@ -22,9 +22,11 @@ class AppExceptionCodes
     INVALID_RANGE = 1040,
     OVERLAPPING_RANGE = 1050,
     ARRAY_EXPECTED = 1060,
+    INDEXED_ARRAY_EXPECTED = 1065,
     SCALER_EXPECTED = 1070,
     EMPTY_ARRAY_EXPECTED = 1080,
     PARTNER_VALUES = 1090,
+    FILE_NOT_FOUND = 2000,
     PARAMETER_MISSING = 9999;
 
 
@@ -83,12 +85,16 @@ class AppExceptionCodes
                 return self::emptyArrayMessage($found,$position);
             case self::ARRAY_EXPECTED:
                 return self::arrayExpectedMessage($found,$position);
+            case self::INDEXED_ARRAY_EXPECTED:
+                return self::indexedArrayExpectedMessage($found,$position);
             case self::SCALER_EXPECTED:
                 return self::scalerExpectedMessage($found,$position);
             case self::PARTNER_VALUES:
                 return self::missingPartnerValueMessage($found,$position);
             case self::UNHANDLED_CONDITION:
                 return self::unhandledConditionMessage($file,$found,$position);
+            case self::FILE_NOT_FOUND:
+                return self::fileNotFoundMessage($file, $found);
         }
         throw new \Exception('Unhandled message',self::UNHANDLED_MESSAGE);
     }
@@ -186,6 +192,15 @@ class AppExceptionCodes
         return $message;
     }
 
+    private static function indexedArrayExpectedMessage(string $found, string $position) : string
+    {
+        $pos = self::strToPos($position);
+        $message = sprintf("Found '$found' at (row:%d,col:%d) but expected an indexed array.",
+            $pos['row'],$pos['col']);
+        $message.= ' File: '.self::$file;
+        return $message;
+    }
+
     /**
      * @param string $found
      * @param string $position
@@ -258,4 +273,10 @@ class AppExceptionCodes
     {
         return "Unhandled condition in $file::$method at line:$line." ;
     }
+
+    private static function fileNotFoundMessage($file, $found=null)
+    {
+        return $found?"$found was not found in $file.":"$file was not found.";
+    }
+
 }

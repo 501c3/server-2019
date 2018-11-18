@@ -18,7 +18,7 @@ class GeorgiaDanceSport
 
 
 
-    public function buildTeamsCouples($team, $year, $partnerProficiencies):array
+    public function buildTeamPersons($team, $year, $partnerProficiencies):array
     {
         $teamCoupleList = [];
         switch ($team['type']) {
@@ -38,6 +38,15 @@ class GeorgiaDanceSport
                 }
         }
         return $teamCoupleList;
+    }
+
+    public function buildTeamSolo(array $team, int $year){
+        $person = ['type'=>$team['type'],
+                   'status'=>$team['status'],
+                   'years'=>$year,
+                   'proficiency'=>$team['proficiency']];
+        return [['team'=>$team, 'persons'=>[$person]]];
+
     }
 
     private function buildStudentStudentCouples(array & $teamCoupleList,
@@ -87,7 +96,7 @@ class GeorgiaDanceSport
             foreach ($teacherProficiencies as $teacherProficiency) {
                 $teacher = ['type'=>'Amateur','status'=>'Teacher',
                             'years'=>$teacherAge, 'proficiency'=>$teacherProficiency];
-                $student = ['type'=>'Amateur','status'=>'Teacher',
+                $student = ['type'=>'Amateur','status'=>'Student',
                             'years'=>$year, 'proficiency'=>$team['proficiency']];
                 if($sex[0]==$sex[1]) {
                     $teacher['sex']=$sex[0];
@@ -105,17 +114,10 @@ class GeorgiaDanceSport
                     array_push($teamCoupleList,
                         ['team'=>$team, 'persons'=>[$teacher,$student]]);
                 }
-
-                for ($studentAge = 16; $studentAge < 100; $studentAge++) {
-
-                    $student = ['type'=>'Amateur','status'=>'Student',
-                        'years'=>$year, 'proficiency'=>$team['proficiency']];
-                    array_push($teamCoupleList, ['team'=> $team,
-                        'persons'=>[$teacher, $student]]);
-                }
             }
         }
     }
+
 
     private function ageRangeCouple($year):array
     {

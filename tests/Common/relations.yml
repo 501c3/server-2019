@@ -12,12 +12,12 @@ team-person:
     Bronze: [Pre Bronze, Intermediate Bronze, Full Bronze, Open Bronze, Bronze]
     Silver: [Pre Silver, Intermediate Silver, Full Silver, Open Silver, Silver]
 - type: Amateur
-  status: Student
+  status: Student-Student
   sex:
   - Male-Male
   - Male-Female
   - Female-Female
-  age: 12-15
+  age: 13-15
   proficiency:
     Newcomer: [Newcomer]
     Bronze: [Pre Bronze, Intermediate Bronze, Full Bronze, Open Bronze, Bronze]
@@ -85,9 +85,9 @@ team-event:
     status:
       Teacher-Student: Teacher-Student
     sex:
-      Male-Female: Unspecified
-      Male-Male: Unspecified
-      Female-Female: Unspecified
+      Male-Female: Mixed-Sex
+      Male-Male: Mixed-Sex
+      Female-Female: Mixed-Sex
     age:
       Y01: [Under 6]
       Y02: [Under 6]
@@ -139,55 +139,55 @@ team-event:
       Y48: [Adult 16-50]
       Y49: [Adult 16-50]
       Y50: [Adult 16-50]
-      Y51: [Adult 50+]
-      Y52: [Adult 50+]
-      Y53: [Adult 50+]
-      Y54: [Adult 50+]
-      Y55: [Adult 50+]
-      Y56: [Adult 50+]
-      Y57: [Adult 50+]
-      Y58: [Adult 50+]
-      Y59: [Adult 50+]
-      Y60: [Adult 50+]
-      Y61: [Adult 50+]
-      Y62: [Adult 50+]
-      Y63: [Adult 50+]
-      Y64: [Adult 50+]
-      Y65: [Adult 50+]
-      Y66: [Adult 50+]
-      Y67: [Adult 50+]
-      Y68: [Adult 50+]
-      Y69: [Adult 50+]
-      Y70: [Adult 50+]
-      Y71: [Adult 50+]
-      Y72: [Adult 50+]
-      Y73: [Adult 50+]
-      Y74: [Adult 50+]
-      Y75: [Adult 50+]
-      Y76: [Adult 50+]
-      Y77: [Adult 50+]
-      Y78: [Adult 50+]
-      Y79: [Adult 50+]
-      Y80: [Adult 50+]
-      Y81: [Adult 50+]
-      Y82: [Adult 50+]
-      Y83: [Adult 50+]
-      Y84: [Adult 50+]
-      Y85: [Adult 50+]
-      Y86: [Adult 50+]
-      Y87: [Adult 50+]
-      Y88: [Adult 50+]
-      Y89: [Adult 50+]
-      Y90: [Adult 50+]
-      Y91: [Adult 50+]
-      Y92: [Adult 50+]
-      Y93: [Adult 50+]
-      Y94: [Adult 50+]
-      Y95: [Adult 50+]
-      Y96: [Adult 50+]
-      Y97: [Adult 50+]
-      Y98: [Adult 50+]
-      Y99: [Adult 50+]
+      Y51: [Senior 50]
+      Y52: [Senior 50]
+      Y53: [Senior 50]
+      Y54: [Senior 50]
+      Y55: [Senior 50]
+      Y56: [Senior 50]
+      Y57: [Senior 50]
+      Y58: [Senior 50]
+      Y59: [Senior 50]
+      Y60: [Senior 50]
+      Y61: [Senior 50]
+      Y62: [Senior 50]
+      Y63: [Senior 50]
+      Y64: [Senior 50]
+      Y65: [Senior 50]
+      Y66: [Senior 50]
+      Y67: [Senior 50]
+      Y68: [Senior 50]
+      Y69: [Senior 50]
+      Y70: [Senior 50]
+      Y71: [Senior 50]
+      Y72: [Senior 50]
+      Y73: [Senior 50]
+      Y74: [Senior 50]
+      Y75: [Senior 50]
+      Y76: [Senior 50]
+      Y77: [Senior 50]
+      Y78: [Senior 50]
+      Y79: [Senior 50]
+      Y80: [Senior 50]
+      Y81: [Senior 50]
+      Y82: [Senior 50]
+      Y83: [Senior 50]
+      Y84: [Senior 50]
+      Y85: [Senior 50]
+      Y86: [Senior 50]
+      Y87: [Senior 50]
+      Y88: [Senior 50]
+      Y89: [Senior 50]
+      Y90: [Senior 50]
+      Y91: [Senior 50]
+      Y92: [Senior 50]
+      Y93: [Senior 50]
+      Y94: [Senior 50]
+      Y95: [Senior 50]
+      Y96: [Senior 50]
+      Y97: [Senior 50]
+      Y98: [Senior 50]
+      Y99: [Senior 50]
     proficiency:
       Pre Bronze: [Pre Bronze]
       Intermediate Bronze: [Bronze]
@@ -212,121 +212,123 @@ team-event:
     status:
       Student-Student: Student-Student
     sex:
-      Male-Female: [Unspecified]
-      Male-Male: [Unspecified]
-      Female-Female: [Unspecified]
+      Male-Female: Mixed-Sex
+      Male-Male: Mixed-Sex
+      Female-Female: Mixed-Sex
     age:
-      Y01: Under 6
-      Y02: Under 6
-      Y03: Under 6
-      Y04: Under 6
-      Y05: Under 6
-      Y06: Under 6
-      Y07: Under 8
-      Y08: Under 8
-      Y09: Under 12
-      Y10: Under 12
-      Y11: Under 12
-      Y12: Junior 12-16
-      Y13: Junior 12-16
-      Y14: Junior 12-16
-      Y15: Junior 12-16
-      Y16: Adult 16-50
-      Y17: Adult 16-50
-      Y18: Adult 16-50
-      Y19: Adult 16-50
-      Y20: Adult 16-50
-      Y21: Adult 16-50
-      Y22: Adult 16-50
-      Y23: Adult 16-50
-      Y24: Adult 16-50
-      Y25: Adult 16-50
-      Y26: Adult 16-50
-      Y27: Adult 16-50
-      Y28: Adult 16-50
-      Y29: Adult 16-50
-      Y30: Adult 16-50
-      Y31: Adult 16-50
-      Y32: Adult 16-50
-      Y33: Adult 16-50
-      Y34: Adult 16-50
-      Y35: Adult 16-50
-      Y36: Adult 16-50
-      Y37: Adult 16-50
-      Y38: Adult 16-50
-      Y39: Adult 16-50
-      Y40: Adult 16-50
-      Y41: Adult 16-50
-      Y42: Adult 16-50
-      Y43: Adult 16-50
-      Y44: Adult 16-50
-      Y45: Adult 16-50
-      Y46: Adult 16-50
-      Y47: Adult 16-50
-      Y48: Adult 16-50
-      Y49: Adult 16-50
-      Y50: Adult 16-50
-      Y51: Adult 50+
-      Y52: Adult 50+
-      Y53: Adult 50+
-      Y54: Adult 50+
-      Y55: Adult 50+
-      Y56: Adult 50+
-      Y57: Adult 50+
-      Y58: Adult 50+
-      Y59: Adult 50+
-      Y60: Adult 50+
-      Y61: Adult 50+
-      Y62: Adult 50+
-      Y63: Adult 50+
-      Y64: Adult 50+
-      Y65: Adult 50+
-      Y66: Adult 50+
-      Y67: Adult 50+
-      Y68: Adult 50+
-      Y69: Adult 50+
-      Y70: Adult 50+
-      Y71: Adult 50+
-      Y72: Adult 50+
-      Y73: Adult 50+
-      Y74: Adult 50+
-      Y75: Adult 50+
-      Y76: Adult 50+
-      Y77: Adult 50+
-      Y78: Adult 50+
-      Y79: Adult 50+
-      Y80: Adult 50+
-      Y81: Adult 50+
-      Y82: Adult 50+
-      Y83: Adult 50+
-      Y84: Adult 50+
-      Y85: Adult 50+
-      Y86: Adult 50+
-      Y87: Adult 50+
-      Y88: Adult 50+
-      Y89: Adult 50+
-      Y90: Adult 50+
-      Y91: Adult 50+
-      Y92: Adult 50+
-      Y93: Adult 50+
-      Y94: Adult 50+
-      Y95: Adult 50+
-      Y96: Adult 50+
-      Y97: Adult 50+
-      Y98: Adult 50+
-      Y99: Adult 50+
+      Y01: [Under 6]
+      Y02: [Under 6]
+      Y03: [Under 6]
+      Y04: [Under 6]
+      Y05: [Under 6]
+      Y06: [Under 6]
+      Y07: [Under 8]
+      Y08: [Under 8]
+      Y09: [Under 12]
+      Y10: [Under 12]
+      Y11: [Under 12]
+      Y12: [Junior 12-16]
+      Y13: [Junior 12-16]
+      Y14: [Junior 12-16]
+      Y15: [Junior 12-16]
+      Y16: [Adult 16-50]
+      Y17: [Adult 16-50]
+      Y18: [Adult 16-50]
+      Y19: [Adult 16-50]
+      Y20: [Adult 16-50]
+      Y21: [Adult 16-50]
+      Y22: [Adult 16-50]
+      Y23: [Adult 16-50]
+      Y24: [Adult 16-50]
+      Y25: [Adult 16-50]
+      Y26: [Adult 16-50]
+      Y27: [Adult 16-50]
+      Y28: [Adult 16-50]
+      Y29: [Adult 16-50]
+      Y30: [Adult 16-50]
+      Y31: [Adult 16-50]
+      Y32: [Adult 16-50]
+      Y33: [Adult 16-50]
+      Y34: [Adult 16-50]
+      Y35: [Adult 16-50]
+      Y36: [Adult 16-50]
+      Y37: [Adult 16-50]
+      Y38: [Adult 16-50]
+      Y39: [Adult 16-50]
+      Y40: [Adult 16-50]
+      Y41: [Adult 16-50]
+      Y42: [Adult 16-50]
+      Y43: [Adult 16-50]
+      Y44: [Adult 16-50]
+      Y45: [Adult 16-50]
+      Y46: [Adult 16-50]
+      Y47: [Adult 16-50]
+      Y48: [Adult 16-50]
+      Y49: [Adult 16-50]
+      Y50: [Adult 16-50]
+      Y51: [Senior 50]
+      Y52: [Senior 50]
+      Y53: [Senior 50]
+      Y54: [Senior 50]
+      Y55: [Senior 50]
+      Y56: [Senior 50]
+      Y57: [Senior 50]
+      Y58: [Senior 50]
+      Y59: [Senior 50]
+      Y60: [Senior 50]
+      Y61: [Senior 50]
+      Y62: [Senior 50]
+      Y63: [Senior 50]
+      Y64: [Senior 50]
+      Y65: [Senior 50]
+      Y66: [Senior 50]
+      Y67: [Senior 50]
+      Y68: [Senior 50]
+      Y69: [Senior 50]
+      Y70: [Senior 50]
+      Y71: [Senior 50]
+      Y72: [Senior 50]
+      Y73: [Senior 50]
+      Y74: [Senior 50]
+      Y75: [Senior 50]
+      Y76: [Senior 50]
+      Y77: [Senior 50]
+      Y78: [Senior 50]
+      Y79: [Senior 50]
+      Y80: [Senior 50]
+      Y81: [Senior 50]
+      Y82: [Senior 50]
+      Y83: [Senior 50]
+      Y84: [Senior 50]
+      Y85: [Senior 50]
+      Y86: [Senior 50]
+      Y87: [Senior 50]
+      Y88: [Senior 50]
+      Y89: [Senior 50]
+      Y90: [Senior 50]
+      Y91: [Senior 50]
+      Y92: [Senior 50]
+      Y93: [Senior 50]
+      Y94: [Senior 50]
+      Y95: [Senior 50]
+      Y96: [Senior 50]
+      Y97: [Senior 50]
+      Y98: [Senior 50]
+      Y99: [Senior 50]
     proficiency:
       Pre Bronze: [Pre Bronze]
       Bronze: [Bronze]
       Silver: [Silver]
       Gold: [Gold]
   Georgia DanceSport Amateur-2019:
-  - type: Amateur
-    status: Student-Student
+  - type:
+      Amateur: Amateur
+    status:
+      Student-Student: Student-Student
     sex:
-      Male-Male: [Male-Male]
-      Male-Female: [Male-Female]
-      Female-Female: [Female-Female]
+      Male-Male: Same-Sex
+      Male-Female: Male-Female
+      Female-Female: Same-Sex
     age:
       Y01: [Baby]
       Y02: [Baby]
@@ -449,11 +451,13 @@ team-event:
       Pre Championship: [Pre Championship,Championship]
       Gold Star 2: [Pre Championship,Championship]
       Championship: [Championship]
-  - type: Amateur
-    status: Student
+  - type:
+      Amateur: Amateur
+    status:
+      Student: Student
     sex:
-      Male: Unspecified
-      Female: Unspecified
+      Male: Mixed-Sex
+      Female: Mixed-Sex
     age:
       Y01: [Baby]
       Y02: [Baby]
@@ -475,16 +479,18 @@ team-event:
       Y18: [Youth,Adult]
     proficiency:
       Newcomer: [Newcomer,Bronze]
-      Bronze: [Newcomer,Bronze]
-      Silver: [Bronze,Silver]
-      Gold: [Silver,Gold]
+      Bronze: [Bronze,Silver]
+      Silver: [Silver,Gold]
+      Gold: [Gold]
   Georgia DanceSport ProAm-2019:
-    - type: Professional-Amateur
-      status: Teacher-Student
+    - type:
+        Professional-Amateur: Professional-Amateur
+      status:
+        Teacher-Student: Teacher-Student
       sex:
-        Male-Female: Unspecified
-        Male-Male: Unspecified
-        Female-Female: Unspecified
+        Male-Female: Mixed-Sex
+        Male-Male: Mixed-Sex
+        Female-Female: Mixed-Sex
       age:
         Y01: [Baby,Juvenile]
         Y02: [Baby,Juvenile]
@@ -539,8 +545,8 @@ team-event:
         Y51: [Senior 1,Senior 2]
         Y52: [Senior 1,Senior 2]
         Y53: [Senior 1,Senior 2]
-        Y54: [Senior 2,Sneior 3]
-        Y55: [Senior 2,Sneior 3]
+        Y54: [Senior 2,Senior 3]
+        Y55: [Senior 2,Senior 3]
         Y56: [Senior 2,Senior 3]
         Y57: [Senior 2,Senior 3]
         Y58: [Senior 2,Senior 3]
@@ -586,7 +592,7 @@ team-event:
         Y98: [Senior 4,Senior 5]
         Y99: [Senior 4,Senior 5]
       proficiency:
-        Pre Bronze: [Pre Bronze, Intermedate Bronze, Full Bronze]
+        Pre Bronze: [Pre Bronze, Intermediate Bronze, Full Bronze]
         Intermediate Bronze: [Intermediate Bronze, Full Bronze, Open Bronze]
         Full Bronze: [Full Bronze, Open Bronze, Pre Silver]
         Open Bronze: [Open Bronze, Pre Silver, Intermediate Silver]
@@ -601,3 +607,124 @@ team-event:
         Gold Star 1: [Gold Star 1,Gold Star 2, Championship]
         Gold Star 2: [Gold Star 2, Championship]
         Championship: [Championship]
+    - type:
+        Amateur: Amateur
+      status:
+        Teacher-Student: Teacher-Student
+      sex:
+        Male-Female: Mixed-Sex
+        Male-Male: Mixed-Sex
+        Female-Female: Mixed-Sex
+      age:
+        Y01: [Baby,Juvenile]
+        Y02: [Baby,Juvenile]
+        Y03: [Baby,Juvenile]
+        Y04: [Baby,Juvenile]
+        Y05: [Juvenile,Preteen 1]
+        Y06: [Juvenile,Preteen 1]
+        Y07: [Preteen 1,Preteen 2]
+        Y08: [Preteen 1,Preteen 2]
+        Y09: [Preteen 1,Preteen 2]
+        Y10: [Preteen 2,Junior 1]
+        Y11: [Preteen 2,Junior 1]
+        Y12: [Junior 1,Junior 2]
+        Y13: [Junior 1,Junior 2]
+        Y14: [Junior 2,Youth]
+        Y15: [Junior 2,Youth]
+        Y16: [Youth,Adult]
+        Y17: [Youth,Adult]
+        Y18: [Youth,Adult]
+        Y19: [Adult]
+        Y20: [Adult]
+        Y21: [Adult]
+        Y22: [Adult]
+        Y23: [Adult]
+        Y24: [Adult]
+        Y25: [Adult]
+        Y26: [Adult]
+        Y27: [Adult]
+        Y28: [Adult]
+        Y29: [Adult]
+        Y30: [Adult]
+        Y31: [Adult]
+        Y32: [Adult]
+        Y33: [Adult]
+        Y34: [Adult]
+        Y35: [Adult,Senior 1]
+        Y36: [Adult,Senior 1]
+        Y37: [Adult,Senior 1]
+        Y38: [Adult,Senior 1]
+        Y39: [Adult,Senior 1]
+        Y40: [Adult,Senior 1]
+        Y41: [Adult,Senior 1]
+        Y42: [Adult,Senior 1]
+        Y43: [Adult,Senior 1]
+        Y44: [Adult,Senior 1]
+        Y45: [Senior 1,Senior 2]
+        Y46: [Senior 1,Senior 2]
+        Y47: [Senior 1,Senior 2]
+        Y48: [Senior 1,Senior 2]
+        Y49: [Senior 1,Senior 2]
+        Y50: [Senior 1,Senior 2]
+        Y51: [Senior 1,Senior 2]
+        Y52: [Senior 1,Senior 2]
+        Y53: [Senior 1,Senior 2]
+        Y54: [Senior 2,Senior 3]
+        Y55: [Senior 2,Senior 3]
+        Y56: [Senior 2,Senior 3]
+        Y57: [Senior 2,Senior 3]
+        Y58: [Senior 2,Senior 3]
+        Y59: [Senior 2,Senior 3]
+        Y60: [Senior 2,Senior 3]
+        Y61: [Senior 2,Senior 3]
+        Y62: [Senior 2,Senior 3]
+        Y63: [Senior 2,Senior 3]
+        Y64: [Senior 2,Senior 3]
+        Y65: [Senior 3,Senior 4]
+        Y66: [Senior 3,Senior 4]
+        Y67: [Senior 3,Senior 4]
+        Y68: [Senior 3,Senior 4]
+        Y69: [Senior 3,Senior 4]
+        Y70: [Senior 3,Senior 4]
+        Y71: [Senior 3,Senior 4]
+        Y72: [Senior 3,Senior 4]
+        Y73: [Senior 3,Senior 4]
+        Y74: [Senior 3,Senior 4]
+        Y75: [Senior 4,Senior 5]
+        Y76: [Senior 4,Senior 5]
+        Y77: [Senior 4,Senior 5]
+        Y78: [Senior 4,Senior 5]
+        Y79: [Senior 4,Senior 5]
+        Y80: [Senior 4,Senior 5]
+        Y81: [Senior 4,Senior 5]
+        Y82: [Senior 4,Senior 5]
+        Y83: [Senior 4,Senior 5]
+        Y84: [Senior 4,Senior 5]
+        Y85: [Senior 4,Senior 5]
+        Y86: [Senior 4,Senior 5]
+        Y87: [Senior 4,Senior 5]
+        Y88: [Senior 4,Senior 5]
+        Y89: [Senior 4,Senior 5]
+        Y90: [Senior 4,Senior 5]
+        Y91: [Senior 4,Senior 5]
+        Y92: [Senior 4,Senior 5]
+        Y93: [Senior 4,Senior 5]
+        Y94: [Senior 4,Senior 5]
+        Y95: [Senior 4,Senior 5]
+        Y96: [Senior 4,Senior 5]
+        Y97: [Senior 4,Senior 5]
+        Y98: [Senior 4,Senior 5]
+        Y99: [Senior 4,Senior 5]
+      proficiency:
+        Pre Bronze: [Pre Bronze, Intermediate Bronze, Full Bronze]
+        Intermediate Bronze: [Intermediate Bronze, Full Bronze, Open Bronze]
+        Full Bronze: [Full Bronze, Open Bronze, Pre Silver]
+        Open Bronze: [Open Bronze, Pre Silver, Intermediate Silver]
+        Pre Silver: [Pre Silver, Intermediate Silver, Full Silver]
+        Intermediate Silver: [Intermediate Silver,Full Silver, Open Silver]
+        Full Silver: [Full Silver,Open Silver, Pre Gold]
+        Open Silver: [Open Silver,Pre Gold, Intermediate Gold]
+        Pre Gold: [Pre Gold,Intermediate Gold, Full Gold]
+        Intermediate Gold: [Intermediate Gold,Full Gold, Open Gold]
+        Full Gold: [Full Gold,Open Gold, Gold Star 1]
+        Open Gold: [Open Gold,Gold Star 1, Gold Star 2]

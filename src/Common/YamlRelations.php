@@ -10,6 +10,8 @@ namespace App\Common;
 
 
 
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
+
 /**
  * Class YamlRelations
  * @package App\Common
@@ -19,29 +21,29 @@ class YamlRelations extends YamlModel
 
     const
         TOP_KEYS = ['competition','team-person','team-event'];
+
     /**
      * @var GeorgiaDanceSport
      */
     private $competition;
     /**
-     * @var array
+     * @var integer
      * Contains only the latest  teamPerson collections
      */
-    private $teamPerson = [];
-    /**
-     * @var array
-     */
-    //private $teamEvent = [];
-//    private $dbPerson;
-//    private $dbTeam;
-//    private $dbEvent;
+
+    private $fileNumber = 0;
+
+    /** @var EventDispatcherInterface */
+    private $dispatcher;
 
     /**
      * YamlRelations constructor.
+     * @param EventDispatcherInterface $dispatcher
      */
-    public function __construct()
+    public function __construct(EventDispatcherInterface $dispatcher = null)
     {
         $this->competition = new GeorgiaDanceSport();
+        $this->dispatcher = $dispatcher;
     }
 
 
@@ -62,14 +64,24 @@ class YamlRelations extends YamlModel
         }
     }
 
+    private function initializeTmpLocations(){
+        foreach(['person','team','event','team-person','team-event'] as $tmp) {
+            if(!file_exists("/tmp/gads/$tmp")){
+                mkdir("/tmp/gads/$tmp",0777,true);
+            }
+            array_map('unlink', array_filter((array) glob("/tmp/gads/$tmp/*")));
+        }
+    }
+
+
     /**
      * @param string $file
-     * @return array
      * @throws AppException
      * @throws \Exception
      */
     public function declareRelations(string $file)
     {
+        $this->initializeTmpLocations();
         $this->file=$file;
         $relationsPositions =  YamlPosition::yamlAddPosition($file);
         foreach($relationsPositions as $keyPosition=>$recordList) {
@@ -97,26 +109,30 @@ class YamlRelations extends YamlModel
                     }
                     break;
                 case 'team-event':
-//                    foreach($recordList as $record) {
-//                        //$this->relationsFor($record,self::EVENT_DOMAINS,'teamEventBuild');
-//                    }
+                    foreach($recordList as $modelPosition=>$records) {
+                        list($model,$position) = explode('|',$modelPosition);
+                        if(!in_array($model,$this->model)) {
+                            throw new AppException(AppExceptionCodes::NOT_IN_COLLECTION,
+                                $this->file,$model,$position,$this->model);
+                        }
+                        foreach($records as $record) {
+                            $this->relationsFor($record,self::PLAYER_DOMAINS,'teamEventBuild',$model);
+                        }
+                    }
                     break;
             }
         }
-        //TODO: Holds the latest teamPerson build before inserting into database.  Here for testing purposes.
-        return $this->teamPerson;
     }
 
     /**
      * @param array $record
      * @param array $domains
      * @param string $buildFn
+     * @param string|null $model
      * @throws AppException
-     * @throws \Exception
      */
-    public function relationsFor(array $record, array $domains, string $buildFn)
+    public function relationsFor(array $record, array $domains, string $buildFn, string $model=null)
     {
-
         $cache = [];
         foreach($record as $keyPos=>$dataPos) {
             list($key,$position) = explode('|',$keyPos);
@@ -126,8 +142,7 @@ class YamlRelations extends YamlModel
             }
             $cache[$key]=$dataPos;
         }
-        $positions = YamlPosition::isolate(array_keys($record),YamlPosition::POSITION);
-        $this->$buildFn($cache,$positions);
+        $this->$buildFn($cache,$model);
     }
 
 
@@ -232,7 +247,7 @@ class YamlRelations extends YamlModel
           $statusList = explode('-',$description['status']);
           switch(count($statusList)) {
               case 1:
-                 // $this->buildSoloTeam($descriptionL1,$year,$partnerProficiencies, $position);
+                  $this->buildSoloTeam($descriptionL1,$year,$partnerProficiencies, $position);
                   break;
               case 2:
                   $this->buildCoupleTeam($descriptionL1,$year,$partnerProficiencies, $position);
@@ -244,19 +259,20 @@ class YamlRelations extends YamlModel
 
     /**
      * @param $description
+     * @param $year
      * @param $partnerProficiencies
+     * @param string $position
      * @throws AppException
      */
-    public function buildSoloTeam($description,$partnerProficiencies) {
+    public function buildSoloTeam($description,$year,$partnerProficiencies,string $position) {
 
-        if(count($partnerProficiencies)){
-            $proficiencyPosition = $partnerProficiencies[0];
-            list($proficiency,$position) = explode('|',$proficiencyPosition);
+        if(!count($partnerProficiencies)){
             throw new AppException(AppExceptionCodes::EMPTY_ARRAY_EXPECTED,
-                $this->file, $proficiency,$position);
+                $this->file, $partnerProficiencies[0],$position);
         }
-        var_dump($description);die;
-        //TODO and possible solo competitions
+        $teamSolo=$this->competition->buildTeamSolo($description,$year);
+        $fileName='tp'.str_pad(++$this->fileNumber,7,'0',STR_PAD_LEFT);
+        yaml_emit_file($fileName,$teamSolo);
     }
 
     /**
@@ -280,14 +296,166 @@ class YamlRelations extends YamlModel
             }
         }
         /*@var array */
-        $teamsCouples=$this->competition->buildTeamsCouples($description,$year,$partnerProficiencies);
-        $this->teamPerson=$teamsCouples;
-//        foreach($teamsCouples as $singleTeam) {
-//           //TODO: DbInterface Implemented Here.
-//        }
+        $teamPersons=$this->competition->buildTeamPersons($description,$year,$partnerProficiencies);
+        $filename = 'tp'.str_pad(++$this->fileNumber,7,'0',STR_PAD_LEFT);
+        yaml_emit_file('/tmp/gads/team-person/'.$filename.'.yaml', $teamPersons);
     }
 
-    public function teamEventBuild(array $cache) {
-        var_dump($cache);die;
+    /**
+     * @param array $cache
+     * @param string|null $model
+     * @throws AppException
+     */
+    public function teamEventBuild(array $cache, string $model=null) {
+
+        if(!is_array($cache['type'])) {
+            list($typeScaler,$typeScalerPos)=explode('|',$cache['type']);
+            throw new AppException(AppExceptionCodes::INDEXED_ARRAY_EXPECTED,$this->file,
+                        $typeScaler,$typeScalerPos);
+        }
+        foreach($cache['type'] as $teamTypePosition=>$eventTypePosition){
+            list($teamType,$teamTypePos) = explode('|',$teamTypePosition);
+            $teamTypeCollection=array_keys($this->domain['type']);
+            if(!in_array($teamType,$teamTypeCollection)){
+                throw new AppException(AppExceptionCodes::NOT_IN_COLLECTION,$this->file,
+                    $teamType,$teamTypePos, $teamTypeCollection);
+            }
+            $eventTypeCollection=array_keys($this->value[$model]['type']);
+            list($eventType,$eventTypePos) = explode('|',$eventTypePosition);
+            if(!in_array($eventType,$eventTypeCollection)){
+                throw new AppException(AppExceptionCodes::NOT_IN_COLLECTION,$this->file,
+                    $eventType,$eventTypePos, $eventTypeCollection);
+            }
+            if(!is_array($cache['status'])) {
+                list($statusScaler,$statusScalerPos)=explode('|',$cache['status']);
+                throw new AppException(AppExceptionCodes::INDEXED_ARRAY_EXPECTED,$this->file,
+                    $statusScaler,$statusScalerPos);
+
+            }
+            foreach($cache['status'] as $teamStatusPosition=>$eventStatusPosition){
+                $teamStatusCollection = array_keys($this->domain['status']);
+                list($teamStatus,$teamStatusPos) = explode('|',$teamStatusPosition);
+                if(!in_array($teamStatus,$teamStatusCollection)){
+                    throw new AppException(AppExceptionCodes::NOT_IN_COLLECTION, $this->file,
+                        $teamStatus,$teamStatusPos,$teamStatusCollection);
+                }
+                $eventStatusCollection = array_keys($this->value[$model]['status']);
+                list($eventStatus,$eventStatusPos) = explode('|',$eventStatusPosition);
+                if(!in_array($eventStatus,$eventStatusCollection)) {
+                    throw new AppException(AppExceptionCodes::NOT_IN_COLLECTION, $this->file,
+                        $eventStatus,$eventStatusPos,$eventStatusCollection);
+                }
+                if(!is_array($cache['sex'])) {
+                    list($sexScaler,$sexScalerPos)=explode('|',$cache['sex']);
+                    throw new AppException(AppExceptionCodes::INDEXED_ARRAY_EXPECTED,$this->file,
+                        $sexScaler,$sexScalerPos);
+
+                }
+                foreach($cache['sex'] as $teamSexPosition=>$eventSexPosition) {
+                    $teamSexCollection = array_keys($this->domain['sex']);
+                    list($teamSex,$teamSexPos) = explode('|',$teamSexPosition);
+                    if(!in_array($teamSex,$teamSexCollection)){
+                        throw new AppException(AppExceptionCodes::NOT_IN_COLLECTION, $this->file,
+                            $teamSex,$teamSexPos,$teamSexCollection);
+                    }
+                    $eventSexCollection = array_keys($this->value[$model]['sex']);
+                    list($eventSex,$eventSexPos) = explode('|',$eventSexPosition);
+                    if(!in_array($eventSex,$eventSexCollection)) {
+                        throw new AppException(AppExceptionCodes::NOT_IN_COLLECTION, $this->file,
+                            $eventSex,$eventSexPos,$eventSexCollection);
+                    }
+                    if(!isset($this->event[$eventType][$eventStatus][$eventSex])) {
+                        $expectedEventSex = array_keys($this->event[$eventType][$eventStatus]);
+                        throw new AppException(AppExceptionCodes::NOT_IN_COLLECTION, $this->file,
+                            $eventSex,$eventSexPos,$expectedEventSex);
+                    }
+                    if(!is_array($cache['age'])) {
+                        list($ageScaler,$ageScalerPos)=explode('|',$cache['age']);
+                        throw new AppException(AppExceptionCodes::INDEXED_ARRAY_EXPECTED,$this->file,
+                            $ageScaler,$ageScalerPos);
+
+                    }
+
+                    foreach($cache['age'] as $teamAgePosition=>$eventAgeListPosition){
+                        $teamAgeCollection = array_keys($this->domain['age']);
+                        list($teamAge,$teamAgePos) = explode('|',$teamAgePosition);
+                        if(!in_array($teamAge,$teamAgeCollection)){
+                            throw new AppException(AppExceptionCodes::NOT_IN_COLLECTION, $this->file,
+                                $teamAge, $teamAgePos, $teamAgeCollection);
+                        }
+                        if(!is_array($cache['proficiency'])) {
+                            list($proficiencyScaler,$proficiencyScalerPos)=explode('|',$cache['proficiency']);
+                            throw new AppException(AppExceptionCodes::INDEXED_ARRAY_EXPECTED,$this->file,
+                                $proficiencyScaler,$proficiencyScalerPos);
+                        }
+                        foreach($cache['proficiency'] as $teamProficiencyPosition=>$eventProficiencyListPosition){
+                            $teamProficiencyCollection = array_keys($this->domain['proficiency']);
+                            list($teamProficiency, $teamProficiencyPos) = explode('|',$teamProficiencyPosition);
+                            if(!in_array($teamProficiency, $teamProficiencyCollection)) {
+                                throw new AppException(AppExceptionCodes::NOT_IN_COLLECTION, $this->file,
+                                    $$teamProficiency,$teamProficiencyPos, $teamProficiencyCollection);
+                            }
+                            $team = ['type'=>$teamType,'status'=>$teamStatus,
+                                     'sex'=>$teamSex,'age'=>$teamAge,'proficiency'=>$teamProficiency];
+                            $event = ['type'=>$eventType,'status'=>$eventStatus, 'sex'=>$eventSex];
+                            $eventHeaderList = [];
+                            foreach($eventAgeListPosition as $eventAgePosition){
+                                $eventAgeCollection=array_keys($this->value[$model]['age']);
+                                list($eventAge,$eventAgePos) = explode('|',$eventAgePosition);
+                                if(!in_array($eventAge,$eventAgeCollection)){
+                                    throw new AppException(AppExceptionCodes::NOT_IN_COLLECTION, $this->file,
+                                        $eventAge,$eventAgePos,$eventAgeCollection);
+                                }
+                                $eventL1=$event;
+                                $eventL1['age']=$eventAge;
+                                foreach($eventProficiencyListPosition as $eventProficiencyPosition) {
+                                    $eventProficiencyCollection=array_keys($this->value[$model]['proficiency']);
+                                    list($eventProficiency,$eventProficiencyPos) =
+                                        explode('|',$eventProficiencyPosition);
+                                    if(!in_array($eventProficiency,$eventProficiencyCollection)) {
+                                        throw new AppException(AppExceptionCodes::NOT_IN_COLLECTION, $this->file,
+                                            $eventProficiency, $eventProficiencyPos, $eventProficiencyCollection);
+                                    }
+                                    $eventL2=$eventL1;
+                                    $eventL2['proficiency']=$eventProficiency;
+                                    array_push($eventHeaderList,$eventL2);
+                                }
+                            }
+                            $this->buildToTmpFiles($team,$eventHeaderList);
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    /**
+     * @param array $team
+     * @param array $eventHeaderList
+     */
+    private function buildToTmpFiles(array $team, array $eventHeaderList)
+    {
+        $eventList = [];
+        $file='te'.str_pad($this->fileNumber++,'7','0',STR_PAD_LEFT);
+        foreach($eventHeaderList as $eventHeader){
+            $type = $eventHeader['type'];
+            $status= $eventHeader['status'];
+            $sex = $eventHeader['sex'];
+            $age = $eventHeader['age'];
+            $proficiency = $eventHeader['proficiency'];
+            foreach(array_keys($this->event[$type][$status][$sex]) as $model) {
+                $styleEvents=& $this->event[$type][$status][$sex][$model][$age][$proficiency];
+                if(isset($this->event[$type][$status][$sex][$model][$age][$proficiency])){
+                    foreach($styleEvents as $style=>$events){
+                        foreach($events['events'] as $event) {
+                            array_push($eventList, $event);
+                        }
+                    }
+                }
+            }
+        }
+        if(count($eventList)){
+            yaml_emit_file('/tmp/gads/team-event/'.$file.'.yaml',['team'=>$team,'events'=>$eventList]);
+        }
     }
 }

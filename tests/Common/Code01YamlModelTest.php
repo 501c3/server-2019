@@ -35,7 +35,7 @@ class Code01YamlModelTest extends KernelTestCase
    public function test0110Model()
    {
        $this->yamlModel->declareModels(__DIR__ . '/models.yml');
-       $structure = $this->yamlModel->getStructure();
+       $structure = $this->yamlModel->fetchModels();
        $count=count($structure);
        $this->assertEquals(3,$count);
    }

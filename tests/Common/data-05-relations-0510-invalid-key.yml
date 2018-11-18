@@ -7,8 +7,7 @@ invalid-key:
   age: 1-15
   proficiency:
     Newcomer: [Newcomer]
-    Bronze:
-  - Silver
+    Bronze: [Newcomer,Bronze]
 team-event:
   ISTD Medal Exams-2019:
   - type:

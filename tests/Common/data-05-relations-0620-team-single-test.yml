@@ -8,25 +8,26 @@ team-person:
   proficiency:
     Pre Bronze: [Newcomer, Pre Bronze]
 team-event:
-  ISTD Medal Exams-2019:
+  Georgia DanceSport Amateur-2019:
   - type:
       Amateur: Amateur
     status:
-      Teacher-Student: Teacher-Student
+      Student-Student: Student-Student
     sex:
-      Male-Female: Unspecified
+      Male-Female: Male-Female
     age:
-      Y01: [Under 6]
-      Y02: [Under 6]
+      Y15: [Junior 2,Youth]
+      Y16: [Junior 2,Youth]
     proficiency:
-      Pre Bronze: [Pre Bronze]
+      Pre Bronze: [Bronze,Silver]
   Georgia DanceSport ProAm-2019:
-    - type: Professional-Amateur
-      status: Teacher-Student
+    - type:
+        Professional-Amateur: Professional-Amateur
+      status:
+        Student-Student: Teacher-Student
       sex:
-        Male-Female: Unspecified
-
+        Male-Female: Male-Female
       age:
-        Y01: [Baby,Juvenile]
+        Y15: [Junior 2,Youth]
       proficiency:
         Newcomer: [Newcomer]

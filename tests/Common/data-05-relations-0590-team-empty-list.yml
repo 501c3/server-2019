@@ -7,6 +7,7 @@ team-person:
   age: 15-15
   proficiency:
     Pre Bronze: [Newcomer, Pre Bronze]
+    Newcomer: []
 team-event:
   ISTD Medal Exams-2019:
   - type:

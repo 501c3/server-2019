@@ -1,0 +1,8 @@
+models: tests/Common/models.yml
+domains: tests/Common/domains.yml
+values: tests/Common/values.yml
+persons: tests/Common/persons.yml
+teams: tests/Common/teams.yml
+event-values: tests/Common/event-values.yml
+model-events: tests/Common/model-events.yml
+relations: tests/Common/relations.yml

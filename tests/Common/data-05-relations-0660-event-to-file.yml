@@ -1,0 +1,21 @@
+competition: GeorgiaDanceSport
+team-person:
+- type: Amateur
+  status: Student-Student
+  sex:
+  - Male-Female
+  age: 15-15
+  proficiency:
+    Pre Bronze: [Newcomer, Pre Bronze]
+team-event:
+  Georgia DanceSport Amateur-2019:
+  - type:
+      Amateur: Amateur
+    status:
+      Student-Student: Student-Student
+    sex:
+      Male-Female: Male-Female
+    age:
+      Y15: [Junior 2]
+    proficiency:
+      Pre Bronze: [Bronze,Silver]

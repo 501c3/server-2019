@@ -21,7 +21,7 @@ class YamlModel
     /**
      * @var array
      */
-    private $model;
+    protected $model;
     /**
      * @var array
      * $this->domain[<domain>][<value>]=[abbr=><abbr>]
@@ -750,6 +750,7 @@ class YamlModel
     {
         foreach($styleDancesTag as $record){
             $descriptionL1 = $description;
+            $descriptionL1['tag'] = $record['tag'];
             foreach($record['style'] as $style=>$rec) {
                 if(!isset($prfPtr[$style])) {
                     $prfPtr[$style] = ['events'=>[]];
@@ -821,7 +822,7 @@ class YamlModel
         return $this->domain[$domain];
     }
 
-    public function getStructure()
+    public function fetchModels()
     {
         return $this->model;
     }

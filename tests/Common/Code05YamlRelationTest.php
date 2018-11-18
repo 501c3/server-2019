@@ -16,6 +16,8 @@ use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 class Code05YamlRelationTest extends KernelTestCase
 {
   private $ageRangeFor=[];
+
+  /** @var YamlRelations */
   private $yamlRelations;
 
   private function setUpRanges()
@@ -91,6 +93,7 @@ class Code05YamlRelationTest extends KernelTestCase
       $this->yamlRelations->declarePersons(__DIR__ . '/persons.yml');
       $this->yamlRelations->declareTeams(__DIR__.'/teams.yml');
       $this->yamlRelations->declareEventValues(__DIR__.'/event-values.yml');
+      $this->yamlRelations->declareEvents(__DIR__.'/model-events.yml');
       $this->setUpRanges();
   }
 
@@ -178,7 +181,7 @@ class Code05YamlRelationTest extends KernelTestCase
 
     /**
      * @expectedException \App\Common\AppException
-     * @expectedExceptionMessage Empty array expected near Newcomer at (row:9,col:16).
+     * @expectedExceptionMessage  Empty array expected near Newcomer at (row:9,col:5).
      * @expectedExceptionCode \App\Common\AppExceptionCodes::EMPTY_ARRAY_EXPECTED
      *
      */
@@ -197,40 +200,44 @@ class Code05YamlRelationTest extends KernelTestCase
       $this->yamlRelations->declareRelations(__DIR__.'/data-05-relations-0610-team-missing-partner.yml');
   }
 
-
-
-
-  public function test0620RelationsTeamSingleTest()
+    /**
+     * @expectedException \App\Common\AppException
+     * @expectedExceptionMessage Found 'invalid_key' at (row:16,col:5). Expected [type, status, sex, age, proficiency].
+     * @expectedExceptionCode \App\Common\AppExceptionCodes::NOT_IN_COLLECTION
+     */
+  public function test0630RelationsEventInvalidKey()
   {
-      $relations=$this->yamlRelations->declareRelations(__DIR__ . '/data-05-relations-0620-team-single-test.yml');
-      foreach($relations as $relation){
-          $this->assertEquals(
-              ['type'=>'Amateur','status'=>'Student-Student','age'=>'Y15',
-              'sex'=>'Male-Female','proficiency'=>'Pre Bronze'],
-              $relation['team']);
-          $p0 = $relation['persons'][0];
-          $p1 = $relation['persons'][1];
-          $this->assertGreaterThanOrEqual(13,$p0['years']);
-          $this->assertGreaterThanOrEqual(13,$p1['years']);
-          $this->assertLessThanOrEqual(15,$p0['years']);
-          $this->assertLessThanOrEqual(15,$p1['years']);
-          for($i=1;$i<12;$i++){
-              $this->assertNotEquals($i,$p0['years']);
-              $this->assertNotEquals($i,$p1['years']);
-          }
-          for($i=16;$i<100;$i++) {
-              $this->assertNotEquals($i,$p0['years']);
-              $this->assertNotEquals($i,$p1['years']);
-          }
-          $this->assertArraySubset(['type'=>'Amateur','status'=>'Student',
-                                    'proficiency'=>'Pre Bronze'],
-                                    $relation['persons'][0]);
-      }
+      $this->yamlRelations->declareRelations(__DIR__.'/data-05-relations-0630-event-invalid-key.yml');
   }
 
-  public function test0630RelationsTeamListing()
+    /**
+     * @expectedException \App\Common\AppException
+     * @expectedExceptionMessage Found 'Invalid Value' at (row:15,col:24). Expected [Student-Student].
+     * @expectedExceptionCode \App\Common\AppExceptionCodes::NOT_IN_COLLECTION
+     */
+  public function test0640RelationsEventInvalidValue()
   {
-      $relations=$this->yamlRelations->declareRelations(__DIR__.'/relations.yml');
-      var_dump($relations[0]);die;
+      $this->yamlRelations->declareRelations(__DIR__.'/data-05-relations-0640-event-invalid-value.yml');
+  }
+
+    /**
+     * @expectedException \App\Common\AppException
+     * @expectedExceptionMessage Found 'Invalid Age' at (row:19,col:13).
+     * @expectedExceptionCode \App\Common\AppExceptionCodes::NOT_IN_COLLECTION
+     */
+  public function test0650RelationsEventInvalidAge()
+  {
+      $this->yamlRelations->declareRelations(__DIR__.'/data-05-relations-0650-event-invalid-age.yml');
+  }
+
+    /**
+     * @throws \App\Common\AppException
+     */
+  public function test0660RelationsEventToFile()
+  {
+      $this->yamlRelations->declareRelations(__DIR__.'/data-05-relations-0660-event-to-file.yml');
+      $this->assertFileExists('/tmp/gads/team-person/tp0000001.yaml');
+      $this->assertFileExists('/tmp/gads/team-event/te0000001.yaml');
+
   }
 }
