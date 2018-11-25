@@ -1,14 +1,16 @@
 <?php
 
-namespace Entity\Models;
+namespace App\Entity\Models;
 
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
  * Person
  *
  * @ORM\Table(name="person")
- * @ORM\Entity(repositoryClass="Repository\Models\PersonRepository")
+ * @ORM\Entity(repositoryClass="App\Repository\Models\PersonRepository")
  */
 class Person
 {
@@ -22,23 +24,23 @@ class Person
     private $id;
 
     /**
-     * @var bool
+     * @var integer
      *
-     * @ORM\Column(name="age", type="boolean", nullable=false)
+     * @ORM\Column(name="age", type="integer", nullable=false)
      */
     private $age;
 
     /**
-     * @var json
+     * @var array
      *
      * @ORM\Column(name="description", type="json", nullable=false)
      */
     private $description;
 
     /**
-     * @var \Doctrine\Common\Collections\Collection
+     * @var Collection
      *
-     * @ORM\ManyToMany(targetEntity="Entity\Models\Value", inversedBy="personAge")
+     * @ORM\ManyToMany(targetEntity="App\Entity\Models\Value", inversedBy="personAge")
      * @ORM\JoinTable(name="person_has_value",
      *   joinColumns={
      *     @ORM\JoinColumn(name="person_age", referencedColumnName="id")
@@ -51,9 +53,9 @@ class Person
     private $value;
 
     /**
-     * @var \Doctrine\Common\Collections\Collection
+     * @var Collection
      *
-     * @ORM\ManyToMany(targetEntity="Entity\Models\Team", mappedBy="person")
+     * @ORM\ManyToMany(targetEntity="App\Entity\Models\Team", mappedBy="person")
      */
     private $team;
 
@@ -62,8 +64,8 @@ class Person
      */
     public function __construct()
     {
-        $this->value = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->team = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->value = new ArrayCollection();
+        $this->team = new ArrayCollection();
     }
 
     /**
@@ -93,67 +95,73 @@ class Person
     }
 
     /**
-     * @param bool $age
+     * @param int $age
      * @return Person
      */
-    public function setAge(bool $age): Person
+    public function setAge(int $age): Person
     {
         $this->age = $age;
         return $this;
     }
 
     /**
-     * @return json
+     * @return array
      */
-    public function getDescription(): json
+    public function getDescription(): array
     {
         return $this->description;
     }
 
     /**
-     * @param json $description
+     * @param array $description
      * @return Person
      */
-    public function setDescription(json $description): Person
+    public function setDescription(array $description): Person
     {
         $this->description = $description;
         return $this;
     }
 
     /**
-     * @return \Doctrine\Common\Collections\Collection
+     * @return Collection
      */
-    public function getValue(): \Doctrine\Common\Collections\Collection
+    public function getValue(): Collection
     {
         return $this->value;
     }
 
     /**
-     * @param \Doctrine\Common\Collections\Collection $value
+     * @param Collection $value
      * @return Person
      */
-    public function setValue(\Doctrine\Common\Collections\Collection $value): Person
+    public function setValue(Collection $value): Person
     {
         $this->value = $value;
         return $this;
     }
 
     /**
-     * @return \Doctrine\Common\Collections\Collection
+     * @return Collection
      */
-    public function getTeam(): \Doctrine\Common\Collections\Collection
+    public function getTeam(): Collection
     {
         return $this->team;
     }
 
     /**
-     * @param \Doctrine\Common\Collections\Collection $team
+     * @param Collection $team
      * @return Person
      */
-    public function setTeam(\Doctrine\Common\Collections\Collection $team): Person
+    public function setTeam(Collection $team): Person
     {
         $this->team = $team;
         return $this;
     }
+
+    public function getAge() : int
+    {
+        return $this->age;
+    }
+
 
 }

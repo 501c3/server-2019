@@ -116,7 +116,6 @@ class YamlDefineCommand extends Command
     private function buildPhpStructures(string $masterFile, OutputInterface $output)
     {
         $this->subscriber->setOutputInterface($output);
-        $this->sendStatus(ProcessStatus::COMMENCE, 0);
         try {
            $contents = yaml_parse_file(__DIR__ . '/' . $masterFile);
         } catch(\Exception $exception){
@@ -132,26 +131,36 @@ class YamlDefineCommand extends Command
         foreach(self::MASTER_KEYS as $key) {
             $lineCounts[$key]=$this->checkSubfilesAndLineCounts($contents[$key]) ;
         }
-        $this->totalLines=array_reduce(array_values($lineCounts),function($carry, $value){$carry+=$value; return $carry;});
-
-        $this->progress = 0;
+        $totalLines=array_reduce(array_values($lineCounts),function($carry, $value){$carry+=$value; return $carry;});
+        $progress = 0;
+        $output->write('Declaring model entities');
+        $this->sendStatus(ProcessStatus::COMMENCE, $totalLines);
         $this->yamlRelations->declareModels($contents['models']);
-        $this->sendStatus(ProcessStatus::WORKING,$lineCounts['models']);
+        $progress+=$lineCounts['models'];
+        $this->sendStatus(ProcessStatus::WORKING,$progress);
         $this->yamlRelations->declareDomains($contents['domains']);
+        $progress+=$lineCounts['domains'];
         $this->sendStatus(ProcessStatus::WORKING,$lineCounts['domains']);
         $this->yamlRelations->declareValues($contents['values']);
-        $this->sendStatus(ProcessStatus::WORKING,$lineCounts['values']);
+        $progress+=$lineCounts['values'];
+        $this->sendStatus(ProcessStatus::WORKING,$progress);
         $this->yamlRelations->declarePersons($contents['persons']);
-        $this->sendStatus(ProcessStatus::WORKING,$lineCounts['persons']);
+        $progress+=$lineCounts['persons'];
+        $this->sendStatus(ProcessStatus::WORKING,$progress);
         $this->yamlRelations->declareTeams($contents['teams']);
-        $this->sendStatus(ProcessStatus::WORKING,$lineCounts['teams']);
+        $progress+=$lineCounts['teams'];
+        $this->sendStatus(ProcessStatus::WORKING,$progress);
         $this->yamlRelations->declareEventValues($contents['event-values']);
-        $this->sendStatus(ProcessStatus::WORKING,$lineCounts['event-values']);
+        $progress+=$lineCounts['event-values'];
+        $this->sendStatus(ProcessStatus::WORKING,$progress);
         $this->yamlRelations->declareEvents($contents['model-events']);
-        $this->sendStatus(ProcessStatus::WORKING,$lineCounts['model-events']);
+        $progress+=$lineCounts['model-events'];
+        $this->sendStatus(ProcessStatus::WORKING,$progress);
+        $this->sendStatus(ProcessStatus::COMPLETE,$this->totalLines);
+
         $this->yamlRelations->declareRelations($contents['relations']);
         $this->sendStatus(ProcessStatus::WORKING,$lineCounts['relations']);
-        $this->sendStatus(ProcessStatus::COMPLETE,100);
+
     }
 
     protected function execute(InputInterface $input, OutputInterface $output)

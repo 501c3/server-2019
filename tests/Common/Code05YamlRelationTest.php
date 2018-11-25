@@ -212,7 +212,7 @@ class Code05YamlRelationTest extends KernelTestCase
 
     /**
      * @expectedException \App\Common\AppException
-     * @expectedExceptionMessage Found 'Invalid Value' at (row:15,col:24). Expected [Student-Student].
+     * @expectedExceptionMessage Found 'Invalid Value' at (row:15,col:24). Expected [Student, Student-Student].
      * @expectedExceptionCode \App\Common\AppExceptionCodes::NOT_IN_COLLECTION
      */
   public function test0640RelationsEventInvalidValue()

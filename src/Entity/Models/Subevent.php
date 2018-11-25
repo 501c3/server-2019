@@ -1,7 +1,6 @@
 <?php
 
 namespace App\Entity\Models;
-
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -22,36 +21,21 @@ class Subevent
     private $id;
 
     /**
-     * @var json
+     * @var array
      *
      * @ORM\Column(name="description", type="json", nullable=false)
      */
     private $description;
 
     /**
-     * @var \Entity\Models\Event
+     * @var \App\Entity\Models\Event
      *
-     * @ORM\ManyToOne(targetEntity="Entity\Models\Event")
+     * @ORM\ManyToOne(targetEntity="App\Entity\Models\Event")
      * @ORM\JoinColumns({
      *   @ORM\JoinColumn(name="event_id", referencedColumnName="id")
      * })
      */
     private $event;
-
-    /**
-     * @var \Doctrine\Common\Collections\Collection
-     *
-     * @ORM\ManyToMany(targetEntity="Entity\Models\Competition", mappedBy="subevent")
-     */
-    private $competition;
-
-    /**
-     * Constructor
-     */
-    public function __construct()
-    {
-        $this->competition = new \Doctrine\Common\Collections\ArrayCollection();
-    }
 
     /**
      * @return int
@@ -72,25 +56,25 @@ class Subevent
     }
 
     /**
-     * @return json
+     * @return array
      */
-    public function getDescription(): json
+    public function getDescription(): array
     {
         return $this->description;
     }
 
     /**
-     * @param json $description
+     * @param array $description
      * @return Subevent
      */
-    public function setDescription(json $description): Subevent
+    public function setDescription(array $description): Subevent
     {
         $this->description = $description;
         return $this;
     }
 
     /**
-     * @return Event
+     * @return \App\Entity\Models\Event
      */
     public function getEvent(): Event
     {
@@ -98,30 +82,12 @@ class Subevent
     }
 
     /**
-     * @param Event $event
+     * @param \App\Entity\Models\Event $event
      * @return Subevent
      */
     public function setEvent(Event $event): Subevent
     {
         $this->event = $event;
-        return $this;
-    }
-
-    /**
-     * @return \Doctrine\Common\Collections\Collection
-     */
-    public function getCompetition(): \Doctrine\Common\Collections\Collection
-    {
-        return $this->competition;
-    }
-
-    /**
-     * @param \Doctrine\Common\Collections\Collection $competition
-     * @return Subevent
-     */
-    public function setCompetition(\Doctrine\Common\Collections\Collection $competition): Subevent
-    {
-        $this->competition = $competition;
         return $this;
     }
 

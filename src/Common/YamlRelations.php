@@ -243,7 +243,7 @@ class YamlRelations extends YamlModel
     {
       for($year=$ageRange[0];$year<=$ageRange[1];$year++){
           $descriptionL1 = $description;
-          $descriptionL1['age']='Y'.str_pad($year,2, "0");
+          $descriptionL1['age']='Y'.str_pad($year,2, "0", STR_PAD_LEFT);
           $statusList = explode('-',$description['status']);
           switch(count($statusList)) {
               case 1:
@@ -266,7 +266,7 @@ class YamlRelations extends YamlModel
      */
     public function buildSoloTeam($description,$year,$partnerProficiencies,string $position) {
 
-        if(!count($partnerProficiencies)){
+        if(count($partnerProficiencies)>0){
             throw new AppException(AppExceptionCodes::EMPTY_ARRAY_EXPECTED,
                 $this->file, $partnerProficiencies[0],$position);
         }

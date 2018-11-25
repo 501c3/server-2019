@@ -2,6 +2,8 @@
 
 namespace App\Entity\Models;
 
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -22,16 +24,16 @@ class Event
     private $id;
 
     /**
-     * @var json
+     * @var array
      *
      * @ORM\Column(name="description", type="json", nullable=false)
      */
     private $description;
 
     /**
-     * @var \Entity\Models\Model
+     * @var \App\Entity\Models\Model
      *
-     * @ORM\ManyToOne(targetEntity="Entity\Models\Model")
+     * @ORM\ManyToOne(targetEntity="App\Entity\Models\Model")
      * @ORM\JoinColumns({
      *   @ORM\JoinColumn(name="model_id", referencedColumnName="id")
      * })
@@ -39,9 +41,9 @@ class Event
     private $model;
 
     /**
-     * @var \Doctrine\Common\Collections\Collection
+     * @var Collection
      *
-     * @ORM\ManyToMany(targetEntity="Entity\Models\Value", inversedBy="event")
+     * @ORM\ManyToMany(targetEntity="App\Entity\Models\Value", inversedBy="event")
      * @ORM\JoinTable(name="event_has_value",
      *   joinColumns={
      *     @ORM\JoinColumn(name="event_id", referencedColumnName="id")
@@ -54,9 +56,9 @@ class Event
     private $value;
 
     /**
-     * @var \Doctrine\Common\Collections\Collection
+     * @var Collection
      *
-     * @ORM\ManyToMany(targetEntity="Entity\Models\Team", mappedBy="event")
+     * @ORM\ManyToMany(targetEntity="App\Entity\Models\Team", mappedBy="event")
      */
     private $team;
 
@@ -65,8 +67,8 @@ class Event
      */
     public function __construct()
     {
-        $this->value = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->team = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->value = new ArrayCollection();
+        $this->team = new ArrayCollection();
     }
 
     /**
@@ -88,18 +90,18 @@ class Event
     }
 
     /**
-     * @return json
+     * @return array
      */
-    public function getDescription(): json
+    public function getDescription(): array
     {
         return $this->description;
     }
 
     /**
-     * @param json $description
+     * @param array $description
      * @return Event
      */
-    public function setDescription(json $description): Event
+    public function setDescription(array $description): Event
     {
         $this->description = $description;
         return $this;
@@ -124,40 +126,38 @@ class Event
     }
 
     /**
-     * @return \Doctrine\Common\Collections\Collection
+     * @return Collection
      */
-    public function getValue(): \Doctrine\Common\Collections\Collection
+    public function getValue(): Collection
     {
         return $this->value;
     }
 
     /**
-     * @param \Doctrine\Common\Collections\Collection $value
+     * @param Collection $value
      * @return Event
      */
-    public function setValue(\Doctrine\Common\Collections\Collection $value): Event
+    public function setValue(Collection $value): Event
     {
         $this->value = $value;
         return $this;
     }
 
     /**
-     * @return \Doctrine\Common\Collections\Collection
+     * @return Collection
      */
-    public function getTeam(): \Doctrine\Common\Collections\Collection
+    public function getTeam(): Collection
     {
         return $this->team;
     }
 
     /**
-     * @param \Doctrine\Common\Collections\Collection $team
+     * @param Collection $team
      * @return Event
      */
-    public function setTeam(\Doctrine\Common\Collections\Collection $team): Event
+    public function setTeam(Collection $team): Event
     {
         $this->team = $team;
         return $this;
     }
-
-
 }

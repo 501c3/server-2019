@@ -3,7 +3,6 @@
 namespace App\Entity\Models;
 
 use Doctrine\ORM\Mapping as ORM;
-use phpDocumentor\Reflection\Types\Integer;
 
 /**
  * Model
@@ -30,7 +29,7 @@ class Model
     private $name;
 
     /**
-     * @var \DateTime|null
+     * @var \DateTime|null'Test Model 3 Updated'
      *
      * @ORM\Column(name="created_at", type="datetime", nullable=true, options={"default"="CURRENT_TIMESTAMP"})
      */

@@ -52,7 +52,7 @@ class YamlModel
      *
      * $team[<type>][status][sex][<age>][<proficiency>]=<record>
      * <record> = ['type'=><value>, 'status'=><value>, 'sex'=><value>,
-                     'age'=><value>, 'proficiency'=><value>
+    'age'=><value>, 'proficiency'=><value>
      *               'people'=>[person_records], 'events'=>['event_list']
      * <type>:=Amateur|Professional
      * <sex>:=Male|Femal|Male-Male|Male-Female|Female-Female
@@ -418,8 +418,8 @@ class YamlModel
                 }
                 return YamlPosition::isolate($dataPosition);
             case 'proficiency':
-               $this->eventDanceCheck($dataPosition,$model);
-               return YamlPosition::isolate($dataPosition);
+                $this->eventDanceCheck($dataPosition,$model);
+                return YamlPosition::isolate($dataPosition);
 
         }
         return null;
@@ -546,7 +546,7 @@ class YamlModel
                             }
                         }
                     }
-                   break;
+                    break;
                 case 'single-event':
                     foreach($tmp['substyle'] as $substsyle=>$collectionPositions){
                         if(is_array($collectionPositions[0])) {
@@ -606,9 +606,9 @@ class YamlModel
             list($value,$position)=explode('|',$valuePos);
             if(!isset($this->domain[$key][$value])) {
                 throw new AppException(AppExceptionCodes::UNRECOGNIZED_VALUE,
-                                    $this->file,
-                                     $value,
-                                     $position);
+                    $this->file,
+                    $value,
+                    $position);
             }
         }
         return YamlPosition::isolate($valuesPositions);
@@ -687,19 +687,19 @@ class YamlModel
 
     protected function valuesBuild($values,string $model)
     {
-       if(!isset($this->value[$model])) {
-           $this->value[$model]=[];
-       }
-       foreach($values as $domain=>$valueList) {
-           if (!isset($this->value[$model][$domain])) {
-               $this->value[$model][$domain] = [];
-           }
-           foreach($valueList as $value){
-               if(!isset($this->value[$model][$domain][$value])){
-                   $this->value[$model][$domain][$value]=[];
-               }
-           }
-       }
+        if(!isset($this->value[$model])) {
+            $this->value[$model]=[];
+        }
+        foreach($values as $domain=>$valueList) {
+            if (!isset($this->value[$model][$domain])) {
+                $this->value[$model][$domain] = [];
+            }
+            foreach($valueList as $value){
+                if(!isset($this->value[$model][$domain][$value])){
+                    $this->value[$model][$domain][$value]=[];
+                }
+            }
+        }
     }
 
     /**
@@ -740,7 +740,7 @@ class YamlModel
                     $descriptionL3['proficiency'] = $proficiency;
                     $this->buildEventSpecifics(
                         $sexPtr[$sex][$model][$age][$proficiency],
-                          $styleDancesTag, $descriptionL3);
+                        $styleDancesTag, $descriptionL3);
                 }
             }
         }
@@ -793,7 +793,7 @@ class YamlModel
             list($value) = explode('|', $valuePosition);
             if(!in_array($key, self::VALUE_KEYS)) {
                 throw new AppException(AppExceptionCodes::NOT_IN_COLLECTION, $this->file,
-                                        $key, $keyPos, self::VALUE_KEYS);
+                    $key, $keyPos, self::VALUE_KEYS);
             }
             $descriptorOut[$key] = $value;
         }

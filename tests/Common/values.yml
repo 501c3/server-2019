@@ -251,11 +251,11 @@ dance:
   Triple Two: {abbr: TT}
   Performance: {abbr: P}
 genre:
-  International: {domain: style}
-  American: {domain: style}
-  Standard: {domain: substyle}
-  Smooth: {domain: substyle}
-  Latin: {domain: subtyle}
-  Rhythm: {domain: substyle}
-  Fun Events: {domain: style}
-  Novelty: {domain: substyle}
+  International: {domain: 'style'}
+  American: {domain: 'style'}
+  Standard: {domain: 'substyle'}
+  Smooth: {domain: 'substyle'}
+  Latin: {domain: 'substyle'}
+  Rhythm: {domain: 'substyle'}
+  Fun Events: {domain: 'style'}
+  Novelty: {domain: 'substyle'}

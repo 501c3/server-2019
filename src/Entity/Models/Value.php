@@ -2,7 +2,11 @@
 
 namespace App\Entity\Models;
 
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+
+
 
 /**
  * Value
@@ -36,9 +40,9 @@ class Value
     private $abbr;
 
     /**
-     * @var \Entity\Models\Domain
+     * @var \App\Entity\Models\Domain
      *
-     * @ORM\ManyToOne(targetEntity="Entity\Models\Domain")
+     * @ORM\ManyToOne(targetEntity="App\Entity\Models\Domain")
      * @ORM\JoinColumns({
      *   @ORM\JoinColumn(name="domain_id", referencedColumnName="id")
      * })
@@ -46,16 +50,16 @@ class Value
     private $domain;
 
     /**
-     * @var \Doctrine\Common\Collections\Collection
+     * @var Collection
      *
-     * @ORM\ManyToMany(targetEntity="Entity\Models\Event", mappedBy="value")
+     * @ORM\ManyToMany(targetEntity="App\Entity\Models\Event", mappedBy="value")
      */
     private $event;
 
     /**
-     * @var \Doctrine\Common\Collections\Collection
+     * @var Collection
      *
-     * @ORM\ManyToMany(targetEntity="Entity\Models\Person", mappedBy="value")
+     * @ORM\ManyToMany(targetEntity="App\Entity\Models\Person", mappedBy="value")
      */
     private $personAge;
 
@@ -64,8 +68,8 @@ class Value
      */
     public function __construct()
     {
-        $this->event = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->personAge = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->event = new ArrayCollection();
+        $this->personAge = new ArrayCollection();
     }
 
     /**
@@ -141,36 +145,36 @@ class Value
     }
 
     /**
-     * @return \Doctrine\Common\Collections\Collection
+     * @return Collection
      */
-    public function getEvent(): \Doctrine\Common\Collections\Collection
+    public function getEvent(): Collection
     {
         return $this->event;
     }
 
     /**
-     * @param \Doctrine\Common\Collections\Collection $event
+     * @param Collection $event
      * @return Value
      */
-    public function setEvent(\Doctrine\Common\Collections\Collection $event): Value
+    public function setEvent(Collection $event): Value
     {
         $this->event = $event;
         return $this;
     }
 
     /**
-     * @return \Doctrine\Common\Collections\Collection
+     * @return Collection
      */
-    public function getPersonAge(): \Doctrine\Common\Collections\Collection
+    public function getPersonAge(): Collection
     {
         return $this->personAge;
     }
 
     /**
-     * @param \Doctrine\Common\Collections\Collection $personAge
+     * @param Collection $personAge
      * @return Value
      */
-    public function setPersonAge(\Doctrine\Common\Collections\Collection $personAge): Value
+    public function setPersonAge(Collection $personAge): Value
     {
         $this->personAge = $personAge;
         return $this;

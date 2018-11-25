@@ -27,12 +27,12 @@ class Code01YamlModelTest extends KernelTestCase
      */
     private  $yamlModel;
 
-   public function setUp()
-   {
-      $this->yamlModel = new YamlModel();
-   }
+  public function setUp()
+  {
+   $this->yamlModel = new YamlModel();
+  }
 
-   public function test0110Model()
+    public function test0110Model()
    {
        $this->yamlModel->declareModels(__DIR__ . '/models.yml');
        $structure = $this->yamlModel->fetchModels();
@@ -83,6 +83,9 @@ class Code01YamlModelTest extends KernelTestCase
        $this->assertArraySubset(self::TEST_VALUE, $values);
    }
 
+    /**
+     * @throws \App\Common\AppException
+     */
    public function test0170ModelValue()
    {
        $models= $this->yamlModel->declareModels(__DIR__ . '/models.yml');
