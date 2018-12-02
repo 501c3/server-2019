@@ -1,4 +1,4 @@
-models: tests/Common/models.yml
-domains: tests/Common/domains.yml
-event-values: tests/Common/values.yml
+models: tests/Common/setup-1000-models.yml
+domains: tests/Common/setup-1000-domains.yml
+event-values: tests/Common/setup-1000-values.yml
 model-events: tests/Common/model-events.yml

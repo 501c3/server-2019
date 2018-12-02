@@ -46,16 +46,10 @@ class YamlPosition
      */
     public static function yamlAddPosition(string $file)
     {
-        try{
-            $string=file_get_contents($file);
-            $data=Yaml::parse($string);
-        } catch(\Exception $e) {
-            $message = $e->getMessage();
-            $message.=' File: '.$file;
-            throw new \Exception($message, $e->getCode());
-        }
+        $string=file_get_contents($file);
+        $data=Yaml::parse($string);
         if(is_null($data)) {
-            throw new \Exception("No yaml string to parse in $file", 255);
+            throw new AppException(AppExceptionCodes::UNHANDLED_CONDITION, [__FILE__]);
         }
         $rowColumns=self::rowColumn($string);
         $positions=Yaml::parse($rowColumns);
@@ -78,7 +72,7 @@ class YamlPosition
                 return true;
             }
             if ($pos) {
-                throw new AppException(AppExceptionCodes::NOT_IN_COLLECTION,"No file specified.", $str,$pos,$collection);
+                throw new AppException(AppExceptionCodes::FOUND_BUT_EXPECTED,[$file, $str,$pos,$collection]);
             }
         }
         if(in_array($string, $collection)) {
@@ -127,7 +121,7 @@ class YamlPosition
             list($string,$position) = explode('|',$mixed);
             return $return?$string:$position;
         }
-        throw new \Exception('Error in parsing');
+        throw new AppException(AppExceptionCodes::UNHANDLED_CONDITION,[__FILE__]);
     }
 
 

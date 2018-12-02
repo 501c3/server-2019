@@ -26,8 +26,8 @@ doctrine:
                 user:     '%env(DATABASE_USER)%'
                 password: '%env(DATABASE_PASSWORD)%'
                 charset: utf8mb4
-            models:
-                dbname:   models
+            model:
+                dbname:   model
                 driver:   'pdo_mysql'
                 server_version: '7.2'
                 host:     '%env(DATABASE_HOST)%'
@@ -37,6 +37,15 @@ doctrine:
                 charset: utf8mb4
             sales:
                 dbname:   sales
+                driver:   'pdo_mysql'
+                server_version: '7.2'
+                host:     '%env(DATABASE_HOST)%'
+                port:     3306
+                user:     '%env(DATABASE_USER)%'
+                password: '%env(DATABASE_PASSWORD)%'
+                charset: utf8mb4
+            setup:
+                dbname:   setup
                 driver:   'pdo_mysql'
                 server_version: '7.2'
                 host:     '%env(DATABASE_HOST)%'
@@ -76,15 +85,15 @@ doctrine:
                         dir:  '%kernel.project_dir%/src/Entity/Competition'
                         prefix: 'App\Entity\Competition'
                         alias: Competition
-            models:
-                connection: models
+            model:
+                connection: model
                 mappings:
-                    Models:
+                    Model:
                         is_bundle: false
                         type: annotation
-                        dir:  '%kernel.project_dir%/src/Entity/Models'
-                        prefix: 'App\Entity\Models'
-                        alias: Models
+                        dir:  '%kernel.project_dir%/src/Entity/Model'
+                        prefix: 'App\Entity\Model'
+                        alias: Model
             sales:
                 connection: sales
                 mappings:
@@ -94,6 +103,15 @@ doctrine:
                         dir:  '%kernel.project_dir%/src/Entity/Sales'
                         prefix: 'App\Entity\Sales'
                         alias: Sales
+            setup:
+                connection: setup
+                mappings:
+                    Sales:
+                        is_bundle: false
+                        type: annotation
+                        dir:  '%kernel.project_dir%/src/Entity/Setup'
+                        prefix: 'App\Entity\Setup'
+                        alias: Setup
             score:
                 connection: score
                 mappings:

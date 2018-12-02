@@ -11,6 +11,7 @@
 /phpunit.phar
 /phpunit.xml.dist
 /tests/.gitignore
+/tests/Common.deprecated
 /bin
 ###< symfony/framework-bundle ###
 

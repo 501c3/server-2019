@@ -1,3 +1,3 @@
 #!/bin/bash
-./bin/console doctrine:mapping:convert --from-database --em=models --filter=Sequence --namespace='Entity\Models\' --force --no-debug annotation ./src
-#for i in $(ls src/Entity/models/); do sed -i  's/Entity\\models/App\\Entity\\models/g' src/Entity/Models/${i}; done > /dev/null
+./bin/console doctrine:mapping:convert --from-database --em=model  --namespace='Entity\Model\' --force --no-debug annotation ./src
+for i in $(ls src/Entity/Model/); do sed -i  's/Entity\\Model/App\\Entity\\Model/g' src/Entity/Model/${i}; done > /dev/null

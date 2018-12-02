@@ -1,9 +1,0 @@
-- type: Professional
-  status: Teacher
-  invalid_key:
-    - Male
-    - Female
-  age: 16-99
-  proficiency:
-  - Rising Star
-  - Professional

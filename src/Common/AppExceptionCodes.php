@@ -15,7 +15,7 @@ class AppExceptionCodes
     INVALID_POSITION = 0010,
     UNHANDLED_MESSAGE = 0020,
     UNHANDLED_CONDITION=0030,
-    NOT_IN_COLLECTION = 1000,
+    FOUND_BUT_EXPECTED = 1000,
     INVALID_PARAMETER = 1010,
     UNRECOGNIZED_VALUE = 1020,
     MISSING_KEYS = 1030,
@@ -35,17 +35,62 @@ class AppExceptionCodes
     /**
      * @param string $string
      * @return array
-     * @throws \Exception
+     * @throws AppException
      */
     public static function strToPos(string $string) {
         $pos=[];
         $result = preg_match('/R(?P<row>\d+)C(?P<col>\d+)/',$string, $pos);
         if(!$result) {
-          $message = sprintf('"%s" passed to exception.  Expected string of form "R\d+C\d+" where \d in [0-9]',$string);
-          throw new AppException(self::UNHANDLED_MESSAGE, self::$file, $message);
+            throw new AppException(self::UNHANDLED_CONDITION, [__FILE__]);
         }
         return $pos;
     }
+
+    /**
+     * @param $code
+     * @param $file
+     * @param $found
+     * @param $position
+     * @param $expected
+     * @return string
+     * @throws AppException
+     */
+    public static function messageFPE($code,$file,$found,$position,$expected)
+    {
+        self::$file = $file;
+        $str=is_array($expected)?'['.join("|",$expected).']':$expected;
+        $pos = self::strToPos($position);
+        return sprintf(self::MESSAGE_FPE,$found,$pos['row'],$pos['col'],$str,$file,$code);
+    }
+
+    /**
+     * @param $code
+     * @param $file
+     * @param $found
+     * @param $position
+     * @return string
+     * @throws AppException
+     */
+    public static function messageFP($code,$file,$found,$position)
+    {
+        self::$file = $file;
+        $pos = self::strToPos($position);
+        return sprintf(self::MESSAGE_FP,$found,$pos['row'],$pos['col'],$file,$code);
+    }
+
+    public static function messageMK($code,$file,$missingKeys,$positions)
+    {
+        self::$file = $file;
+        $lines = [];
+        foreach($positions as $position) {
+            $pos=self::strToPos($position);
+            $lines[] = $pos['row'];
+        }
+        $max = max($lines);
+        $min = min($lines);
+        return sprintf(self::MESSAGE_MK,'['.join('|',$missingKeys).']',$min,$max,$code);
+    }
+
 
     /**
      * Example

@@ -1,9 +1,0 @@
-- type: Invalid Type
-  status: Teacher
-  sex:
-    - Male
-    - Female
-  age: 16-99
-  proficiency:
-  - Rising Star
-  - Professional

@@ -1,9 +1,0 @@
-- type: Professional
-  status: Teacher
-  sex:
-    - Male
-    - Female
-  age: 16-13
-  proficiency:
-  - Rising Star
-  - Professional

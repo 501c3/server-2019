@@ -15,13 +15,14 @@ use App\Entity\Models\Team;
 use App\Kernel;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\EntityManagerInterface;
+use Doctrine\ORM\PersistentCollection;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 /**
  * Class YamlRelations
  * @package App\Common
  */
-class YamlDbRelations extends YamlDbModel
+class YamlDbRelations extends deprecated
 {
 
     const
@@ -306,20 +307,32 @@ class YamlDbRelations extends YamlDbModel
                                 [$team['sex']]
                                 [$team['age']]
                                 [$team['proficiency']];
-
+            /** @var PersistentCollection $currentPersonObjects */
             $currentPersonObjects = $teamObj->getPerson();
+            /** @var Person $person */
             foreach($persons as $person) {
                 /** @var Person $personObj */
+                if(!isset($this->person[$person['type']]
+                            [$person['status']]
+                            [$person['sex']]
+                            [$person['years']]
+                            [$person['proficiency']])) continue;
                 $personObj = $this->person[$person['type']]
                                         [$person['status']]
                                         [$person['sex']]
                                         [$person['years']]
                                         [$person['proficiency']];
-                $teamObj->getPerson()->add($personObj);
+
+                $duplicate = $currentPersonObjects->exists(
+                    function($key,$element) use ($personObj) {
+                        return $personObj->getId()==$element->getId();
+                    });
+                if(!$duplicate){
+                    $teamObj->getPerson()->add($personObj);
+                }
             }
         }
         $this->entityManager->flush();
-        die('@319');
     }
 
     /**
