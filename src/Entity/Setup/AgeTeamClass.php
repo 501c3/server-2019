@@ -25,7 +25,7 @@ class AgeTeamClass
     /**
      * @var array
      *
-     * @ORM\Column(name="describe", type="json", nullable=false)
+     * @ORM\Column(name="`describe`", type="json", nullable=false)
      */
     private $describe;
 

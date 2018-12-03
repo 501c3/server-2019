@@ -1,0 +1,9 @@
+- type: Amateur
+  status: Student
+  sex:
+  - Male
+  - Female
+
+  proficiency:
+  - Social
+  - Newcomer

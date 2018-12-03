@@ -1,0 +1,9 @@
+- type: Amateur
+  status: Student
+  sex:
+  - Male
+  - Female
+  invalid_key: 1-15
+  proficiency:
+  - Social
+  - Newcomer

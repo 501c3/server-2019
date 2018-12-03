@@ -35,7 +35,7 @@ class YamlDbSetupBase
     protected $modelValue = [];
 
     /** @var EntityManagerInterface */
-    private $entityManager;
+    protected $entityManager;
 
     public function __construct(EntityManagerInterface $entityManager) /**
      * @param string $file
@@ -180,6 +180,7 @@ class YamlDbSetupBase
                 throw new AppException(AppExceptionCodes::UNRECOGNIZED_VALUE, [$file, $model, $position]);
             }
             foreach ($records as $keyPosition=>$valueList) {
+                /** @var string $position */
                 list($key, $position) = explode('|', $keyPosition);
                 if (!in_array($key, self::EVENT_DOMAINS)) {
                     throw new AppException(AppExceptionCodes::FOUND_BUT_EXPECTED,
@@ -200,8 +201,8 @@ class YamlDbSetupBase
                 list($key) = explode('|', $keyPosition);
                 $cache[$key] = $this->modelValuesCheck($file, $key, $dataPosition);
             }
-            $this->modelValuesBuild($cache, $model);
-            }
+        $this->modelValuesBuild($cache, $model);
+        }
 
         return $this->modelValue;
     }
@@ -215,10 +216,11 @@ class YamlDbSetupBase
      * @throws AppException
      * @throws \Exception
      */
-    protected function modelValuesCheck(string $file, string $key, $valuesPositions)
+    protected function modelValuesCheck(string $file, string $key, array $valuesPositions)
     {
         foreach($valuesPositions as $valuePos) {
             list($value,$position)=explode('|',$valuePos);
+            /** @var YamlDbSetupBase $this */
             if(!isset($this->value[$key][$value])) {
                 throw new AppException(AppExceptionCodes::UNRECOGNIZED_VALUE,
                     [$file,$value,$position]);

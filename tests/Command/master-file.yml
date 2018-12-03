@@ -1,8 +1,8 @@
-models: tests/Common/setup-1000-models.yml
-domains: tests/Common/setup-1000-domains.yml
-values: tests/Common/setup-1000-values.yml
+models: tests/Common/setup-01-models.yml
+domains: tests/Common/setup-02-domains.yml
+values: tests/Common/setup-03-values.yml
 persons: tests/Common/persons.yml
 teams: tests/Common/teams.yml
-event-values: tests/Common/event-setup-1000-values.yml
+event-values: tests/Common/event-setup-03-values.yml
 model-events: tests/Common/model-events.yml
 relations: tests/Common/relations.yml

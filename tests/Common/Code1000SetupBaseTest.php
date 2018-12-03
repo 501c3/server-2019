@@ -90,7 +90,7 @@ class Code1000SetupBaseTest extends KernelTestCase
         /** @var ModelRepository $repository */
         $repository = $this->getRepository(Model::class);
         $setup = $this->getYamlDbBaseSetup();
-        $parseResult = $setup->parseModels(__DIR__ . '/../../tests/Common/setup-1000-models.yml');
+        $parseResult = $setup->parseModels(__DIR__ . '/../../tests/Common/setup-01-models.yml');
         $readResult = $repository->read();
         $this->assertEquals($readResult,$parseResult);
         $this->assertEquals(3, count($readResult));
@@ -106,7 +106,7 @@ class Code1000SetupBaseTest extends KernelTestCase
         /** @var DomainRepository $repository */
         $repository = $this->getRepository(Domain::class);
         $setup = $this->getYamlDbBaseSetup();
-        $parseResult = $setup->parseDomains(__DIR__ . '/../../tests/Common/setup-1000-domains.yml');
+        $parseResult = $setup->parseDomains(__DIR__ . '/../../tests/Common/setup-02-domains.yml');
         $readResult = $repository->read();
         $this->assertEquals($readResult,$parseResult);
         $this->assertEquals(10, count($readResult));
@@ -122,8 +122,8 @@ class Code1000SetupBaseTest extends KernelTestCase
     {
         /** @var YamlDbSetupBase $setup */
         $setup = $this->getYamlDbBaseSetup();
-        $setup->parseModels(__DIR__ . '/../../tests/Common/setup-1000-models.yml');
-        $setup->parseDomains(__DIR__ . '/../../tests/Common/setup-1000-domains.yml');
+        $setup->parseModels(__DIR__ . '/../../tests/Common/setup-01-models.yml');
+        $setup->parseDomains(__DIR__ . '/../../tests/Common/setup-02-domains.yml');
         return $setup;
     }
 
@@ -136,7 +136,7 @@ class Code1000SetupBaseTest extends KernelTestCase
     private function parseModelsDomainsValues()
     {
         $setup = $this->parseModelsAndDomains();
-        $setup->parseValues(__DIR__ . '/../../tests/Common/setup-1000-values.yml');
+        $setup->parseValues(__DIR__ . '/../../tests/Common/setup-03-values.yml');
         return $setup;
     }
 
@@ -181,7 +181,7 @@ class Code1000SetupBaseTest extends KernelTestCase
         $repository = $this->getRepository(Value::class);
         /** @var YamlDbSetupBase $setup */
         $setup = $this->parseModelsAndDomains();
-        $parseResult=$setup->parseValues(__DIR__ . '/../../tests/Common/setup-1000-values.yml');
+        $parseResult=$setup->parseValues(__DIR__ . '/../../tests/Common/setup-03-values.yml');
         $readResult =$repository->read();
         $this->assertEquals($readResult,$parseResult);
         $this->assertEquals(10, count($parseResult));
@@ -264,7 +264,7 @@ class Code1000SetupBaseTest extends KernelTestCase
     public function test1100ModelValue()
     {
         $setup = $this->parseModelsDomainsValues();
-        $expected=$setup->parseModelValues(__DIR__.'/../../tests/Common/setup-1000-model-values.yml');
+        $expected=$setup->parseModelValues(__DIR__ . '/../../tests/Common/setup-04-model-values.yml');
         /** @var ModelRepository $repository */
         $repository = $this->getRepository(Model::class);
         $actual = $repository->fetchQuickSearch();

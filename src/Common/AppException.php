@@ -14,8 +14,9 @@ class AppException extends \Exception
 
     const
         MESSAGE_FPE = "Found '%s' at (row:%d,col:%d) but expected %s in file: %s. Reference: %d",
-        MESSAGE_FP  ="'%s' as (row:%d,col:%d) is an unrecognized value in file: %s. Reference: %d",
+        MESSAGE_FP  ="'%s' at (row:%d,col:%d) is an unrecognized value in file: %s. Reference: %d",
         MESSAGE_MK  ="Missing %s between lines %d-%d in file: %s. Reference: %d",
+        MESSAGE_IR  ="'%s' at (row:%d,col:%d) is an invalid numeric range in file: %s. Reference: %d",
         MESSAGE_UC  ="Unhandled condition in source file: %s. Code: %d";
 
 
@@ -64,8 +65,10 @@ class AppException extends \Exception
         switch($code) {
             case AppExceptionCodes::FOUND_BUT_EXPECTED:
                 return self::messageFPE($code, $file, $found, $position, $expected);
+            case AppExceptionCodes::INVALID_RANGE:
+                return self::messageIR($code,$file,$found,$position);
             case AppExceptionCodes::UNRECOGNIZED_VALUE:
-                return self::messageFP($code, $file, $found, $position);
+                return self::messageFP($code,$file,$found,$position);
             case AppExceptionCodes::MISSING_KEYS:
                 return self::messageMK($code,$file,$found,$position);
             default:
@@ -89,6 +92,13 @@ class AppException extends \Exception
         $pos = self::strToPos($position);
         return sprintf(self::MESSAGE_FPE,$found,$pos['row'],$pos['col'],$str,$file,$code);
     }
+
+    public static function messageIR($code,$file,$found,$position)
+    {
+        $pos = self::strToPos($position);
+        return sprintf(self::MESSAGE_IR,$found,$pos['row'],$pos['col'],$file,$code);
+    }
+
 
     /**
      * @param $code
