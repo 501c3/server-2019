@@ -21,17 +21,27 @@ class AgePersonRepository extends ServiceEntityRepository
    }
 
     /**
-     * @param array $description
+     * @param array $describe
+     * @param array $values
+     * @param array $prfPersons
      * @return AgePerson
      * @throws \Doctrine\ORM\ORMException
      * @throws \Doctrine\ORM\OptimisticLockException
      */
-    public function create(array $description) {
+    public function create(array $describe, array $values, array $prfPersons) {
        $em = $this->getEntityManager();
        $agePerson = new AgePerson();
-       $agePerson->setDescribe($description);
+       $agePerson->setDescribe($describe);
+       $valCollection = $agePerson->getValue();
+       $prfCollection = $agePerson->getPrfPerson();
        $em->persist($agePerson);
-       $em->flush();
+       foreach($values as $value){
+            $valCollection->add($value);
+        }
+        foreach($prfPersons as $prfPerson) {
+            $prfCollection->add($prfPerson);
+        }
+        $em->flush();
        return $agePerson;
     }
 
@@ -47,18 +57,18 @@ class AgePersonRepository extends ServiceEntityRepository
            $describe = $result->getDescribe();
            $type = $describe['type'];
            $status = $describe['status'];
-           $sex = $describe['sex'];
            $years = $describe['years'];
+           $designate = $describe['designate'];
            if(!isset($arr[$type])) {
                $arr[$type]=[];
            }
            if(!isset($arr[$type][$status])) {
                $arr[$type][$status] = [];
            }
-           if(!isset($arr[$type][$status][$sex])) {
-               $arr[$type][$status][$sex]=[];
+           if(!isset($arr[$type][$status][$years])) {
+               $arr[$type][$status][$years]=[];
            }
-           $arr[$type][$status][$sex][$years]=$result;
+           $arr[$type][$status][$years][$designate]=$result;
        }
        return $arr;
    }

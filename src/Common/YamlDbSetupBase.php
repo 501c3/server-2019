@@ -40,7 +40,7 @@ class YamlDbSetupBase
     public function __construct(EntityManagerInterface $entityManager) /**
      * @param string $file
      * @return mixed
-     * @throws AppException
+     * @throws AppParseException
      */
     {
         $this->entityManager=$entityManager;
@@ -89,7 +89,7 @@ class YamlDbSetupBase
     /**
      * @param string $file
      * @return array
-     * @throws AppException
+     * @throws AppParseException
      * @throws \Doctrine\ORM\ORMException
      * @throws \Doctrine\ORM\OptimisticLockException
      * @throws \Exception
@@ -102,7 +102,7 @@ class YamlDbSetupBase
         foreach ($domainPositionArray as $domainPosition) {
             list($domain, $position) = explode('|', $domainPosition);
             if (!in_array($domain, $validKeys)) {
-                throw new AppException(AppExceptionCodes::FOUND_BUT_EXPECTED,
+                throw new AppParseException(AppExceptionCodes::FOUND_BUT_EXPECTED,
                     [$file, $domain, $position, $validKeys]);
             }
         }
@@ -127,7 +127,7 @@ class YamlDbSetupBase
      * @param $descriptorIn
      * @param $file
      * @return array
-     * @throws AppException
+     * @throws AppParseException
      */
     private function valueDescriptor($descriptorIn,$file) {
         $descriptorOut = [];
@@ -136,7 +136,7 @@ class YamlDbSetupBase
             list($value) = explode('|', $valuePosition);
             if(!in_array($key, self::VALUE_KEYS)) {
 
-                throw new AppException(AppExceptionCodes::FOUND_BUT_EXPECTED,
+                throw new AppParseException(AppExceptionCodes::FOUND_BUT_EXPECTED,
                     [$file,$key, $keyPos, self::VALUE_KEYS]);
             }
             $descriptorOut[$key] = $value;
@@ -149,7 +149,7 @@ class YamlDbSetupBase
      * @param string $valueKey
      * @param string $valuePosition
      * @return string
-     * @throws AppException
+     * @throws AppParseException
      */
     private function fetchAbbr(array $descriptor, string $valueKey, string $valuePosition) : string
     {
@@ -161,14 +161,14 @@ class YamlDbSetupBase
         } elseif (isset($descriptor['abbr'])) {
             return $descriptor['abbr'];
         } else {
-            throw new AppException(AppExceptionCodes::UNRECOGNIZED_VALUE, [$valueKey, $valuePosition]);
+            throw new AppParseException(AppExceptionCodes::UNRECOGNIZED_VALUE, [$valueKey, $valuePosition]);
         }
     }
 
     /**
      * @param string $file
      * @return array
-     * @throws AppException
+     * @throws AppParseException
      * @throws \Exception
      */
     public function parseModelValues(string $file) : array
@@ -177,13 +177,13 @@ class YamlDbSetupBase
         foreach ($modelsPositions as $modelPos => $records) {
             list($model, $position) = explode('|', $modelPos);
             if (!in_array($model, array_keys($this->model))) {
-                throw new AppException(AppExceptionCodes::UNRECOGNIZED_VALUE, [$file, $model, $position]);
+                throw new AppParseException(AppExceptionCodes::UNRECOGNIZED_VALUE, [$file, $model, $position]);
             }
             foreach ($records as $keyPosition=>$valueList) {
                 /** @var string $position */
                 list($key, $position) = explode('|', $keyPosition);
                 if (!in_array($key, self::EVENT_DOMAINS)) {
-                    throw new AppException(AppExceptionCodes::FOUND_BUT_EXPECTED,
+                    throw new AppParseException(AppExceptionCodes::FOUND_BUT_EXPECTED,
                         [$file, $key, $position, self::EVENT_DOMAINS]);
                 }
 
@@ -193,7 +193,7 @@ class YamlDbSetupBase
             $keysPositions = YamlPosition::isolate($keysPositions, YamlPosition::POSITION);
             $difference = array_diff(self::EVENT_DOMAINS, $keysFound);
             if (count($difference)) {
-                throw new AppException(AppExceptionCodes::MISSING_KEYS,
+                throw new AppParseException(AppExceptionCodes::MISSING_KEYS,
                     [$file, $difference, $keysPositions]);
             }
             $cache = [];
@@ -213,7 +213,7 @@ class YamlDbSetupBase
      * @param string $key
      * @param $valuesPositions
      * @return array|string
-     * @throws AppException
+     * @throws AppParseException
      * @throws \Exception
      */
     protected function modelValuesCheck(string $file, string $key, array $valuesPositions)
@@ -222,7 +222,7 @@ class YamlDbSetupBase
             list($value,$position)=explode('|',$valuePos);
             /** @var YamlDbSetupBase $this */
             if(!isset($this->value[$key][$value])) {
-                throw new AppException(AppExceptionCodes::UNRECOGNIZED_VALUE,
+                throw new AppParseException(AppExceptionCodes::UNRECOGNIZED_VALUE,
                     [$file,$value,$position]);
             }
         }

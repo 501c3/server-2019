@@ -22,6 +22,9 @@
   - Full Gold
   - Open Gold
   - Gold
+  designate:
+  - A
+  - B
 - type: Amateur
   status: Student
   sex:
@@ -51,6 +54,9 @@
   - Gold Star 1
   - Championship
   - Gold Star 2
+  designate:
+  - A
+  - B
 - type: Amateur
   status: Teacher
   sex: [Male,Female]
@@ -66,6 +72,9 @@
   - Gold Star 1
   - Championship
   - Gold Star 2
+  designate:
+  - A
+  - B
 - type: Professional
   status: Teacher
   sex: [Male,Female]
@@ -73,3 +82,6 @@
   proficiency:
   - Rising Star
   - Professional
+  designate:
+  - A
+  - B

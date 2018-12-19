@@ -49,7 +49,7 @@ class YamlPosition
         $string=file_get_contents($file);
         $data=Yaml::parse($string);
         if(is_null($data)) {
-            throw new AppException(AppExceptionCodes::UNHANDLED_CONDITION, [__FILE__]);
+            throw new AppParseException(AppExceptionCodes::UNHANDLED_CONDITION, [__FILE__]);
         }
         $rowColumns=self::rowColumn($string);
         $positions=Yaml::parse($rowColumns);
@@ -62,7 +62,7 @@ class YamlPosition
      * @param array $collection
      * @param string|null $file
      * @return bool
-     * @throws AppException
+     * @throws AppParseException
      */
     public static function inCollection(string $string, array $collection, string $file=null) : bool
     {
@@ -72,7 +72,7 @@ class YamlPosition
                 return true;
             }
             if ($pos) {
-                throw new AppException(AppExceptionCodes::FOUND_BUT_EXPECTED,[$file, $str,$pos,$collection]);
+                throw new AppParseException(AppExceptionCodes::FOUND_BUT_EXPECTED,[$file, $str,$pos,$collection]);
             }
         }
         if(in_array($string, $collection)) {
@@ -121,7 +121,7 @@ class YamlPosition
             list($string,$position) = explode('|',$mixed);
             return $return?$string:$position;
         }
-        throw new AppException(AppExceptionCodes::UNHANDLED_CONDITION,[__FILE__]);
+        throw new AppParseException(AppExceptionCodes::UNHANDLED_CONDITION,[__FILE__]);
     }
 
 

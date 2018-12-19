@@ -13,7 +13,7 @@
 namespace Tests\Utils;
 
 use App\Common\YamlPosition;
-use App\Common\AppException;
+use App\Common\AppParseException;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\Yaml\Yaml;
 
@@ -76,7 +76,7 @@ class Code0000YamlParseTest extends KernelTestCase
     }
 
     /**
-     * @throws AppException
+     * @throws AppParseException
      */
     public function test0050PositionKey()
     {
@@ -90,10 +90,10 @@ class Code0000YamlParseTest extends KernelTestCase
     }
 
     /**
-     * @expectedException \App\Common\AppException
+     * @expectedException \App\Common\AppParseException
      * @expectedExceptionMessage  Found 'key99' at (row:10,col:10) in file unavailable.  Expected [key1|key2|key3].
      * @expectedExceptionCode \App\Common\AppExceptionCodes::FOUND_BUT_EXPECTED
-     * @throws AppException
+     * @throws AppParseException
      */
     public function test0060PositionInCollection()
     {

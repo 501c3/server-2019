@@ -115,7 +115,7 @@ class YamlModel
     /**
      * @param string $file
      * @return array
-     * @throws AppException
+     * @throws AppParseException
      * @throws Exception
      */
     public function declareValues(string $file)
@@ -127,7 +127,7 @@ class YamlModel
         foreach ($domainPositionArray as $domainPosition) {
             list($domain, $position) = explode('|', $domainPosition);
             if (!in_array($domain, $validKeys)) {
-                throw new AppException(AppExceptionCodes::NOT_IN_COLLECTION, $this->file,
+                throw new AppParseException(AppExceptionCodes::NOT_IN_COLLECTION, $this->file,
                     $domain, $position, $validKeys);
             }
         }
@@ -152,7 +152,7 @@ class YamlModel
      * @param string $build
      * @param string $return
      * @return array
-     * @throws AppException
+     * @throws AppParseException
      * @throws Exception
      */
     protected function declare(string $file,
@@ -167,7 +167,7 @@ class YamlModel
         foreach ($modelsPositions as $modelPos => $records) {
             list($model, $position) = explode('|', $modelPos);
             if (!in_array($model, $this->model)) {
-                throw new AppException(AppExceptionCodes::UNRECOGNIZED_VALUE, $this->file, $model, $position);
+                throw new AppParseException(AppExceptionCodes::UNRECOGNIZED_VALUE, $this->file, $model, $position);
             }
             $this->$methodFor($records, $domains, $check, $build, $model);
         }
@@ -177,7 +177,7 @@ class YamlModel
     /**
      * @param string $file
      * @return array
-     * @throws AppException
+     * @throws AppParseException
      * @throws Exception
      */
     public function declarePersons(string $file) : array
@@ -196,7 +196,7 @@ class YamlModel
     /**
      * @param string $file
      * @return array
-     * @throws AppException
+     * @throws AppParseException
      * @throws Exception
      */
     public function declareTeams(string $file) : array
@@ -214,7 +214,7 @@ class YamlModel
     /**
      * @param string $file
      * @return array
-     * @throws AppException
+     * @throws AppParseException
      * @throws Exception
      */
     public function declareEvents(string $file) : array
@@ -224,7 +224,7 @@ class YamlModel
         foreach ($modelsPositions as $modelPos => $records) {
             list($model, $position) = explode('|', $modelPos);
             if (!in_array($model, $this->model)) {
-                throw new AppException(AppExceptionCodes::UNRECOGNIZED_VALUE,
+                throw new AppParseException(AppExceptionCodes::UNRECOGNIZED_VALUE,
                     $this->file, $model, $position);
             }
             $this->entitiesFor($records,
@@ -239,7 +239,7 @@ class YamlModel
     /**
      * @param string $file
      * @return array
-     * @throws AppException
+     * @throws AppParseException
      * @throws Exception
      */
     public function declareEventValues(string $file) : array
@@ -249,7 +249,7 @@ class YamlModel
         foreach ($modelsPositions as $modelPos => $records) {
             list($model, $position) = explode('|', $modelPos);
             if (!in_array($model, $this->model)) {
-                throw new AppException(AppExceptionCodes::UNRECOGNIZED_VALUE, $this->file, $model, $position);
+                throw new AppParseException(AppExceptionCodes::UNRECOGNIZED_VALUE, $this->file, $model, $position);
             }
             $this->entitiesFor($records, self::EVENT_DOMAINS, 'valuesCheck', 'valuesBuild', $model);
         }
@@ -262,7 +262,7 @@ class YamlModel
      * @param array $domains
      * @param string $checkFn
      * @param string $buildFn
-     * @throws AppException
+     * @throws AppParseException
      * @throws Exception
      */
     protected function entitiesFor(array $records, array $domains, string $checkFn, string $buildFn, string $model=null)
@@ -272,7 +272,7 @@ class YamlModel
             foreach ($keysPositions as $keyPos) {
                 list($key, $position) = explode('|', $keyPos);
                 if (!in_array($key, $domains)) {
-                    throw new AppException(AppExceptionCodes::NOT_IN_COLLECTION, $this->file,
+                    throw new AppParseException(AppExceptionCodes::NOT_IN_COLLECTION, $this->file,
                         $key, $position, $domains);
                 }
             }
@@ -281,7 +281,7 @@ class YamlModel
             $difference = array_diff($domains, $keysFound);
             if (count($difference)) {
                 $found = join(',', $difference);
-                throw new AppException(AppExceptionCodes::MISSING_KEYS, $this->file,
+                throw new AppParseException(AppExceptionCodes::MISSING_KEYS, $this->file,
                     $found, null, $keysPositions);
             }
 
@@ -324,12 +324,12 @@ class YamlModel
             case 'sex':
                 if(!is_array($dataPosition)) {
                     list($value, $pos) = explode('|', $dataPosition);
-                    throw new AppException(AppExceptionCodes::ARRAY_EXPECTED, $this->file, $value, $pos);
+                    throw new AppParseException(AppExceptionCodes::ARRAY_EXPECTED, $this->file, $value, $pos);
                 }
                 foreach ($dataPosition as $valuePosition) {
                     list($value, $pos) = explode('|', $valuePosition);
                     if (!isset($this->domain[$key][$value])) {
-                        throw new AppException(AppExceptionCodes::UNRECOGNIZED_VALUE, $this->file,
+                        throw new AppParseException(AppExceptionCodes::UNRECOGNIZED_VALUE, $this->file,
                             $value, $pos);
                     }
                 }
@@ -338,7 +338,7 @@ class YamlModel
             case 'status':
                 list($value, $pos) = explode('|', $dataPosition);
                 if (!isset($this->domain[$key][$value])) {
-                    throw new AppException(AppExceptionCodes::UNRECOGNIZED_VALUE, $this->file, $value, $pos);
+                    throw new AppParseException(AppExceptionCodes::UNRECOGNIZED_VALUE, $this->file, $value, $pos);
                 }
                 return YamlPosition::isolate($dataPosition);
 
@@ -351,7 +351,7 @@ class YamlModel
      * @param string $key
      * @param $dataPosition
      * @return array|null|string
-     * @throws AppException
+     * @throws AppParseException
      * @throws Exception
      */
     protected function teamsCheck(string $key, $dataPosition)
@@ -361,7 +361,7 @@ class YamlModel
             case 'type':
                 list($value, $pos) = explode('|', $dataPosition);
                 if (!isset($this->domain[$key][$value])) {
-                    throw new AppException(AppExceptionCodes::UNRECOGNIZED_VALUE, $this->file, $value, $pos);
+                    throw new AppParseException(AppExceptionCodes::UNRECOGNIZED_VALUE, $this->file, $value, $pos);
                 }
                 return YamlPosition::isolate($dataPosition);
             case 'age':
@@ -369,12 +369,12 @@ class YamlModel
             case 'sex':
                 if(!is_array($dataPosition)) {
                     list($value, $pos) = explode('|', $dataPosition);
-                    throw new AppException(AppExceptionCodes::ARRAY_EXPECTED, $this->file, $value, $pos);
+                    throw new AppParseException(AppExceptionCodes::ARRAY_EXPECTED, $this->file, $value, $pos);
                 }
                 foreach ($dataPosition as $valuePosition) {
                     list($value, $pos) = explode('|', $valuePosition);
                     if (!isset($this->domain[$key][$value])) {
-                        throw new AppException(AppExceptionCodes::UNRECOGNIZED_VALUE, $this->file,
+                        throw new AppParseException(AppExceptionCodes::UNRECOGNIZED_VALUE, $this->file,
                             $value, $pos);
                     }
                 }
@@ -390,7 +390,7 @@ class YamlModel
      * @param string $key
      * @param $dataPosition
      * @return array|null|string
-     * @throws AppException
+     * @throws AppParseException
      * @throws Exception
      */
     protected function eventsCheck(string $key, $dataPosition,string $model)
@@ -400,19 +400,19 @@ class YamlModel
             case 'status':
                 list($value, $pos) = explode('|', $dataPosition);
                 if (!isset($this->domain[$key][$value])) {
-                    throw new AppException(AppExceptionCodes::UNRECOGNIZED_VALUE, $this->file, $value, $pos);
+                    throw new AppParseException(AppExceptionCodes::UNRECOGNIZED_VALUE, $this->file, $value, $pos);
                 }
                 return YamlPosition::isolate($dataPosition);
             case 'sex':
             case 'age':
                 if(!is_array($dataPosition)) {
                     list($value, $pos) = explode('|', $dataPosition);
-                    throw new AppException(AppExceptionCodes::ARRAY_EXPECTED, $this->file, $value, $pos);
+                    throw new AppParseException(AppExceptionCodes::ARRAY_EXPECTED, $this->file, $value, $pos);
                 }
                 foreach ($dataPosition as $valuePosition) {
                     list($value, $pos) = explode('|', $valuePosition);
                     if (!isset($this->domain[$key][$value])) {
-                        throw new AppException(AppExceptionCodes::UNRECOGNIZED_VALUE, $this->file,
+                        throw new AppParseException(AppExceptionCodes::UNRECOGNIZED_VALUE, $this->file,
                             $value, $pos);
                     }
                 }
@@ -428,33 +428,33 @@ class YamlModel
     /**
      * @param string $model
      * @param array $dataPosition
-     * @throws AppException
+     * @throws AppParseException
      */
     private function eventDanceCheck(array $dataPosition,string $model)
     {
         foreach($dataPosition as $proficiencyPos=>$styleDances) {
             list($proficiency, $position) = explode('|',$proficiencyPos);
             if(!isset($this->domain['proficiency'][$proficiency])) {
-                throw new AppException(AppExceptionCodes::UNRECOGNIZED_VALUE,
+                throw new AppParseException(AppExceptionCodes::UNRECOGNIZED_VALUE,
                     $this->file,$proficiency,$position);
             }
             foreach($styleDances as $section) {
                 foreach($section as $keyPos=>$subsectionPos) {
                     list($key,$pos) = explode('|',$keyPos);
                     if(!in_array($key,['tag','style'])) {
-                        throw new AppException(AppExceptionCodes::NOT_IN_COLLECTION,
+                        throw new AppParseException(AppExceptionCodes::NOT_IN_COLLECTION,
                             $this->file,$key,$pos,['tag','style']);
                     }
                     switch($key){
                         case 'tag':
                             list($tag,$tagPos) = explode('|',$subsectionPos);
                             if(!isset($this->domain['tag'][$tag])){
-                                throw new AppException(AppExceptionCodes::UNRECOGNIZED_VALUE,
+                                throw new AppParseException(AppExceptionCodes::UNRECOGNIZED_VALUE,
                                     $this->file,$tag,$tagPos);
                             }
                             if(!isset($this->value[$model]['tag'][$tag])){
                                 $collection=array_keys($this->value[$model]['tag']);
-                                throw new AppException(AppExceptionCodes::NOT_IN_COLLECTION,
+                                throw new AppParseException(AppExceptionCodes::NOT_IN_COLLECTION,
                                     $this->file,$tag,$tagPos,$collection);
                             }
                             break;
@@ -470,19 +470,19 @@ class YamlModel
     /**
      * @param string $model
      * @param array $subsectionPos
-     * @throws AppException
+     * @throws AppParseException
      */
     private function eventDanceSubstyleCheck(array $subsectionPos,string $model)
     {
         foreach($subsectionPos as $stylePosition=>$eventsPositions){
             list($style,$stylePos) = explode('|',$stylePosition);
             if(!isset($this->domain['style'][$style])) {
-                throw new AppException(AppExceptionCodes::UNRECOGNIZED_VALUE,
+                throw new AppParseException(AppExceptionCodes::UNRECOGNIZED_VALUE,
                     $this->file,$style,$stylePos);
             }
             if(!isset($this->value[$model]['style'][$style])){
                 $collection=array_keys($this->value[$model]['style']);
-                throw new AppException(AppExceptionCodes::NOT_IN_COLLECTION,
+                throw new AppParseException(AppExceptionCodes::NOT_IN_COLLECTION,
                     $this->file,$style,$stylePos,$collection);
             }
             $tmp = [];
@@ -490,7 +490,7 @@ class YamlModel
             foreach($eventsPositions as $keyPos=>$dataPositions){
                 list($key,$pos) = explode('|',$keyPos);
                 if(!in_array($key,$collection)) {
-                    throw new AppException(AppExceptionCodes::NOT_IN_COLLECTION,
+                    throw new AppParseException(AppExceptionCodes::NOT_IN_COLLECTION,
                         $this->file,$key,$pos,$collection);
                 }
                 switch($key){
@@ -498,7 +498,7 @@ class YamlModel
                         $dispositionCollection = ['multiple-events','single-event'];
                         list($disposition,$dispositionPos) = explode('|',$dataPositions);
                         if(!in_array($disposition,$dispositionCollection)){
-                            throw new AppException(AppExceptionCodes::NOT_IN_COLLECTION,
+                            throw new AppParseException(AppExceptionCodes::NOT_IN_COLLECTION,
                                 $this->file,$disposition,$dispositionPos,$dispositionCollection);
                         }
                         $tmp['disposition']=$disposition;
@@ -510,12 +510,12 @@ class YamlModel
                         foreach($dataPositions as $substylePos=>$eventsDancesPos) {
                             list($substyle,$position) = explode('|',$substylePos);
                             if(!isset($this->domain['substyle'][$substyle])) {
-                                throw new AppException(AppExceptionCodes::UNRECOGNIZED_VALUE,
+                                throw new AppParseException(AppExceptionCodes::UNRECOGNIZED_VALUE,
                                     $this->file,$substyle,$position);
                             }
                             $collection = array_keys($this->value[$model]['substyle']);
                             if(!isset($this->value[$model]['substyle'][$substyle])) {
-                                throw new AppException(AppExceptionCodes::NOT_IN_COLLECTION,
+                                throw new AppParseException(AppExceptionCodes::NOT_IN_COLLECTION,
                                     $this->file,$substyle,$position,$collection);
                             }
                             $tmp['substyle'][$substyle]=$eventsDancesPos;
@@ -529,18 +529,18 @@ class YamlModel
                         foreach ($dancesPositions as $collectionPositions) {
                             if (is_scalar($collectionPositions)) {
                                 list($scaler, $scalerPos) = explode('|', $collectionPositions);
-                                throw new AppException(AppExceptionCodes::ARRAY_EXPECTED,
+                                throw new AppParseException(AppExceptionCodes::ARRAY_EXPECTED,
                                     $this->file, $scaler, $scalerPos);
                             }
                             foreach ($collectionPositions as $dancePosition) {
                                 list($dance, $dancePos) = explode('|', $dancePosition);
                                 if (!isset($this->domain['dance'][$dance])) {
-                                    throw new AppException(AppExceptionCodes::UNRECOGNIZED_VALUE,
+                                    throw new AppParseException(AppExceptionCodes::UNRECOGNIZED_VALUE,
                                         $this->file, $dance, $dancePos);
                                 }
                                 if (!isset($this->value[$model]['dance'][$dance])) {
                                     $danceCollection = array_keys($this->value[$model]['dance']);
-                                    throw new AppException(AppExceptionCodes::NOT_IN_COLLECTION,
+                                    throw new AppParseException(AppExceptionCodes::NOT_IN_COLLECTION,
                                         $this->file, $dance, $dancePos, $danceCollection);
                                 }
                             }
@@ -551,18 +551,18 @@ class YamlModel
                     foreach($tmp['substyle'] as $substsyle=>$collectionPositions){
                         if(is_array($collectionPositions[0])) {
                             list($scaler,$scalerPos) = explode('|',$collectionPositions[0][0]);
-                            throw new AppException(AppExceptionCodes::SCALER_EXPECTED,
+                            throw new AppParseException(AppExceptionCodes::SCALER_EXPECTED,
                                 $this->file,$scaler,$scalerPos);
                         }
                         foreach($collectionPositions as $dancePos) {
                             list($dance,$dancePos) = explode('|', $dancePos);
                             if(!isset($this->domain['dance'][$dance])) {
-                                throw new AppException(AppExceptionCodes::UNRECOGNIZED_VALUE,
+                                throw new AppParseException(AppExceptionCodes::UNRECOGNIZED_VALUE,
                                     $this->file,$dance,$dancePos);
                             }
                             if(!isset($this->value[$model]['dance'][$dance])) {
                                 $danceCollection = array_keys($this->value[$model]['dance']);
-                                throw new AppException(AppExceptionCodes::NOT_IN_COLLECTION,
+                                throw new AppParseException(AppExceptionCodes::NOT_IN_COLLECTION,
                                     $this->file,$dance,$dancePos,$danceCollection);
                             }
                         }
@@ -574,7 +574,7 @@ class YamlModel
     /**
      * @param string $dataPosition
      * @return array
-     * @throws AppException
+     * @throws AppParseException
      */
     private function personCheckAge(string $dataPosition) : array
     {
@@ -582,11 +582,11 @@ class YamlModel
         list($yearRange, $rangePos) = explode('|', $dataPosition);
         if (preg_match('/(?P<lb>\d+)\-(?P<ub>\d+)/', $yearRange, $matches)) {
             if ($matches['lb'] > $matches['ub']) {
-                throw new AppException(AppExceptionCodes::INVALID_RANGE, $this->file,
+                throw new AppParseException(AppExceptionCodes::INVALID_RANGE, $this->file,
                     $yearRange, $rangePos);
             }
         } else {
-            throw new AppException(AppExceptionCodes::UNRECOGNIZED_VALUE, $this->file,
+            throw new AppParseException(AppExceptionCodes::UNRECOGNIZED_VALUE, $this->file,
                 $yearRange, $rangePos);
         }
         $years = range($matches['lb'], $matches['ub']);
@@ -597,7 +597,7 @@ class YamlModel
      * @param string $key
      * @param $valuesPositions
      * @return array|string
-     * @throws AppException
+     * @throws AppParseException
      * @throws Exception
      */
     protected function valuesCheck(string $key, $valuesPositions)
@@ -605,7 +605,7 @@ class YamlModel
         foreach($valuesPositions as $valuePos) {
             list($value,$position)=explode('|',$valuePos);
             if(!isset($this->domain[$key][$value])) {
-                throw new AppException(AppExceptionCodes::UNRECOGNIZED_VALUE,
+                throw new AppParseException(AppExceptionCodes::UNRECOGNIZED_VALUE,
                     $this->file,
                     $value,
                     $position);
@@ -783,7 +783,7 @@ class YamlModel
     /**
      * @param $descriptorIn
      * @return array
-     * @throws AppException
+     * @throws AppParseException
      */
 
     private function valueDescriptor($descriptorIn) {
@@ -792,7 +792,7 @@ class YamlModel
             list($key,$keyPos) = explode('|', $keyPosition);
             list($value) = explode('|', $valuePosition);
             if(!in_array($key, self::VALUE_KEYS)) {
-                throw new AppException(AppExceptionCodes::NOT_IN_COLLECTION, $this->file,
+                throw new AppParseException(AppExceptionCodes::NOT_IN_COLLECTION, $this->file,
                     $key, $keyPos, self::VALUE_KEYS);
             }
             $descriptorOut[$key] = $value;
@@ -808,7 +808,7 @@ class YamlModel
     /**
      * @param string|null $domain
      * @return mixed
-     * @throws AppException
+     * @throws AppParseException
      */
     public function fetchValues(string $domain=null)
     {
@@ -816,7 +816,7 @@ class YamlModel
             return $this->domain;
         }
         if(!isset($this->domain[$domain])) {
-            throw new AppException(AppExceptionCodes::INVALID_PARAMETER,
+            throw new AppParseException(AppExceptionCodes::INVALID_PARAMETER,
                 $this->file, $domain,null,array_keys($this->domain));
         }
         return $this->domain[$domain];

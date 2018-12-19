@@ -2,6 +2,7 @@
 
 namespace App\Entity\Setup;
 
+use Doctrine\Common\Collections\ArrayCollection;
 use /** @noinspection PhpUnusedAliasInspection */
     Doctrine\ORM\Mapping as ORM;
 
@@ -54,7 +55,7 @@ class PrfPerson
     /**
      * @var \Doctrine\Common\Collections\Collection
      *
-     * @ORM\ManyToMany(targetEntity="App\Entity\Setup\PrfTeam", inversedBy="prfPerson")
+     * @ORM\ManyToMany(targetEntity="App\Entity\Setup\PrfTeam", inversedBy="prfPerson", cascade={"persist"})
      * @ORM\JoinTable(name="prf_team_has_prf_person",
      *   joinColumns={
      *     @ORM\JoinColumn(name="prf_person_id", referencedColumnName="id")
@@ -71,9 +72,9 @@ class PrfPerson
      */
     public function __construct()
     {
-        $this->agePerson = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->value = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->prfTeam = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->agePerson = new ArrayCollection();
+        $this->value = new ArrayCollection();
+        $this->prfTeam = new ArrayCollection();
     }
 
     /**

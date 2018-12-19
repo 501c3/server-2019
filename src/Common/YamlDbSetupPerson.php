@@ -21,9 +21,9 @@ use Doctrine\ORM\EntityManagerInterface;
 
 class YamlDbSetupPerson extends YamlDbSetupBase
 {
-    const PERSON_DOMAIN_KEYS = ['type','status','sex','age','proficiency'];
+    const PERSON_DOMAIN_KEYS = ['type','status','sex','age','proficiency','designate'];
 
-    private $person = [];
+    protected $person = [];
 
     public function __construct(EntityManagerInterface $entityManager)
     {
@@ -33,7 +33,7 @@ class YamlDbSetupPerson extends YamlDbSetupBase
     /**
      * @param string $file
      * @return array
-     * @throws AppException
+     * @throws AppParseException
      * @throws \Doctrine\ORM\ORMException
      * @throws \Doctrine\ORM\OptimisticLockException
      * @throws \Exception
@@ -45,7 +45,7 @@ class YamlDbSetupPerson extends YamlDbSetupBase
             foreach($records as $keyPosition=>$valueList) {
                 list($key,$position) = explode('|',$keyPosition);
                 if(!in_array($key,self::PERSON_DOMAIN_KEYS)) {
-                    throw new AppException(AppExceptionCodes::FOUND_BUT_EXPECTED,
+                    throw new AppParseException(AppExceptionCodes::FOUND_BUT_EXPECTED,
                         [$file,$key,$position,self::PERSON_DOMAIN_KEYS]);
                 }
             }
@@ -53,7 +53,7 @@ class YamlDbSetupPerson extends YamlDbSetupBase
             $keysFound = YamlPosition::isolate($keysPositions);
             $difference = array_diff(self::PERSON_DOMAIN_KEYS, $keysFound);
             if (count($difference)) {
-                throw new AppException(AppExceptionCodes::MISSING_KEYS,
+                throw new AppParseException(AppExceptionCodes::MISSING_KEYS,
                     [$file, $difference, $keysPositions]);
             }
             $cache = [];
@@ -71,7 +71,7 @@ class YamlDbSetupPerson extends YamlDbSetupBase
      * @param string $key
      * @param $valuesPositions
      * @return array|string
-     * @throws AppException
+     * @throws AppParseException
      * @throws \Exception
      *
      */
@@ -82,7 +82,7 @@ class YamlDbSetupPerson extends YamlDbSetupBase
             case 'status':
                 list($value,$position) = explode('|',$valuesPositions);
                 if(!isset($this->value[$key][$value])) {
-                    throw new AppException(AppExceptionCodes::UNRECOGNIZED_VALUE,
+                    throw new AppParseException(AppExceptionCodes::UNRECOGNIZED_VALUE,
                         [$file, $value, $position]);
                 }
                 break;
@@ -92,16 +92,17 @@ class YamlDbSetupPerson extends YamlDbSetupBase
                 if(!$result ||
                     (!is_numeric($bound['lower'])) || !is_numeric($bound['upper']) ||
                     ($bound['lower']>$bound['upper'])) {
-                    throw new AppException(AppExceptionCodes::INVALID_RANGE, [$file,$range,$position]);
+                    throw new AppParseException(AppExceptionCodes::INVALID_RANGE, [$file,$range,$position]);
                 }
                 break;
             case 'sex':
             case 'proficiency':
+            case 'designate':
                 foreach($valuesPositions as $valuePos) {
                     list($value,$position)=explode('|',$valuePos);
                     /** @var YamlDbSetupBase $this */
                     if(!isset($this->value[$key][$value])) {
-                        throw new AppException(AppExceptionCodes::UNRECOGNIZED_VALUE,
+                        throw new AppParseException(AppExceptionCodes::UNRECOGNIZED_VALUE,
                             [$file,$value,$position]);
                     }
                 }
@@ -124,101 +125,95 @@ class YamlDbSetupPerson extends YamlDbSetupBase
         if(!isset($this->person[$type][$status])) {
             $this->person[$type][$status] = [];
         }
-        foreach($cache['sex'] as $sex) {
-            if(!isset($this->person[$type][$status][$sex])){
-                $this->person[$type][$status][$sex] = [];
-            }
-            $ages = $this->agePersonValuesBuild($type,$status,$sex,$cache['age']);
-            $prfs = $this->prfPersonValuesBuild($type,$status,$sex, $cache['proficiency']);
-
-            /** @var AgePerson $agePerson */
-            foreach($ages as $years=>$agePerson) {
-                /** @var PrfPerson $prfPerson */
-                foreach($prfs as $proficiency=>$prfPerson) {
-                    $agePerson->getPrfPerson()->set($proficiency,$prfPerson);
-                }
-            }
-
-            $this->person[$type][$status][$sex]['prf'] = $prfs;
-
-            $this->person[$type][$status][$sex]['age'] = $ages;
+        if(!isset($this->person[$type][$status])){
+            $this->person[$type][$status] = ['age'=>[],'prf'=>[]];
         }
-        $this->entityManager->flush();
+        $prfPersons = $this->prfPersonValuesBuild($type,$status,$cache['sex'],
+                                            $cache['proficiency'],$cache['designate']);
+        $this->agePersonValuesBuild($type,$status,$cache['age'],$cache['designate'],$prfPersons);
     }
 
     /**
-     * @param $type
-     * @param $status
-     * @param $sex
-     * @param $ageRange
-     * @return array
+     * @param string $type
+     * @param string $status
+     * @param string $ageRange
+     * @param array $designates
+     * @param array $prfPersons
      * @throws \Doctrine\ORM\ORMException
      * @throws \Doctrine\ORM\OptimisticLockException
      */
-    private function agePersonValuesBuild($type,$status,$sex,$ageRange)
+    private function agePersonValuesBuild(string $type,
+                                          string $status,
+                                          string $ageRange,
+                                          array $designates,
+                                          array $prfPersons)
     {
-        $arr = [];
-        /** @var AgePersonRepository $repository */
+          /** @var AgePersonRepository $repository */
         $repository = $this->entityManager->getRepository(AgePerson::class);
         list($s1,$s2) = explode('-',$ageRange);
         $lb = intval($s1);
         $ub = intval($s2);
+        $describe = ['type'=>$type,'status'=>$status];
+        $values = [$this->value['type'][$type],$this->value['status'][$status]];
         for($i = $lb; $i<=$ub; $i++) {
-            $describe = ['type'=>$type,'status'=>$status,'sex'=>$sex, 'years'=>$i];
-            $agePerson = $repository->create($describe);
-            $agePerson->getValue()->set('type',$this->value['type'][$type]);
-            $agePerson->getValue()->set('status',$this->value['status'][$status]);
-            $agePerson->getValue()->set('sex',$this->value['sex'][$sex]);
-            $arr[$i]=$agePerson;
+            $describe1 = $describe;
+            $describe1['years']=$i;
+            if(!isset($this->person[$type][$status]['age'][$i])){
+                $this->person[$type][$status]['age'][$i]=[];
+                foreach($designates as $designate) {
+                    $describe2 = $describe1;
+                    $describe2['designate']=$designate;
+                    $agePerson = $repository->create($describe2,$values,$prfPersons);
+                    $this->person[$type][$status]['age'][$i][$designate]=$agePerson;
+                }
+            }
         }
-        return $arr;
     }
 
     /**
      * @param $type
      * @param $status
-     * @param $sex
+     * @param $sexes
      * @param $proficiencies
+     * @param $designates
      * @return array
      * @throws \Doctrine\ORM\ORMException
      * @throws \Doctrine\ORM\OptimisticLockException
      */
-    private function prfPersonValuesBuild($type,$status,$sex,$proficiencies)
+    private function prfPersonValuesBuild($type,$status,$sexes,$proficiencies,$designates)
     {
         $arr = [];
         /** @var PrfPersonRepository $repository */
         $repository = $this->entityManager->getRepository(PrfPerson::class);
-        foreach($proficiencies as $proficiency) {
-            $describe = ['type'=>$type,'status'=>$status,'sex'=>$sex,'proficiency'=>$proficiency];
-            $prfPerson = $repository->create($describe);
-            foreach($describe as $key=>$value) {
-                $prfPerson->getValue()->set($key,$this->value[$key][$value]);
+        $describe = ['type'=>$type,'status'=>$status];
+        foreach($sexes as $sex){
+            $describe1 = $describe;
+            $describe1['sex']=$sex;
+            if(!isset($this->person[$type][$status]['prf'][$sex])){
+                $this->person[$type][$status]['prf'][$sex]=[];
             }
-            $arr[$proficiency] = $prfPerson;
+            foreach($proficiencies as $proficiency) {
+                $describe2 = $describe1;
+                $describe2['proficiency']=$proficiency;
+                if(!isset($this->person[$type][$status]['prf'][$sex][$proficiency])) {
+                    $this->person[$type][$status]['prf'][$sex][$proficiency]=[];
+                }
+                foreach($designates as $designate) {
+                    $describe3 = $describe2;
+                    $describe3['designate']=$designate;
+                    $collection = [];
+                    foreach($describe3 as $key=>$value) {
+                        $collection[]=$this->value[$key][$value];
+                    }
+                    if(!isset($this->person[$type][$status]['prf'][$sex][$proficiency][$designate])){
+                        $prfPerson = $repository->create($describe3,$collection);
+                        $this->person[$type][$status]['prf'][$sex][$proficiency][$designate]=$prfPerson;
+                        $arr[]=$prfPerson;
+                    }
+                }
+            }
         }
         return $arr;
     }
-
-    private function agePrfValRelations(& $ages, & $prfs)
-    {
-
-        /**
-         * @var int $i
-         * @var AgePerson $age
-         */
-
-        foreach($ages as $i=>$age) {
-            /**
-             * @var string  $proficiency
-             * @var PrfPerson $prf
-             */
-
-            foreach($prfs as $proficiency=>$prf) {
-                $age->getPrfPerson()->add($prf);
-            }
-        }
-    }
-
-
 
 }

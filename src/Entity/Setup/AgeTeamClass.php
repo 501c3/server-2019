@@ -2,6 +2,8 @@
 
 namespace App\Entity\Setup;
 
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use /** @noinspection PhpUnusedAliasInspection */
     Doctrine\ORM\Mapping as ORM;
 
@@ -30,7 +32,7 @@ class AgeTeamClass
     private $describe;
 
     /**
-     * @var \Doctrine\Common\Collections\Collection
+     * @var Collection
      *
      * @ORM\ManyToMany(targetEntity="App\Entity\Setup\PrfTeamClass", inversedBy="ageTeamClass")
      * @ORM\JoinTable(name="age_team_class_has_prf_team_class",
@@ -45,7 +47,7 @@ class AgeTeamClass
     private $prfTeamClass;
 
     /**
-     * @var \Doctrine\Common\Collections\Collection
+     * @var Collection
      *
      * @ORM\ManyToMany(targetEntity="App\Entity\Setup\Value", inversedBy="ageTeamClass")
      * @ORM\JoinTable(name="age_team_class_has_value",
@@ -64,8 +66,8 @@ class AgeTeamClass
      */
     public function __construct()
     {
-        $this->prfTeamClass = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->value = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->prfTeamClass = new ArrayCollection();
+        $this->value = new ArrayCollection();
     }
 
     /**
@@ -105,36 +107,36 @@ class AgeTeamClass
     }
 
     /**
-     * @return \Doctrine\Common\Collections\Collection
+     * @return Collection
      */
-    public function getPrfTeamClass(): \Doctrine\Common\Collections\Collection
+    public function getPrfTeamClass(): Collection
     {
         return $this->prfTeamClass;
     }
 
     /**
-     * @param \Doctrine\Common\Collections\Collection $prfTeamClass
+     * @param Collection $prfTeamClass
      * @return AgeTeamClass
      */
-    public function setPrfTeamClass(\Doctrine\Common\Collections\Collection $prfTeamClass): AgeTeamClass
+    public function setPrfTeamClass(Collection $prfTeamClass): AgeTeamClass
     {
         $this->prfTeamClass = $prfTeamClass;
         return $this;
     }
 
     /**
-     * @return \Doctrine\Common\Collections\Collection
+     * @return Collection
      */
-    public function getValue(): \Doctrine\Common\Collections\Collection
+    public function getValue(): Collection
     {
         return $this->value;
     }
 
     /**
-     * @param \Doctrine\Common\Collections\Collection $value
+     * @param Collection $value
      * @return AgeTeamClass
      */
-    public function setValue(\Doctrine\Common\Collections\Collection $value): AgeTeamClass
+    public function setValue(Collection $value): AgeTeamClass
     {
         $this->value = $value;
         return $this;

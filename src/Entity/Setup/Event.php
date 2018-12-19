@@ -2,6 +2,7 @@
 
 namespace App\Entity\Setup;
 
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use /** @noinspection PhpUnusedAliasInspection */
     Doctrine\ORM\Mapping as ORM;
@@ -60,7 +61,7 @@ class Event
      */
     public function __construct()
     {
-        $this->value = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->value = new ArrayCollection();
     }
 
     /**

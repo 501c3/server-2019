@@ -61,6 +61,7 @@ proficiency:
   Rising Star: {abbr: R}
   Professional: {abbr: Pro}
 age:
+  Y00-00: {abbr: Pro, note: Professional}
   Y01-04: {abbr: BY,  note: Baby}
   Y05-05: {abbr: JV,  note: Juvenile}
   Y06-06: {abbr: JV,  note: Juvenile}
@@ -79,7 +80,7 @@ age:
   Y19-34: {abbr: A,   note: Adult}
   Y35-44: {abbr: S1,  note: Senior 1}
   Y45-49: {abbr: S2,  note: Senior 2}
-  Y45-54: {abbr: S2,  note: Senior 2}
+  Y50-54: {abbr: S2,  note: Senior 2}
   Y55-64: {abbr: S3,  note: Senior 3}
   Y65-74: {abbr: S4,  note: Senior 4}
   Y75-99: {abbr: S5,  note: Senior 5}
@@ -173,6 +174,9 @@ dance:
   Polka: {abbr: Plka}
   Triple Two: {abbr: TT}
   Performance: {abbr: P}
+designate:
+  A: {abbr: 'a'}
+  B: {abbr: 'b'}
 genre:
   International: {domain: 'style'}
   American: {domain: 'style'}

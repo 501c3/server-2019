@@ -2,6 +2,7 @@
 
 namespace App\Entity\Setup;
 
+use Doctrine\Common\Collections\ArrayCollection;
 use /** @noinspection PhpUnusedAliasInspection */
     Doctrine\ORM\Mapping as ORM;
 
@@ -93,12 +94,12 @@ class Value
      */
     public function __construct()
     {
-        $this->agePerson = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->ageTeamClass = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->event = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->model = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->prfPerson = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->prfTeamClass = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->agePerson = new ArrayCollection();
+        $this->ageTeamClass = new ArrayCollection();
+        $this->event = new ArrayCollection();
+        $this->model = new ArrayCollection();
+        $this->prfPerson = new ArrayCollection();
+        $this->prfTeamClass = new ArrayCollection();
     }
 
     /**

@@ -71,7 +71,7 @@ class Code1200SetupPersonTest extends KernelTestCase
 
 
     /**
-     * @throws \App\Common\AppException
+     * @throws \App\Common\AppParseException
      * @throws \Doctrine\ORM\ORMException
      * @throws \Doctrine\ORM\OptimisticLockException
      */
@@ -87,7 +87,7 @@ class Code1200SetupPersonTest extends KernelTestCase
 
 
     /**
-     * @throws \App\Common\AppException
+     * @throws \App\Common\AppParseException
      * @throws \Doctrine\DBAL\DBALException
      * @throws \Doctrine\ORM\ORMException
      * @throws \Doctrine\ORM\OptimisticLockException
@@ -101,8 +101,8 @@ class Code1200SetupPersonTest extends KernelTestCase
 
 
     /**
-     * @expectedException \App\Common\AppException
-     * @expectedExceptionMessage  Found 'type' at (row:1,col:3) but expected [type|status|sex|age|proficiency]
+     * @expectedException \App\Common\AppParseException
+     * @expectedExceptionMessage Found 'invalid_key' at (row:6,col:3) but expected [type|status|sex|age|proficiency|
      * @expectedExceptionCode \App\Common\AppExceptionCodes::FOUND_BUT_EXPECTED
      * @throws \Exception
      */
@@ -112,24 +112,23 @@ class Code1200SetupPersonTest extends KernelTestCase
     }
 
     /**
-     * @expectedException \App\Common\AppException
-     * @expectedExceptionMessage Missing [age] between lines 1-7 in file: data-1220-missing-key.yml. Reference: 1030
+     * @expectedException \App\Common\AppParseException
+     * @expectedExceptionMessage Missing [age] between lines 1-9 in file: data-1220-missing-key.yml. Reference: 1030
      * @expectedExceptionCode \App\Common\AppExceptionCodes::MISSING_KEYS
-     * @throws \App\Common\AppException
+     * @throws \App\Common\AppParseException
      * @throws \Doctrine\ORM\ORMException
      * @throws \Doctrine\ORM\OptimisticLockException
-
-     */
+ */
     public function test1220MissingKey()
     {
         $this->setup->parsePersons(__DIR__.'/../../tests/Common/data-1220-missing-key.yml');
     }
 
     /**
-     * @expectedException \App\Common\AppException
-     * @expectedExceptionMessage 'Invalid Value' as (row:2,col:11) is an unrecognized value in file:
+     * @expectedException \App\Common\AppParseException
+     * @expectedExceptionMessage 'Invalid Value' at (row:2,col:11) is an unrecognized value in file:
      * @expectedExceptionCode  \App\Common\AppExceptionCodes::UNRECOGNIZED_VALUE
-     * @throws \App\Common\AppException
+     * @throws \App\Common\AppParseException
      * @throws \Doctrine\ORM\ORMException
      * @throws \Doctrine\ORM\OptimisticLockException
      */
@@ -139,10 +138,10 @@ class Code1200SetupPersonTest extends KernelTestCase
     }
 
     /**
-     * @expectedException \App\Common\AppException
-     * @expectedExceptionMessage 'Invalid Value' as (row:4,col:5) is an unrecognized value in file:
+     * @expectedException \App\Common\AppParseException
+     * @expectedExceptionMessage 'Invalid Value' at (row:4,col:5) is an unrecognized value in file:
      * @expectedExceptionCode \App\Common\AppExceptionCodes::UNRECOGNIZED_VALUE
-     * @throws \App\Common\AppException
+     * @throws \App\Common\AppParseException
      * @throws \Doctrine\ORM\ORMException
      * @throws \Doctrine\ORM\OptimisticLockException
      */
@@ -153,10 +152,10 @@ class Code1200SetupPersonTest extends KernelTestCase
 
 
     /**
-     * @expectedException \App\Common\AppException
+     * @expectedException \App\Common\AppParseException
      * @expectedExceptionMessage '1 16' at (row:6,col:8) is an invalid numeric range in file:
      * @expectedExceptionCode \App\Common\AppExceptionCodes::INVALID_RANGE
-     * @throws \App\Common\AppException
+     * @throws \App\Common\AppParseException
      * @throws \Doctrine\ORM\ORMException
      * @throws \Doctrine\ORM\OptimisticLockException
      */
@@ -166,10 +165,10 @@ class Code1200SetupPersonTest extends KernelTestCase
     }
 
     /**
-     * @expectedException \App\Common\AppException
+     * @expectedException \App\Common\AppParseException
      * @expectedExceptionMessage 'X1-16' at (row:6,col:8) is an invalid numeric range in file:
      * @expectedExceptionCode \App\Common\AppExceptionCodes::INVALID_RANGE
-     * @throws \App\Common\AppException
+     * @throws \App\Common\AppParseException
      * @throws \Doctrine\ORM\ORMException
      * @throws \Doctrine\ORM\OptimisticLockException
      */
@@ -179,10 +178,10 @@ class Code1200SetupPersonTest extends KernelTestCase
     }
 
     /**
-     * @expectedException \App\Common\AppException
+     * @expectedException \App\Common\AppParseException
      * @expectedExceptionMessage '16-15' at (row:6,col:8) is an invalid numeric range in file
      * @expectedExceptionCode \App\Common\AppExceptionCodes::INVALID_RANGE
-     * @throws \App\Common\AppException
+     * @throws \App\Common\AppParseException
      * @throws \Doctrine\ORM\ORMException
      * @throws \Doctrine\ORM\OptimisticLockException
      */
@@ -191,8 +190,15 @@ class Code1200SetupPersonTest extends KernelTestCase
         $this->setup->parsePersons(__DIR__.'/../../tests/Common/data-1270-invalid-numeric.yml');
     }
 
+    public function test1280PersonBuildInitial()
+    {
+        $expected = $this->setup->parsePersons(__DIR__.'/../../tests/Common/setup-05-persons.yml');
+        $this->assertTrue(!is_null($expected));
+    }
+
+
     /**
-     * @throws \App\Common\AppException
+     * @throws \App\Common\AppParseException
      * @throws \Doctrine\ORM\ORMException
      * @throws \Doctrine\ORM\OptimisticLockException
      */
@@ -208,27 +214,29 @@ class Code1200SetupPersonTest extends KernelTestCase
         foreach($expected as $type=>$statusList) {
             $this->assertArrayHasKey($type, $actualAge);
             $this->assertArrayHasKey($type, $actualPrf);
-            foreach($statusList as $status=>$sexList) {
-                $this->assertArrayHasKey($status,$actualAge[$type]);
-                $this->assertArrayHasKey($status,$actualPrf[$type]);
-                foreach($sexList as $sex=>$agePrfRecords) {
-                    $this->assertArrayHasKey($sex,$actualAge[$type][$status]);
-                    $this->assertArrayHasKey($sex,$actualPrf[$type][$status]);
+            foreach($statusList as $status=>$agePrfRecords) {
                     /**
                      * @var string $proficiency
                      * @var PrfPerson $expectObject
                      */
-                    foreach($agePrfRecords['prf'] as $proficiency=>$expectObject) {
+                foreach($agePrfRecords['prf'] as $sex=>$proficiencyList) {
+                    $this->assertArrayHasKey($sex,$actualPrf[$type][$status]);
+                    foreach($proficiencyList as $proficiency=>$designateList) {
+                        $this->assertArrayHasKey($status,$actualAge[$type]);
+                        $this->assertArrayHasKey($status,$actualPrf[$type]);
                         /** @var AgePerson $actualObject */
-                        $actualObject = $actualPrf[$type][$status][$sex][$proficiency];
-                        $this->assertEquals($expectObject->getDescribe(),$actualObject->getDescribe());
+                        $this->assertArrayHasKey($proficiency, $actualPrf[$type][$status][$sex]);
+                        foreach($designateList as $designate=>$expectObject){
+                            $actualObject = $actualPrf[$type][$status][$sex][$proficiency][$designate];
+                            $this->assertEquals($expectObject->getDescribe(),$actualObject->getDescribe());
+                        }
                     }
-                    /**
-                     * @var int $years
-                     * @var AgePerson $expectObject
-                     */
-                    foreach($agePrfRecords['age'] as $years=>$expectObject) {
-                        $actualObject = $actualAge[$type][$status][$sex][$years];
+                }
+                foreach($agePrfRecords['age'] as $years=>$designateList) {
+                    $this->assertArrayHasKey($years,$actualAge[$type][$status]);
+                    foreach($designateList as $designate=>$expectObject) {
+                        $this->assertArrayHasKey($designate,$actualAge[$type][$status][$years]);
+                        $actualObject = $actualAge[$type][$status][$years][$designate];
                         $this->assertEquals($expectObject->getDescribe(),$actualObject->getDescribe());
                     }
                 }

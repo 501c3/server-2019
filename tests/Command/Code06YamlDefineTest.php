@@ -28,7 +28,7 @@ class Code06YamlDefineTest extends KernelTestCase
 
 
     /**
-     * @expectedException \App\Common\AppException
+     * @expectedException \App\Common\AppParseException
      * @expectedExceptionMessage ../../tests/Command/master-file was not found.
      * @expectedExceptionCode \App\Common\AppExceptionCodes::FILE_NOT_FOUND
      */
@@ -38,7 +38,7 @@ class Code06YamlDefineTest extends KernelTestCase
     }
 
     /**
-     * @expectedException \App\Common\AppException
+     * @expectedException \App\Common\AppParseException
      * @expectedExceptionMessage [persons,teams] was not found in ../../tests/Command/data-06-master-0010-missing.yml.
      * @expectedExceptionCode \App\Common\AppExceptionCodes::FILE_NOT_FOUND
      */
@@ -49,7 +49,7 @@ class Code06YamlDefineTest extends KernelTestCase
 
 
     /**
-     * @expectedException \App\Common\AppException
+     * @expectedException \App\Common\AppParseException
      * @expectedExceptionMessage  [values] was not found in ../../tests/Command/data-06-master-0020-file-not-found.yml.
      * @expectedExceptionCode \App\Common\AppExceptionCodes::FILE_NOT_FOUND
      */
@@ -59,7 +59,7 @@ class Code06YamlDefineTest extends KernelTestCase
     }
 
     /**
-     * @expectedException \App\Common\AppException
+     * @expectedException \App\Common\AppParseException
      * @expectedExceptionMessage tests/Common/missing.yml was not found.
      * @expectedExceptionCode \App\Common\AppExceptionCodes::FILE_NOT_FOUND
      */

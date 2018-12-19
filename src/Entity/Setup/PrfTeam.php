@@ -2,6 +2,7 @@
 
 namespace App\Entity\Setup;
 
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use /** @noinspection PhpUnusedAliasInspection */
     Doctrine\ORM\Mapping as ORM;
@@ -36,6 +37,13 @@ class PrfTeam
     /**
      * @var Collection
      *
+     * @ORM\ManyToMany(targetEntity="App\Entity\Setup\AgeTeam", mappedBy="prfTeam")
+     */
+    private $ageTeam;
+
+    /**
+     * @var Collection
+     *
      * @ORM\ManyToMany(targetEntity="App\Entity\Setup\PrfPerson", mappedBy="prfTeam")
      */
     private $prfPerson;
@@ -45,7 +53,8 @@ class PrfTeam
      */
     public function __construct()
     {
-        $this->prfPerson = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->ageTeam = new ArrayCollection();
+        $this->prfPerson = new ArrayCollection();
     }
 
     /**
@@ -58,12 +67,10 @@ class PrfTeam
 
     /**
      * @param int $id
-     * @return PrfTeam
      */
-    public function setId(int $id): PrfTeam
+    public function setId(int $id): void
     {
         $this->id = $id;
-        return $this;
     }
 
     /**
@@ -76,12 +83,26 @@ class PrfTeam
 
     /**
      * @param PrfTeamClass $prfTeamClass
-     * @return PrfTeam
      */
-    public function setPrfTeamClass(PrfTeamClass $prfTeamClass): PrfTeam
+    public function setPrfTeamClass(PrfTeamClass $prfTeamClass): void
     {
         $this->prfTeamClass = $prfTeamClass;
-        return $this;
+    }
+
+    /**
+     * @return Collection
+     */
+    public function getAgeTeam(): Collection
+    {
+        return $this->ageTeam;
+    }
+
+    /**
+     * @param Collection $ageTeam
+     */
+    public function setAgeTeam(Collection $ageTeam): void
+    {
+        $this->ageTeam = $ageTeam;
     }
 
     /**
@@ -94,12 +115,10 @@ class PrfTeam
 
     /**
      * @param Collection $prfPerson
-     * @return PrfTeam
      */
-    public function setPrfPerson(Collection $prfPerson): PrfTeam
+    public function setPrfPerson(Collection $prfPerson): void
     {
         $this->prfPerson = $prfPerson;
-        return $this;
     }
 
 

@@ -2,6 +2,8 @@
 
 namespace App\Entity\Setup;
 
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use /** @noinspection PhpUnusedAliasInspection */
     Doctrine\ORM\Mapping as ORM;
 
@@ -33,18 +35,34 @@ class AgeTeam
     private $ageTeamClass;
 
     /**
-     * @var \Doctrine\Common\Collections\Collection
+     * @var Collection
      *
      * @ORM\ManyToMany(targetEntity="App\Entity\Setup\AgePerson", mappedBy="ageTeam")
      */
     private $agePerson;
 
     /**
+     * @var Collection
+     *
+     * @ORM\ManyToMany(targetEntity="App\Entity\Setup\PrfTeam", inversedBy="ageTeam")
+     * @ORM\JoinTable(name="age_team_has_prf_team",
+     *   joinColumns={
+     *     @ORM\JoinColumn(name="age_team_id", referencedColumnName="id")
+     *   },
+     *   inverseJoinColumns={
+     *     @ORM\JoinColumn(name="prf_team_id", referencedColumnName="id")
+     *   }
+     * )
+     */
+    private $prfTeam;
+
+    /**
      * Constructor
      */
     public function __construct()
     {
-        $this->agePerson = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->agePerson = new ArrayCollection();
+        $this->prfTeam = new ArrayCollection();
     }
 
     /**
@@ -55,6 +73,15 @@ class AgeTeam
         return $this->id;
     }
 
+    /**
+     * @param int $id
+     * @return AgeTeam
+     */
+    public function setId(int $id): AgeTeam
+    {
+        $this->id = $id;
+        return $this;
+    }
 
     /**
      * @return AgeTeamClass
@@ -75,20 +102,38 @@ class AgeTeam
     }
 
     /**
-     * @return \Doctrine\Common\Collections\Collection
+     * @return Collection
      */
-    public function getAgePerson(): \Doctrine\Common\Collections\Collection
+    public function getAgePerson(): Collection
     {
         return $this->agePerson;
     }
 
     /**
-     * @param \Doctrine\Common\Collections\Collection $agePerson
+     * @param Collection $agePerson
      * @return AgeTeam
      */
-    public function setAgePerson(\Doctrine\Common\Collections\Collection $agePerson): AgeTeam
+    public function setAgePerson(Collection $agePerson): AgeTeam
     {
         $this->agePerson = $agePerson;
+        return $this;
+    }
+
+    /**
+     * @return Collection
+     */
+    public function getPrfTeam(): Collection
+    {
+        return $this->prfTeam;
+    }
+
+    /**
+     * @param Collection $prfTeam
+     * @return AgeTeam
+     */
+    public function setPrfTeam(Collection $prfTeam): AgeTeam
+    {
+        $this->prfTeam = $prfTeam;
         return $this;
     }
 

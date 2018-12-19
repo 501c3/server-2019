@@ -22,16 +22,21 @@ class PrfPersonRepository extends ServiceEntityRepository
 
     /**
      * @param array $describe
+     * @param array $values
      * @return PrfPerson
      * @throws \Doctrine\ORM\ORMException
      * @throws \Doctrine\ORM\OptimisticLockException
      */
-    public function create(array $describe)
+    public function create(array $describe, array $values)
     {
         $prfPerson = new PrfPerson();
         $prfPerson->setDescribe($describe);
+        $collection = $prfPerson->getValue();
         $em = $this->getEntityManager();
         $em->persist($prfPerson);
+        foreach($values as $value){
+            $collection->add($value);
+        }
         $em->flush();
         return $prfPerson;
     }
@@ -50,6 +55,7 @@ class PrfPersonRepository extends ServiceEntityRepository
             $status = $describe['status'];
             $sex = $describe['sex'];
             $proficiency = $describe['proficiency'];
+            $designate = $describe['designate'];
             if(!isset($arr[$type])) {
                 $arr[$type]=[];
             }
@@ -59,7 +65,10 @@ class PrfPersonRepository extends ServiceEntityRepository
             if(!isset($arr[$type][$status][$sex])) {
                 $arr[$type][$status][$sex] = [];
             }
-            $arr[$type][$status][$sex][$proficiency]=$result;
+            if(!isset($arr[$type][$status][$sex][$proficiency])){
+                $arr[$type][$status][$sex][$proficiency]=[];
+            }
+            $arr[$type][$status][$sex][$proficiency][$designate]=$result;
         }
         return $arr;
     }

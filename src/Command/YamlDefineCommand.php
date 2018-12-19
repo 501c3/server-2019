@@ -2,7 +2,7 @@
 
 namespace App\Command;
 
-use App\Common\AppException;
+use App\Common\AppParseException;
 use App\Common\AppExceptionCodes;
 use App\Common\YamlRelations;
 use App\Signal\ProcessEvent;
@@ -65,12 +65,12 @@ class YamlDefineCommand extends Command
     /**
      * @param $file
      * @return int
-     * @throws AppException
+     * @throws AppParseException
      */
     private function checkSubfilesAndLineCounts($file) : int
     {
         if(!file_exists($file)) {
-            throw new AppException(AppExceptionCodes::FILE_NOT_FOUND, $file);
+            throw new AppParseException(AppExceptionCodes::FILE_NOT_FOUND, $file);
         }
         return intval(exec("wc -l '$file'"));
     }
@@ -111,7 +111,7 @@ class YamlDefineCommand extends Command
 
     /**
      * @param $masterFile
-     * @throws AppException
+     * @throws AppParseException
      */
     private function buildPhpStructures(string $masterFile, OutputInterface $output)
     {
@@ -119,13 +119,13 @@ class YamlDefineCommand extends Command
         try {
            $contents = yaml_parse_file(__DIR__ . '/' . $masterFile);
         } catch(\Exception $exception){
-            throw new AppException(AppExceptionCodes::FILE_NOT_FOUND,$masterFile);
+            throw new AppParseException(AppExceptionCodes::FILE_NOT_FOUND,$masterFile);
         }
         $keys = array_keys($contents);
         $missing=array_diff(self::MASTER_KEYS, $keys);
         if(count($missing)) {
             $foundMissing = '['.join(',',$missing).']';
-            throw new AppException(AppExceptionCodes::FILE_NOT_FOUND,$masterFile,$foundMissing);
+            throw new AppParseException(AppExceptionCodes::FILE_NOT_FOUND,$masterFile,$foundMissing);
         }
         $lineCounts=[];
         foreach(self::MASTER_KEYS as $key) {

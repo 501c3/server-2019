@@ -89,8 +89,9 @@ class ModelRepository extends ServiceEntityRepository
 
     public function fetchQuickSearch():array
     {
+        die('At fetchQuickSearch');
         $qb = $this->createQueryBuilder('model');
-        $qb->select('model','value')
+        $qb->select('model','value','domain')
             ->innerJoin('model.value','value')
             ->innerJoin('value.domain', 'domain');
          $query = $qb->getQuery();
@@ -98,9 +99,9 @@ class ModelRepository extends ServiceEntityRepository
          $arr = [];
          /** @var Model $item */
         foreach($results as $item) {
-            $compName = $item->getName();
-            if(!isset($arr[$compName])) {
-                $arr[$compName]=[];
+            $modelName = $item->getName();
+            if(!isset($arr[$modelName])) {
+                $arr[$modelName]=[];
             }
             /** @var ArrayCollection $collection */
             $collection = $item->getValue();
@@ -109,11 +110,11 @@ class ModelRepository extends ServiceEntityRepository
             while($current) {
                 $domName = $current->getDomain()->getName();
                 $valName = $current->getName();
-                if(!isset($arr[$compName][$domName])) {
-                    $arr[$compName][$domName]=[];
+                if(!isset($arr[$modelName][$domName])) {
+                    $arr[$modelName][$domName]=[];
                 }
-                if(!isset($arr[$compName][$domName][$valName])) {
-                    $arr[$compName][$domName][$valName]=$current;
+                if(!isset($arr[$modelName][$domName][$valName])) {
+                    $arr[$modelName][$domName][$valName]=$current;
                 }
                 $current = $collection->next();
             }
