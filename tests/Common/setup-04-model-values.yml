@@ -117,11 +117,14 @@ Georgia DanceSport ProAm-2019:
   substyle: [Rhythm,Smooth,Latin,Standard]
   status:
   - Teacher-Student
+  - Teacher-Teacher
   type:
   - Amateur
   - Professional-Amateur
+  - Professional
   sex:
   - Mixed-Sex
+  - Male-Female
   proficiency:
   - Newcomer
   - Pre Bronze

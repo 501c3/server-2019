@@ -2,6 +2,7 @@
 
 namespace App\Entity\Setup;
 
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use /** @noinspection PhpUnusedAliasInspection */
     Doctrine\ORM\Mapping as ORM;
@@ -63,15 +64,7 @@ class AgePerson
     /**
      * @var Collection
      *
-     * @ORM\ManyToMany(targetEntity="App\Entity\Setup\AgeTeam", inversedBy="agePerson")
-     * @ORM\JoinTable(name="age_team_has_age_person",
-     *   joinColumns={
-     *     @ORM\JoinColumn(name="age_person_id", referencedColumnName="id")
-     *   },
-     *   inverseJoinColumns={
-     *     @ORM\JoinColumn(name="age_team_id", referencedColumnName="id")
-     *   }
-     * )
+     * @ORM\ManyToMany(targetEntity="App\Entity\Setup\AgeTeam", mappedBy="agePerson")
      */
     private $ageTeam;
 
@@ -80,9 +73,9 @@ class AgePerson
      */
     public function __construct()
     {
-        $this->prfPerson = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->value = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->ageTeam = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->prfPerson = new ArrayCollection();
+        $this->value = new ArrayCollection();
+        $this->ageTeam = new ArrayCollection();
     }
 
     /**
@@ -93,6 +86,15 @@ class AgePerson
         return $this->id;
     }
 
+    /**
+     * @param int $id
+     * @return AgePerson
+     */
+    public function setId(int $id): AgePerson
+    {
+        $this->id = $id;
+        return $this;
+    }
 
     /**
      * @return array
@@ -120,15 +122,7 @@ class AgePerson
         return $this->prfPerson;
     }
 
-    /**
-     * @param Collection $prfPerson
-     * @return AgePerson
-     */
-    public function setPrfPerson(Collection $prfPerson): AgePerson
-    {
-        $this->prfPerson = $prfPerson;
-        return $this;
-    }
+
 
     /**
      * @return Collection
@@ -138,15 +132,7 @@ class AgePerson
         return $this->value;
     }
 
-    /**
-     * @param Collection $value
-     * @return AgePerson
-     */
-    public function setValue(Collection $value): AgePerson
-    {
-        $this->value = $value;
-        return $this;
-    }
+
 
     /**
      * @return Collection
@@ -155,17 +141,5 @@ class AgePerson
     {
         return $this->ageTeam;
     }
-
-    /**
-     * @param Collection $ageTeam
-     * @return AgePerson
-     */
-    public function setAgeTeam(Collection $ageTeam): AgePerson
-    {
-        $this->ageTeam = $ageTeam;
-        return $this;
-    }
-
-
 
 }

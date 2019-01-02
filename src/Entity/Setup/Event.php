@@ -44,6 +44,21 @@ class Event
     /**
      * @var Collection
      *
+     * @ORM\ManyToMany(targetEntity="App\Entity\Setup\TeamClass", inversedBy="event")
+     * @ORM\JoinTable(name="event_has_team_class",
+     *   joinColumns={
+     *     @ORM\JoinColumn(name="event_id", referencedColumnName="id")
+     *   },
+     *   inverseJoinColumns={
+     *     @ORM\JoinColumn(name="team_class_id", referencedColumnName="id")
+     *   }
+     * )
+     */
+    private $teamClass;
+
+    /**
+     * @var Collection
+     *
      * @ORM\ManyToMany(targetEntity="App\Entity\Setup\Value", inversedBy="event")
      * @ORM\JoinTable(name="event_has_value",
      *   joinColumns={
@@ -61,6 +76,7 @@ class Event
      */
     public function __construct()
     {
+        $this->teamClass = new ArrayCollection();
         $this->value = new ArrayCollection();
     }
 
@@ -72,15 +88,6 @@ class Event
         return $this->id;
     }
 
-    /**
-     * @param int $id
-     * @return Event
-     */
-    public function setId(int $id): Event
-    {
-        $this->id = $id;
-        return $this;
-    }
 
     /**
      * @return array
@@ -121,22 +128,18 @@ class Event
     /**
      * @return Collection
      */
+    public function getTeamClass(): Collection
+    {
+        return $this->teamClass;
+    }
+
+
+    /**
+     * @return Collection
+     */
     public function getValue(): Collection
     {
         return $this->value;
     }
-
-    /**
-     * @param Collection $value
-     * @return Event
-     */
-    public function setValue(Collection $value): Event
-    {
-        $this->value = $value;
-        return $this;
-    }
-
-
-
 
 }

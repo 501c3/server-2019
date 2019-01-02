@@ -17,7 +17,8 @@ class AppParseException extends \Exception
         MESSAGE_FP  ="'%s' at (row:%d,col:%d) is an unrecognized value in file: %s. Reference: %d",
         MESSAGE_MK  ="Missing %s between lines %d-%d in file: %s. Reference: %d",
         MESSAGE_IR  ="'%s' at (row:%d,col:%d) is an invalid numeric range in file: %s. Reference: %d",
-        MESSAGE_UC  ="Unhandled condition in source file: %s. Code: %d";
+        MESSAGE_UC  ="Unhandled condition in source file: %s. Code: %d",
+        MESSAGE_ES  ="Expected structure following '%s' at (row:%d,col:%d) in file: %s";
 
 
 
@@ -72,6 +73,8 @@ class AppParseException extends \Exception
                 return self::messageFP($code,$file,$found,$position);
             case AppExceptionCodes::MISSING_KEYS:
                 return self::messageMK($code,$file,$found,$position);
+            case AppExceptionCodes::EXPECTED_STRUCTURE:
+                return self::messageES($code,$file,$found,$position);
             default:
                 return self::messageUC($code,$file);
         }
@@ -136,9 +139,28 @@ class AppParseException extends \Exception
         return sprintf(self::MESSAGE_MK,'['.join('|',$missingKeys).']',$min,$max,$file,$code);
     }
 
+    /**
+     * @param $code
+     * @param $file
+     * @return string
+     */
     public static function messageUC($code,$file)
     {
         return sprintf(self::MESSAGE_UC, $file, $code);
+    }
+
+    /**
+     * @param $code
+     * @param $file
+     * @param $found
+     * @param $position
+     * @return string
+     * @throws AppParseException
+     */
+    public static function messageES($code,$file,$found,$position)
+    {
+        $pos = self::strToPos($position);
+        return sprintf(self::MESSAGE_ES, $found, $pos['row'],$pos['col'],  $file, $code);
     }
 
 }

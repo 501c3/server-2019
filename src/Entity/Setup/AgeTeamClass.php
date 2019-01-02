@@ -131,17 +131,4 @@ class AgeTeamClass
     {
         return $this->value;
     }
-
-    /**
-     * @param Collection $value
-     * @return AgeTeamClass
-     */
-    public function setValue(Collection $value): AgeTeamClass
-    {
-        $this->value = $value;
-        return $this;
-    }
-
-
-
 }

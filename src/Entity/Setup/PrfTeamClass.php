@@ -70,15 +70,6 @@ class PrfTeamClass
         return $this->id;
     }
 
-    /**
-     * @param int $id
-     * @return PrfTeamClass
-     */
-    public function setId(int $id): PrfTeamClass
-    {
-        $this->id = $id;
-        return $this;
-    }
 
     /**
      * @return array
@@ -106,15 +97,6 @@ class PrfTeamClass
         return $this->ageTeamClass;
     }
 
-    /**
-     * @param Collection $ageTeamClass
-     * @return PrfTeamClass
-     */
-    public function setAgeTeamClass(Collection $ageTeamClass): PrfTeamClass
-    {
-        $this->ageTeamClass = $ageTeamClass;
-        return $this;
-    }
 
     /**
      * @return Collection
@@ -122,16 +104,6 @@ class PrfTeamClass
     public function getValue(): Collection
     {
         return $this->value;
-    }
-
-    /**
-     * @param Collection $value
-     * @return PrfTeamClass
-     */
-    public function setValue(Collection $value): PrfTeamClass
-    {
-        $this->value = $value;
-        return $this;
     }
 
 

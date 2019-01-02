@@ -107,4 +107,27 @@ class ValueRepository extends ServiceEntityRepository
         $this->em->remove($value);
         $this->em->flush();
     }
+
+
+
+    public function fetchQuickSearch()
+    {
+        $qb = $this->createQueryBuilder('value');
+        $qb->select('value','domain')
+            ->innerJoin('value.domain','domain');
+        $query = $qb->getQuery();
+        $results = $query->getResult();
+        $arr=[];
+        /** @var Value $result */
+        foreach($results as $result) {
+            $domain = $result->getDomain();
+            $domName = $domain->getName();
+            $valName = $result->getName();
+            if(!isset($arr[$domName])) {
+                $arr[$domName] = [];
+            }
+            $arr[$domName][$valName] = $result;
+        }
+        return $arr;
+    }
 }

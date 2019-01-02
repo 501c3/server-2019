@@ -165,45 +165,41 @@ class YamlDbSetupTeamClass extends YamlDbSetupPerson
         if(!isset($this->team[$type][$status])) {
             $this->team[$type][$status] = ['age'=>[],'prf'=>[]];
         }
-        list($prfClasses, $prfTeamCollection) = $this->prfTeamCollectionBuild($type,$status,$cache['sex'],$cache['proficiency']);
-        $this->ageTeamCollectionBuild($type,$status,$cache['age'],$prfClasses, $prfTeamCollection);
+        $prfTeamClasses = $this->prfTeamCollectionBuild($type,$status,$cache['sex'],$cache['proficiency']);
+        $this->ageTeamCollectionBuild($type,$status,$cache['age'],$prfTeamClasses);
     }
 
     /**
      * @param string $type
      * @param string $status
      * @param array $ages
-     * @param array $prfClasses
-     * @param array $prfTeamCollection
+     * @param array $prfTeamClasses
      * @throws \Doctrine\ORM\ORMException
      * @throws \Doctrine\ORM\OptimisticLockException
      */
     private function ageTeamCollectionBuild(string $type,
                                             string $status,
                                             array $ages,
-                                            array $prfClasses,
-                                            array $prfTeamCollection)
+                                            array $prfTeamClasses)
     {
         foreach($ages as $teamAge=>$personAgeRanges){
             $describe = ['type'=>$type,'status'=>$status,'age'=>$teamAge];
             /** @var AgeTeamClass $ageTeamClass */
-            $ageTeamClass = $this->fetchAgeTeamClass($describe,$prfClasses);
-            $this->collectAgePersonsIntoTeams(
-                            $ageTeamClass,
-                            $personAgeRanges,
-                            $prfTeamCollection);
-
+                $ageTeamClass = $this->fetchAgeTeamClass($describe, $prfTeamClasses); //,$prfCollection['class']);
+                $this->collectAgePersonsIntoTeams(
+                                $ageTeamClass,
+                                $personAgeRanges);
         }
     }
 
     /**
      * @param $describe
-     * @param $prfClasses
+     * @param array $prfTeamClasses
      * @return AgeTeamClass|mixed
      * @throws \Doctrine\ORM\ORMException
      * @throws \Doctrine\ORM\OptimisticLockException
      */
-    private function fetchAgeTeamClass($describe,$prfClasses)
+    private function fetchAgeTeamClass($describe, array $prfTeamClasses)
     {
         $valueList  = [];
         /** @var AgeTeamClassRepository $repository */
@@ -212,7 +208,7 @@ class YamlDbSetupTeamClass extends YamlDbSetupPerson
             foreach($describe as $key=>$value) {
                 $valueList[]=$this->value[$key][$value];
             }
-            $ageTeamClass = $repository->create($describe,$prfClasses,$valueList);
+            $ageTeamClass = $repository->create($describe,$prfTeamClasses,$valueList);
             $this->setAgeTeamClass($describe,$ageTeamClass);
             return $ageTeamClass;
         }
@@ -346,34 +342,32 @@ class YamlDbSetupTeamClass extends YamlDbSetupPerson
      */
     private function prfTeamCollectionBuild(string $type, string $status,array $sexes,array $proficiencies)
     {
-        $prfClasses = [];
-        $collections = [];
+        $teamClasses = new ArrayCollection();
         foreach ($sexes as $sex) {
             foreach ($proficiencies as $teamProficiency => $partnerProficiencyList) {
                 $describe = ['type' => $type, 'status' => $status, 'sex' => $sex, 'proficiency' => $teamProficiency];
                 $prfTeamClass = $this->fetchPrfTeamClass($describe);
-                $teams = $this->collectPrfPersonsIntoPrfTeams(
-                                        $prfTeamClass,
-                                        $partnerProficiencyList);
-                $prfClasses[]=$prfTeamClass;
-                $collections[] = $teams ;
+                $prfTeamClassId= $prfTeamClass->getId();
+                if(!$teamClasses->containsKey($prfTeamClassId)) {
+                    $teamClasses->set($prfTeamClassId, $prfTeamClass);
+                }
+                $this->collectPrfPersonsIntoPrfTeams(
+                                    $prfTeamClass,
+                                    $partnerProficiencyList);
             }
         }
-        return [$prfClasses, array_merge(...$collections)];
+        return $teamClasses->toArray();
     }
-
 
     /**
      * @param AgeTeamClass $ageTeamClass
      * @param array $personAgeRanges
-     * @param array $prfTeamCollection
      * @throws \Doctrine\ORM\ORMException
      * @throws \Doctrine\ORM\OptimisticLockException
      */
     private function collectAgePersonsIntoTeams(
         AgeTeamClass $ageTeamClass,
-        array $personAgeRanges,
-        array $prfTeamCollection)
+        array $personAgeRanges)
     {
         $describe = $ageTeamClass->getDescribe();
         $type = $describe['type'];
@@ -398,14 +392,14 @@ class YamlDbSetupTeamClass extends YamlDbSetupPerson
         switch(count($collectionOfCollection)) {
             case 1:
                 foreach($collectionOfCollection[0] as $person){
-                    $team=$repository->create($ageTeamClass,[$person],$prfTeamCollection);
+                    $team=$repository->create($ageTeamClass,[$person],[]);
                     $this->addAgeTeamToInventory($team);
                 }
                 break;
             case 2:
                 foreach($collectionOfCollection[0] as $personLeft) {
                     foreach($collectionOfCollection[1] as $personRight) {
-                        $team = $repository->create($ageTeamClass,[$personLeft,$personRight],$prfTeamCollection);
+                        $team = $repository->create($ageTeamClass,[$personLeft,$personRight],[]);
                         $this->addAgeTeamToInventory($team);
                     }
                 }
@@ -467,7 +461,6 @@ class YamlDbSetupTeamClass extends YamlDbSetupPerson
            $team=$repository->create($prfTeamClass,$couplingOrSolo);
            $this->addPrfTeamToInventory($team);
            $teamList[]=$team;
-
         }
         return $teamList;
     }

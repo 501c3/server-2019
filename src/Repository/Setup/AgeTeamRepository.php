@@ -39,13 +39,9 @@ class AgeTeamRepository extends ServiceEntityRepository
         $em = $this->getEntityManager();
         $em->persist($ageTeam);
         /** @var AgePerson $person */
+        $collection = $ageTeam->getAgePerson();
         foreach($personList as $person) {
-            $person->getAgeTeam()->add($ageTeam);
-        }
-        $collection = $ageTeam->getPrfTeam();
-        /** @var PrfTeam $prfTeam */
-        foreach($prfTeamList as $prfTeam) {
-            $collection->add($prfTeam);
+            $collection->add($person);
         }
         $em->flush();
         return $ageTeam;

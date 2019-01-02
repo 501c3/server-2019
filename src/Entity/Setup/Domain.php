@@ -38,6 +38,16 @@ class Domain
     }
 
     /**
+     * @param int $id
+     * @return Domain
+     */
+    public function setId(int $id): Domain
+    {
+        $this->id = $id;
+        return $this;
+    }
+
+    /**
      * @return string
      */
     public function getName(): string
@@ -54,5 +64,4 @@ class Domain
         $this->name = $name;
         return $this;
     }
-
 }

@@ -39,6 +39,7 @@ class PrfTeamRepository extends ServiceEntityRepository
         /** @var PrfPerson $person */
         foreach($personList as $person){
            $person->getPrfTeam()->add($prfTeam);
+           $prfTeam->getPrfPerson()->add($person);
         }
         $em->flush();
         return $prfTeam;

@@ -226,6 +226,41 @@
     - Pre Championship
     - Gold Star 1
     - Championship
+
+- type: Amateur
+  status: Teacher-Teacher
+  sex:
+    - Male-Female
+    - Male-Male
+    - Female-Female
+  age:
+    Y16-16: [16-16,16-16]
+    Y17-17: [17-17,16-17]
+    Y18-18: [18-18,16-18]
+    Y19-34: [19-34,16-34]
+    Y35-44: [30-44,35-44]
+    Y45-49: [40-49,45-49]
+    Y50-54: [50-54,50-54]
+    Y55-64: [50-64,55-64]
+    Y65-74: [50-74,65-74]
+    Y75-99: [70-99,75-99]
+  proficiency:
+    Pre Championship:
+      - Gold Star 1
+      - Pre Championship
+    Gold Star 1:
+      - Gold Star 1
+      - Pre Championship
+    Championship:
+      - Gold Star 1
+      - Pre Championship
+      - Championship
+      - Gold Star 2
+    Gold Star 2:
+      - Gold Star 1
+      - Pre Championship
+      - Gold Star 2
+      - Championship
 - type: Amateur
   status: Teacher-Student
   sex:

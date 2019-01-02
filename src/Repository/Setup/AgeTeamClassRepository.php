@@ -15,6 +15,7 @@ namespace App\Repository\Setup;
 
 use App\Entity\Setup\AgeTeamClass;
 use App\Entity\Setup\PrfTeam;
+use App\Entity\Setup\PrfTeamClass;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Persistence\ManagerRegistry;
@@ -29,11 +30,12 @@ class AgeTeamClassRepository extends ServiceEntityRepository
     /**
      * @param array $describe
      * @param array $prfClasses
+     * @param array $values
      * @return AgeTeamClass
      * @throws \Doctrine\ORM\ORMException
      * @throws \Doctrine\ORM\OptimisticLockException
      */
-    public function create(array $describe, array $prfClasses=[],array $values=[])
+    public function create(array $describe, array $prfClasses, array $values=[])
     {
         $em = $this->getEntityManager();
         $ageTeamClass = new AgeTeamClass();
@@ -53,6 +55,7 @@ class AgeTeamClassRepository extends ServiceEntityRepository
 
     public function fetchQuickSearch()
     {
+        $arr = [];
         $results = $this->findAll();
         /** @var AgeTeamClass $result */
         foreach($results as $result){

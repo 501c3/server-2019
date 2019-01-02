@@ -250,6 +250,17 @@ class Code1400SetupTeamClassTest extends KernelTestCase
      * @throws \Doctrine\ORM\ORMException
      * @throws \Doctrine\ORM\OptimisticLockException
      */
+    public function test1470ValidTeams()
+    {
+        $expected = $this->setup->parseTeams(__DIR__ . '/../../tests/Common/data-1470-valid-teams.yml');
+        $this->iterateThroughDatabase($expected);
+    }
+
+    /**
+     * @throws \App\Common\AppParseException
+     * @throws \Doctrine\ORM\ORMException
+     * @throws \Doctrine\ORM\OptimisticLockException
+     */
     public function test1500TeamValidComplete()
     {
         $expected = $this->setup->parseTeams(__DIR__ . '/../../tests/Common/setup-06-teams.yml');

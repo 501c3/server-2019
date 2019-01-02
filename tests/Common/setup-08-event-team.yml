@@ -15,26 +15,118 @@ ISTD Medal Exams-2019:
       - Full Silver
       - Open Silver
       - Silver
-      Gold:
-      - Pre Gold
-      - Intermediate Gold
-      - Full Gold
-      - Open Gold
-      - Gold
-      Gold Star 1:
-      - Novice
-      - Gold Star 1
-      Gold Star 2:
-      - Pre Championship
-      - Championship
-      - Gold Star 2
     age:
       Under 6: [Y01-04,Y05-05,Y06-06]
       Under 8: [Y07-07,Y08-08]
       Under 12: [Y09-09,Y10-10,Y11-11]
       Junior 12-16: [Y12-12,Y13-13,Y14-14,Y15-15]
-      Adult 16-50: [Y16-16,Y17-17,Y18-18,Y19-34,Y34-44,Y45-49]
+      Adult 16-50: [Y16-16,Y17-17,Y18-18,Y19-34,Y35-44,Y45-49]
       Senior 50: [Y50-54,Y55-64,Y65-74,Y75-99]
+    sex:
+      Mixed-Sex: [Male-Female,Male-Male,Female-Female]
+    status:
+      Student-Student: [Student-Student]
+    type:
+      Amateur: [Amateur]
+  - proficiency:
+      Pre Bronze:
+        - Newcomer
+        - Pre Bronze
+      Bronze:
+        - Pre Bronze
+        - Intermediate Bronze
+        - Full Bronze
+        - Open Bronze
+        - Bronze
+      Silver:
+        - Pre Silver
+        - Intermediate Silver
+        - Full Silver
+        - Open Silver
+        - Silver
+    age:
+      Under 6: [Y01-04,Y05-05,Y06-06]
+      Under 8: [Y07-07,Y08-08]
+      Under 12: [Y09-09,Y10-10,Y11-11]
+      Junior 12-16: [Y12-12,Y13-13,Y14-14,Y15-15]
+      Adult 16-50: [Y16-16,Y17-17,Y18-18,Y19-34,Y35-44,Y45-49]
+      Senior 50: [Y50-54,Y55-64,Y65-74,Y75-99]
+    sex:
+      Mixed-Sex: [Male-Female,Male-Male,Female-Female]
+    status:
+      Teacher-Student: [Teacher-Student]
+    type:
+      Amateur: [Amateur,Professional-Amateur]
+  - proficiency:
+      Gold:
+        - Pre Gold
+        - Intermediate Gold
+        - Full Gold
+        - Open Gold
+        - Gold
+    age:
+      Under 12: [Y09-09,Y10-10,Y11-11]
+      Junior 12-16: [Y12-12,Y13-13,Y14-14,Y15-15]
+      Adult 16-50: [Y16-16,Y17-17,Y18-18,Y19-34,Y35-44,Y45-49]
+      Senior 50: [Y50-54,Y55-64,Y65-74,Y75-99]
+    sex:
+      Mixed-Sex: [Male-Female,Male-Male,Female-Female]
+    status:
+      Teacher-Student: [Teacher-Student]
+    type:
+      Amateur: [Amateur,Professional-Amateur]
+  - proficiency:
+      Gold:
+        - Pre Gold
+        - Intermediate Gold
+        - Full Gold
+        - Open Gold
+        - Gold
+    age:
+      Under 12: [Y09-09,Y10-10,Y11-11]
+      Junior 12-16: [Y12-12,Y13-13,Y14-14,Y15-15]
+      Adult 16-50: [Y16-16,Y17-17,Y18-18,Y19-34,Y35-44,Y45-49]
+      Senior 50: [Y50-54,Y55-64,Y65-74,Y75-99]
+    sex:
+      Mixed-Sex: [Male-Female,Male-Male,Female-Female]
+    status:
+      Teacher-Student: [Teacher-Student]
+    type:
+      Amateur: [Amateur,Professional-Amateur]
+  - proficiency:
+      Gold Star 1:
+        - Novice
+        - Gold Star 1
+      Gold Star 2:
+        - Pre Championship
+        - Championship
+        - Gold Star 2
+    age:
+      Adult 16-50: [Y16-16,Y17-17,Y18-18,Y19-34,Y35-44,Y45-49]
+      Senior 50: [Y50-54,Y55-64,Y65-74,Y75-99]
+    sex:
+      Mixed-Sex: [Male-Female,Male-Male,Female-Female]
+    status:
+      Teacher-Student: [Teacher-Student]
+    type:
+      Amateur: [Professional-Amateur]
+  - proficiency:
+      Gold Star 1:
+        - Novice
+        - Gold Star 1
+      Gold Star 2:
+        - Pre Championship
+        - Championship
+        - Gold Star 2
+    age:
+      Adult 16-50: [Y16-16,Y17-17,Y18-18,Y19-34,Y35-44,Y45-49]
+      Senior 50: [Y50-54,Y55-64,Y65-74,Y75-99]
+    sex:
+      Mixed-Sex: [Male-Female,Male-Male,Female-Female]
+    status:
+      Student-Student: [Student-Student]
+    type:
+      Amateur: [Amateur]
 Georgia DanceSport Amateur-2019:
   - proficiency:
       Newcomer:
@@ -67,11 +159,52 @@ Georgia DanceSport Amateur-2019:
       Youth: [Y16-16,Y17-17,Y18-18]
       Adult: [Y19-34,Y35-44]
       Senior 1: [Y35-44,Y45-49,Y50-54]
-      Senior 2: [Y45-54,Y55-64]
+      Senior 2: [Y45-49,Y50-54,Y55-64]
       Senior 3: [Y55-64,Y65-74]
       Senior 4: [Y65-74,Y75-99]
       Senior 5: [Y75-99]
-
+    sex:
+      Same-Sex: [Male-Male,Female-Female]
+      Male-Female: [Male-Female]
+    status:
+      Student-Student: [Student-Student]
+    type:
+      Amateur: [Amateur]
+  - proficiency:
+      Newcomer:
+        - Newcomer
+      Bronze:
+        - Newcomer
+        - Pre Bronze
+        - Intermediate Bronze
+        - Full Bronze
+        - Open Bronze
+        - Bronze
+      Silver:
+        - Pre Bronze
+        - Intermediate Bronze
+        - Full Bronze
+        - Open Bronze
+        - Bronze
+        - Pre Silver
+        - Intermediate Silver
+        - Full Silver
+        - Open Silver
+        - Silver
+    age:
+      Baby: [Y01-04]
+      Juvenile: [Y05-05,Y06-06]
+      Preteen 1: [Y07-07,Y08-08,Y09-09]
+      Preteen 2: [Y10-10,Y11-11]
+      Junior 1: [Y12-12,Y13-13]
+      Junior 2: [Y14-14,Y15-15]
+      Youth: [Y16-16,Y17-17,Y18-18]
+    sex:
+      Mixed-Sex: [Male,Female]
+    status:
+      Student: [Student]
+    type:
+      Amateur: [Amateur]
   - proficiency:
       Gold:
       - Pre Silver
@@ -88,10 +221,17 @@ Georgia DanceSport Amateur-2019:
       Youth: [Y16-16,Y17-17,Y18-18]
       Adult: [Y19-34,Y35-44]
       Senior 1: [Y35-44,Y45-49,Y50-54]
-      Senior 2: [Y45-54,Y55-64]
+      Senior 2: [Y45-49,Y50-54,Y55-64]
       Senior 3: [Y55-64,Y65-74]
       Senior 4: [Y65-74,Y75-99]
       Senior 5: [Y75-99]
+    sex:
+      Same-Sex: [Male-Male,Female-Female]
+      Male-Female: [Male-Female]
+    status:
+      Student-Student: [Student-Student]
+    type:
+      Amateur: [Amateur]
   - proficiency:
       Novice:
       - Pre Gold
@@ -104,17 +244,46 @@ Georgia DanceSport Amateur-2019:
       - Novice
       - Gold Star 2
       - Pre Championship
-      Championship: [Pre Championship,Championship]
+      Championship:
       - Pre Championship
       - Gold Star 2
       - Championship
     age:
       Adult: [Y19-34,Y35-44]
       Senior 1: [Y35-44,Y45-49,Y50-54]
-      Senior 2: [Y45-54,Y55-64]
+      Senior 2: [Y45-49,Y50-54,Y55-64]
       Senior 3: [Y55-64,Y65-74]
       Senior 4: [Y65-74,Y75-99]
       Senior 5: [Y75-99]
+    sex:
+      Same-Sex: [Male-Male,Female-Female]
+      Male-Female: [Male-Female]
+    status:
+      Student-Student: [Student-Student]
+    type:
+      Amateur: [Amateur]
+  - proficiency:
+      Pre Championship:
+        - Gold Star 2
+        - Pre Championship
+      Championship:
+        - Pre Championship
+        - Gold Star 2
+        - Championship
+    age:
+      Adult: [Y19-34,Y35-44]
+      Senior 1: [Y35-44,Y45-49,Y50-54]
+      Senior 2: [Y45-49,Y50-54,Y55-64]
+      Senior 3: [Y55-64,Y65-74]
+      Senior 4: [Y65-74,Y75-99]
+      Senior 5: [Y75-99]
+    sex:
+      Same-Sex: [Male-Male,Female-Female]
+      Male-Female: [Male-Female]
+    status:
+      Student-Student: [Teacher-Teacher]
+    type:
+      Amateur: [Amateur]
 Georgia DanceSport ProAm-2019:
   - proficiency:
       Pre Bronze:
@@ -143,6 +312,9 @@ Georgia DanceSport ProAm-2019:
       - Intermediate Silver
       - Full Silver
       Open Silver:
+      - Intermediate Silver
+      - Full Silver
+      - Open Silver
     age:
       Baby: [Y01-04]
       Juvenile: [Y05-05,Y06-06]
@@ -153,10 +325,16 @@ Georgia DanceSport ProAm-2019:
       Youth: [Y16-16,Y17-17,Y18-18]
       Adult: [Y19-34,Y35-44]
       Senior 1: [Y35-44,Y45-49,Y50-54]
-      Senior 2: [Y45-54,Y55-64]
+      Senior 2: [Y45-49, Y50-54,Y55-64]
       Senior 3: [Y55-64,Y65-74]
       Senior 4: [Y65-74,Y75-99]
       Senior 5: [Y75-99]
+    sex:
+      Mixed-Sex: [Male-Female,Male-Male,Female-Female]
+    status:
+      Teacher-Student: [Teacher-Student]
+    type:
+      Professional-Amateur: [Amateur,Professional-Amateur]
   - proficiency:
       Pre Gold:
       - Full Silver
@@ -180,10 +358,16 @@ Georgia DanceSport ProAm-2019:
       Youth: [Y16-16,Y17-17,Y18-18]
       Adult: [Y19-34,Y35-44]
       Senior 1: [Y35-44,Y45-49,Y50-54]
-      Senior 2: [Y45-54,Y55-64]
+      Senior 2: [Y45-49,Y50-54,Y55-64]
       Senior 3: [Y55-64,Y65-74]
       Senior 4: [Y65-74,Y75-99]
       Senior 5: [Y75-99]
+    sex:
+      Mixed-Sex: [Male-Female,Male-Male,Female-Female]
+    status:
+      Teacher-Student: [Teacher-Student]
+    type:
+      Professional-Amateur: [Amateur,Professional-Amateur]
   - proficiency:
       Gold Star 1:
       - Full Gold
@@ -200,7 +384,24 @@ Georgia DanceSport ProAm-2019:
     age:
       Adult: [Y19-34,Y35-44]
       Senior 1: [Y35-44,Y45-49,Y50-54]
-      Senior 2: [Y45-54,Y55-64]
+      Senior 2: [Y45-49,Y50-54,Y55-64]
       Senior 3: [Y55-64,Y65-74]
       Senior 4: [Y65-74,Y75-99]
       Senior 5: [Y75-99]
+    sex:
+      Mixed-Sex: [Male-Female,Male-Male,Female-Female]
+    status:
+      Teacher-Student: [Teacher-Student]
+    type:
+      Professional-Amateur: [Professional-Amateur]
+  - proficiency:
+      Rising Star: [Rising Star]
+      Professional: [Rising Star, Professional]
+    age:
+      Adult: [Y00-00]
+    sex:
+      Male-Female: [Male-Female]
+    status:
+      Teacher-Teacher: [Teacher-Teacher]
+    type:
+      Professional: [Professional]

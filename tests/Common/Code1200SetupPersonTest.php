@@ -190,6 +190,11 @@ class Code1200SetupPersonTest extends KernelTestCase
         $this->setup->parsePersons(__DIR__.'/../../tests/Common/data-1270-invalid-numeric.yml');
     }
 
+    /**
+     * @throws \App\Common\AppParseException
+     * @throws \Doctrine\ORM\ORMException
+     * @throws \Doctrine\ORM\OptimisticLockException
+     */
     public function test1280PersonBuildInitial()
     {
         $expected = $this->setup->parsePersons(__DIR__.'/../../tests/Common/setup-05-persons.yml');

@@ -2,6 +2,8 @@
 
 namespace App\Entity\Setup;
 
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use /** @noinspection PhpUnusedAliasInspection */
     Doctrine\ORM\Mapping as ORM;
 
@@ -23,18 +25,18 @@ class Model
     private $id;
 
     /**
-     * @var \DateTime
-     *
-     * @ORM\Column(name="created", type="datetime", nullable=false)
-     */
-    private $created;
-
-    /**
      * @var string
      *
      * @ORM\Column(name="name", type="string", length=45, nullable=false)
      */
     private $name;
+
+    /**
+     * @var \DateTime
+     *
+     * @ORM\Column(name="created", type="datetime", nullable=false)
+     */
+    private $created;
 
     /**
      * @var \DateTime|null
@@ -44,7 +46,7 @@ class Model
     private $updated;
 
     /**
-     * @var \Doctrine\Common\Collections\Collection
+     * @var Collection
      *
      * @ORM\ManyToMany(targetEntity="App\Entity\Setup\Value", inversedBy="model")
      * @ORM\JoinTable(name="model_has_value",
@@ -63,7 +65,7 @@ class Model
      */
     public function __construct()
     {
-        $this->value = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->value = new ArrayCollection();
     }
 
     /**
@@ -75,20 +77,12 @@ class Model
     }
 
     /**
-     * @return \DateTime
-     */
-    public function getCreated(): \DateTime
-    {
-        return $this->created;
-    }
-
-    /**
-     * @param \DateTime $created
+     * @param int $id
      * @return Model
      */
-    public function setCreated(\DateTime $created): Model
+    public function setId(int $id): Model
     {
-        $this->created = $created;
+        $this->id = $id;
         return $this;
     }
 
@@ -111,6 +105,24 @@ class Model
     }
 
     /**
+     * @return \DateTime
+     */
+    public function getCreated(): \DateTime
+    {
+        return $this->created;
+    }
+
+    /**
+     * @param \DateTime $created
+     * @return Model
+     */
+    public function setCreated(\DateTime $created): Model
+    {
+        $this->created = $created;
+        return $this;
+    }
+
+    /**
      * @return \DateTime|null
      */
     public function getUpdated(): ?\DateTime
@@ -129,23 +141,22 @@ class Model
     }
 
     /**
-     * @return \Doctrine\Common\Collections\Collection
+     * @return Collection
      */
-    public function getValue(): \Doctrine\Common\Collections\Collection
+    public function getValue(): Collection
     {
         return $this->value;
     }
 
     /**
-     * @param \Doctrine\Common\Collections\Collection $value
+     * @param Collection $value
      * @return Model
      */
-    public function setValue(\Doctrine\Common\Collections\Collection $value): Model
+    public function setValue(Collection $value): Model
     {
         $this->value = $value;
         return $this;
     }
-
 
 
 }

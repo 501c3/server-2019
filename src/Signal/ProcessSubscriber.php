@@ -27,6 +27,7 @@ class ProcessSubscriber implements EventSubscriberInterface
 
     private $lastProgress;
 
+
     /**
      * @param OutputInterface $output
      */
@@ -34,6 +35,8 @@ class ProcessSubscriber implements EventSubscriberInterface
     {
         $this->cli = $output;
     }
+
+
 
     /**
      * @param $totalLines

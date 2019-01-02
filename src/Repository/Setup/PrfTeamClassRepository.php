@@ -50,32 +50,32 @@ class PrfTeamClassRepository extends ServiceEntityRepository
 
 
 
-//   public function fetchQuickSearch() {
-//       $qb = $this->createQueryBuilder('class');
-//       $qb->select('class','team','person')
-//           ->innerJoin('class.prfTeam','team')
-//           ->innerJoin('team.prfPerson','person');
-//       $query = $qb->getQuery();
-//       $results = $query->getResult();
-//       $arr = [];
-//       /** @var PrfTeamClass $class */
-//       foreach($results as $class){
-//           $describe = $class->getDescribe();
-//           $type = $describe['type'];
-//           $status = $describe['status'];
-//           $sex = $describe['sex'];
-//           $proficiency = $describe['proficiency'];
-//           if(!isset($arr[$type])) {
-//               $arr[$type]=[];
-//           }
-//           if(!isset($arr[$type][$status])) {
-//               $arr[$type][$status]=[];
-//           }
-//           if(!isset($arr[$type][$status][$sex])){
-//               $arr[$type][$status][$sex]=[];
-//           }
-//           $arr[$type][$status][$sex][$proficiency]=$class;
-//       }
-//       return $arr;
-//   }
+   public function fetchQuickSearch() {
+       $qb = $this->createQueryBuilder('class');
+       $qb->select('class','team','person')
+           ->innerJoin('class.prfTeam','team')
+           ->innerJoin('team.prfPerson','person');
+       $query = $qb->getQuery();
+       $results = $query->getResult();
+       $arr = [];
+       /** @var PrfTeamClass $class */
+       foreach($results as $class){
+           $describe = $class->getDescribe();
+           $type = $describe['type'];
+           $status = $describe['status'];
+           $sex = $describe['sex'];
+           $proficiency = $describe['proficiency'];
+           if(!isset($arr[$type])) {
+               $arr[$type]=[];
+           }
+           if(!isset($arr[$type][$status])) {
+               $arr[$type][$status]=[];
+           }
+           if(!isset($arr[$type][$status][$sex])){
+               $arr[$type][$status][$sex]=[];
+           }
+           $arr[$type][$status][$sex][$proficiency]=$class;
+       }
+       return $arr;
+   }
 }

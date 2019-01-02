@@ -13,7 +13,7 @@ use Symfony\Component\EventDispatcher\Event;
 
 class ProcessEvent extends Event
 {
-    const NAME = 'process.status.update';
+    const NAME = 'process.update';
     /** @var ProcessStatus  */
     private $status;
     public function __construct(ProcessStatus $status)

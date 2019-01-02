@@ -163,8 +163,10 @@ class YamlDbSetupPerson extends YamlDbSetupBase
                 foreach($designates as $designate) {
                     $describe2 = $describe1;
                     $describe2['designate']=$designate;
-                    $agePerson = $repository->create($describe2,$values,$prfPersons);
-                    $this->person[$type][$status]['age'][$i][$designate]=$agePerson;
+                    if(!isset($this->person[$type][$status]['age'][$i][$designate])) {
+                        $agePerson = $repository->create($describe2,$values,$prfPersons);
+                        $this->person[$type][$status]['age'][$i][$designate]=$agePerson;
+                    }
                 }
             }
         }

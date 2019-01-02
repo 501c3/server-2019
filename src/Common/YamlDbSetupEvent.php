@@ -15,7 +15,6 @@ namespace App\Common;
 
 use App\Entity\Setup\Event;
 use App\Entity\Setup\Model;
-use App\Entity\Setup\Value;
 use App\Repository\Setup\EventRepository;
 use App\Repository\Setup\ModelRepository;
 use Doctrine\ORM\EntityManagerInterface;
@@ -30,9 +29,6 @@ class YamlDbSetupEvent
 
     /** @var string */
     private $file;
-
-    /** @var array */
-    private $model;
 
     private $modelValues;
 
@@ -51,7 +47,6 @@ class YamlDbSetupEvent
         /** @var ModelRepository $repository */
         $repository = $this->entityManager->getRepository(Model::class);
         $this->modelValues = $repository->fetchQuickSearch();
-        var_dump(array_keys($this->modelValues));die;
         $this->eventRepository = $em->getRepository(Event::class);
     }
 
@@ -64,6 +59,11 @@ class YamlDbSetupEvent
     {
         $this->file = $file;
         $modelsPositions = YamlPosition::yamlAddPosition($file);
+        if(is_null($this->modelValues)) {
+            /** @var ModelRepository $repository */
+            $repository=$this->entityManager->getRepository(Model::class);
+            $this->modelValues=$repository->fetchQuickSearch();
+        }
         foreach ($modelsPositions as $modelPos => $records) {
             list($model, $position) = explode('|', $modelPos);
             if (!in_array($model, array_keys($this->modelValues))) {
@@ -258,6 +258,11 @@ class YamlDbSetupEvent
         }
     }
 
+    /**
+     * @param array $data
+     * @throws \Doctrine\ORM\ORMException
+     * @throws \Doctrine\ORM\OptimisticLockException
+     */
     private function buildEvents(array $data) {
 
        foreach($data as $modelName=>$blockRecords) {
@@ -278,6 +283,16 @@ class YamlDbSetupEvent
        }
     }
 
+    /**
+     * @param string $modelName
+     * @param string $type
+     * @param array $statusList
+     * @param array $sexList
+     * @param array $ageList
+     * @param array $proficienciesStylesDances
+     * @throws \Doctrine\ORM\ORMException
+     * @throws \Doctrine\ORM\OptimisticLockException
+     */
     private function buildEventBlock(
         string $modelName,
         string $type,
@@ -294,30 +309,41 @@ class YamlDbSetupEvent
         }
         if(!isset($this->event[$modelName][$type])) {
             $this->event[$modelName][$type]=[];
-            foreach($statusList as $status) {
-                if(!isset($this->event[$modelName][$type][$status])){
-                    $this->event[$modelName][$type][$status]=[];
+        }
+        foreach($statusList as $status) {
+            if(!isset($this->event[$modelName][$type][$status])){
+                $this->event[$modelName][$type][$status]=[];
+            }
+            foreach($sexList as $sex) {
+                if(!isset($this->event[$modelName][$type][$status][$sex])){
+                    $this->event[$modelName][$type][$status][$sex]=[];
                 }
-                foreach($sexList as $sex) {
-                    if(!isset($this->event[$modelName][$type][$status][$sex])){
-                        $this->event[$modelName][$type][$status][$sex]=[];
+                foreach($ageList as $age) {
+                    if(!isset($this->event[$modelName][$type][$status][$sex][$age])){
+                        $this->event[$modelName][$type][$status][$sex][$age]=[];
                     }
-                    foreach($ageList as $age) {
-                        if(!isset($this->event[$modelName][$type][$status][$sex][$age])){
-                            $this->event[$modelName][$type][$status][$sex][$age]=[];
+                    foreach($proficienciesStylesDances as $proficiency=>$records) {
+                        if(!isset($this->event[$modelName][$type][$status][$sex][$age][$proficiency])){
+                            $this->event[$modelName][$type][$status][$sex][$age][$proficiency]=[];
                         }
-                        foreach($proficienciesStylesDances as $proficiency=>$records) {
-                            if(!isset($this->event[$modelName][$type][$status][$sex][$age][$proficiency])){
-                                $this->event[$modelName][$type][$status][$sex][$age][$proficiency]=[];
-                            }
-                            $this->buildIndividualEvents($model,$type,$status,$sex,$age,$proficiency,$records);
-                        }
+                        $this->buildIndividualEvents($model,$type,$status,$sex,$age,$proficiency,$records);
                     }
                 }
             }
         }
     }
 
+    /**
+     * @param Model $model
+     * @param string $type
+     * @param string $status
+     * @param string $sex
+     * @param string $age
+     * @param string $proficiency
+     * @param array $records
+     * @throws \Doctrine\ORM\ORMException
+     * @throws \Doctrine\ORM\OptimisticLockException
+     */
     private function buildIndividualEvents(
         Model $model,
         string $type,
@@ -325,8 +351,7 @@ class YamlDbSetupEvent
         string $sex,
         string $age,
         string $proficiency,
-        array $records
-    )
+        array $records)
     {
        $describe = ['type'=>$type,'status'=>$status,'sex'=>$sex,'age'=>$age,'proficiency'=>$proficiency];
        $modelName = $model->getName();

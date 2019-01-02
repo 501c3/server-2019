@@ -26,12 +26,44 @@ use Symfony\Component\Dotenv\Dotenv;
 
 class Code1600SetupEventTest extends KernelTestCase
 {
+    const EXCLUSIONS = [
+        'age_person',
+        'age_person_has_prf_person',
+        'age_person_has_value',
+        'age_team',
+        'age_team_class',
+        'age_team_class_has_prf_team_class',
+        'age_team_class_has_value',
+        'age_team_has_age_person',
+        'age_team_has_prf_team',
+        'domain',
+        'model',
+        'model_has_value',
+        'person',
+        'prf_person',
+        'prf_person_has_value',
+        'prf_team',
+        'prf_team_class',
+        'prf_team_class_has_value',
+        'prf_team_has_prf_person',
+        'team',
+        'team_class',
+        'team_has_person',
+        'value',
+    ];
+
     /** @var  Kernel */
     protected static $kernel;
 
+    /**
+     * @throws \Doctrine\DBAL\DBALException
+     */
     public static function setUpBeforeClass()
     {
         (new Dotenv())->load(__DIR__ . '/../../.env');
+        self::$kernel = self::bootKernel();
+        self::purge();
+        self::loadSetupDump('/home/mgarber/dumps/Data/setup1400');
     }
 
     /**
@@ -48,15 +80,17 @@ class Code1600SetupEventTest extends KernelTestCase
      * @throws \Doctrine\DBAL\DBALException
      * @noinspection PhpUnusedParameterInspection
      */
-    protected function purge(array $excluded=[])
+    protected static function purge(array $excluded=[])
     {
         /** @var EntityManagerInterface $em */
-        $em = $this->getEntityManager();
+        $em = self::$kernel->getContainer()->get('doctrine.orm.setup_entity_manager');
         $purger = new ORMPurger($em,$excluded);
         $purger->setPurgeMode(ORMPurger::PURGE_MODE_TRUNCATE);
         $conn = $purger->getObjectManager()->getConnection();
         $conn->query('SET FOREIGN_KEY_CHECKS=0');
-        $purger->purge();
+        $conn->query('TRUNCATE event');
+        $conn->query('TRUNCATE event_has_value');
+        $conn->query('TRUNCATE event_has_team_class');
         $conn->query('SET FOREIGN_KEY_CHECKS=1');
         $conn->query('UNLOCK TABLES');
     }
@@ -76,23 +110,44 @@ class Code1600SetupEventTest extends KernelTestCase
     public function setUp()
     {
         self::$kernel = self::bootKernel();
-        $this->purge();
-        $this->loadModelsDomainsValuesTeams();
+        $this->purge(self::EXCLUSIONS);
     }
 
+    private static function findDumpFiles($pathfile)
+    {
+        $dumpFiles = [];
+        if(is_dir($pathfile))  {
+            $predump=scandir($pathfile);
+            array_shift($predump);
+            array_shift($predump);
+            foreach($predump as $file){
+                $parts = pathinfo($file);
+                if($parts['extension']=='sql'){
+                    $file=$pathfile.'/'.$parts['filename'].'.'.$parts['extension'];
+                    $dumpFiles[]=$file;
+                }
+            }
+        }
+        return $dumpFiles;
+    }
+
+
     /**
+     * @param $dumpDirectory
      * @throws \Doctrine\DBAL\DBALException
      */
-    private function loadModelsDomainsValuesTeams()
+    private static function loadSetupDump($dumpDirectory)
     {
         /** @var EntityManagerInterface $em */
-        $em = $this->getEntityManager();
+        $em = self::$kernel->getContainer()->get('doctrine.orm.setup_entity_manager');
         $conn = $em->getConnection();
-        $dump = file_get_contents(__DIR__ . '/Dump20181216.sql');
-        //$dump = file_get_contents(__DIR__ . '/setup-06-teams-data.sql');
         $conn->query('set GLOBAL net_buffer_length=3000000');
         $conn->query('SET foreign_key_checks = 0');
-        $conn->query($dump);
+        $dumpFiles = self::findDumpFiles($dumpDirectory);
+        foreach($dumpFiles as $file) {
+            $sql = file_get_contents(($file));
+            $conn->query($sql);
+        }
         $conn->query('SET foreign_key_checks = 1');
         $conn->query('UNLOCK TABLES');
     }
@@ -246,54 +301,50 @@ class Code1600SetupEventTest extends KernelTestCase
     }
 
 
+    public function test1745ValidEventsStudent()
+    {
+        $this->loadAndIterateThroughDatabase(__DIR__.'/data-1745-valid-events-student.yml');
+    }
+
+
     /**
      * @param $yamlPathFile
      * @throws \Exception
      */
     private function loadAndIterateThroughDatabase($yamlPathFile)
     {
-
         $setup = $this->getYamlDbSetupEvent();
         $expected = $setup->parseEvents($yamlPathFile);
         /** @var EventRepository $repository */
         $repository = $this->getEntityManager()->getRepository(Event::class);
-        $results = $repository->findAll();
-        $this->assertEquals(10,count($results));
         $entityManager = $this->getEntityManager();
+        $models = $entityManager->getRepository(Model::class)->findAll();
         /** @var Model $model */
-        $model = $entityManager->getRepository(Model::class)->find(1);
-        $modelName = $model->getName();
-        $actual = $repository->fetchQuickSearch($model);
-        foreach($expected[$modelName] as $type=>$statusList) {
-            $this->assertArrayHasKey($type,$actual);
-            foreach($statusList as $status=>$sexList) {
-                $this->assertArrayHasKey($status,$actual[$type]);
-                foreach($sexList as $sex=>$ageList) {
-                    $this->assertArrayHasKey($sex,$actual[$type][$status]);
-                    foreach($ageList as $age=>$proficiencyList) {
-                        $this->assertArrayHasKey($age,$actual[$type][$status][$sex]);
-                        foreach($proficiencyList as $proficiency=>$styleList) {
-                            $this->assertArrayHasKey($proficiency,$actual[$type][$status][$sex][$age]);
-                            foreach($styleList as $style=>$eventList) {
-                                $this->assertArrayHasKey($style,$actual[$type][$status][$sex][$age][$proficiency]);
-                                $expEvents=$expected[$modelName][$type][$status][$sex][$age][$proficiency][$style];
-                                $actEvents=$actual[$type][$status][$sex][$age][$proficiency][$style];
-                                $this->assertEquals(count($expEvents),count($actEvents));
+        foreach($models as $model) {
+            $modelName = $model->getName();
+            $actual = $repository->fetchQuickSearch($model);
+            foreach($expected[$modelName] as $type=>$statusList) {
+                $this->assertArrayHasKey($type,$actual);
+                foreach($statusList as $status=>$sexList) {
+                    $this->assertArrayHasKey($status,$actual[$type]);
+                    foreach($sexList as $sex=>$ageList) {
+                        $this->assertArrayHasKey($sex,$actual[$type][$status]);
+                        foreach($ageList as $age=>$proficiencyList) {
+                            $this->assertArrayHasKey($age,$actual[$type][$status][$sex]);
+                            foreach($proficiencyList as $proficiency=>$styleList) {
+                                $this->assertArrayHasKey($proficiency,$actual[$type][$status][$sex][$age]);
+                                foreach($styleList as $style=>$eventList) {
+                                    $this->assertArrayHasKey($style,$actual[$type][$status][$sex][$age][$proficiency]);
+                                    $expEvents=$expected[$modelName][$type][$status][$sex][$age][$proficiency][$style];
+                                    $actEvents=$actual[$type][$status][$sex][$age][$proficiency][$style];
+                                    $this->assertEquals(count($expEvents),count($actEvents));
+                                }
                             }
                         }
                     }
                 }
             }
         }
-    }
-
-
-    /**
-     * @throws \Exception
-     */
-    public function test1740ValidEventsPartial()
-    {
-        $this->loadAndIterateThroughDatabase(__DIR__.'/data-1740-valid-events-partial.yml');
     }
 
 

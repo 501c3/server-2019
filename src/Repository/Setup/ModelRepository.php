@@ -89,7 +89,6 @@ class ModelRepository extends ServiceEntityRepository
 
     public function fetchQuickSearch():array
     {
-        die('At fetchQuickSearch');
         $qb = $this->createQueryBuilder('model');
         $qb->select('model','value','domain')
             ->innerJoin('model.value','value')

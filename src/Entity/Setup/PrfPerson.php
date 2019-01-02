@@ -3,6 +3,7 @@
 namespace App\Entity\Setup;
 
 use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use /** @noinspection PhpUnusedAliasInspection */
     Doctrine\ORM\Mapping as ORM;
 
@@ -31,14 +32,14 @@ class PrfPerson
     private $describe;
 
     /**
-     * @var \Doctrine\Common\Collections\Collection
+     * @var Collection
      *
      * @ORM\ManyToMany(targetEntity="App\Entity\Setup\AgePerson", mappedBy="prfPerson")
      */
     private $agePerson;
 
     /**
-     * @var \Doctrine\Common\Collections\Collection
+     * @var Collection
      *
      * @ORM\ManyToMany(targetEntity="App\Entity\Setup\Value", inversedBy="prfPerson")
      * @ORM\JoinTable(name="prf_person_has_value",
@@ -53,17 +54,9 @@ class PrfPerson
     private $value;
 
     /**
-     * @var \Doctrine\Common\Collections\Collection
+     * @var Collection
      *
-     * @ORM\ManyToMany(targetEntity="App\Entity\Setup\PrfTeam", inversedBy="prfPerson", cascade={"persist"})
-     * @ORM\JoinTable(name="prf_team_has_prf_person",
-     *   joinColumns={
-     *     @ORM\JoinColumn(name="prf_person_id", referencedColumnName="id")
-     *   },
-     *   inverseJoinColumns={
-     *     @ORM\JoinColumn(name="prf_team_id", referencedColumnName="id")
-     *   }
-     * )
+     * @ORM\ManyToMany(targetEntity="App\Entity\Setup\PrfTeam", mappedBy="prfPerson")
      */
     private $prfTeam;
 
@@ -85,15 +78,6 @@ class PrfPerson
         return $this->id;
     }
 
-    /**
-     * @param int $id
-     * @return PrfPerson
-     */
-    public function setId(int $id): PrfPerson
-    {
-        $this->id = $id;
-        return $this;
-    }
 
     /**
      * @return array
@@ -114,59 +98,29 @@ class PrfPerson
     }
 
     /**
-     * @return \Doctrine\Common\Collections\Collection
+     * @return Collection
      */
-    public function getAgePerson(): \Doctrine\Common\Collections\Collection
+    public function getAgePerson(): Collection
     {
         return $this->agePerson;
     }
 
-    /**
-     * @param \Doctrine\Common\Collections\Collection $agePerson
-     * @return PrfPerson
-     */
-    public function setAgePerson(\Doctrine\Common\Collections\Collection $agePerson): PrfPerson
-    {
-        $this->agePerson = $agePerson;
-        return $this;
-    }
 
     /**
-     * @return \Doctrine\Common\Collections\Collection
+     * @return Collection
      */
-    public function getValue(): \Doctrine\Common\Collections\Collection
+    public function getValue(): Collection
     {
         return $this->value;
     }
 
-    /**
-     * @param \Doctrine\Common\Collections\Collection $value
-     * @return PrfPerson
-     */
-    public function setValue(\Doctrine\Common\Collections\Collection $value): PrfPerson
-    {
-        $this->value = $value;
-        return $this;
-    }
 
     /**
-     * @return \Doctrine\Common\Collections\Collection
+     * @return Collection
      */
-    public function getPrfTeam(): \Doctrine\Common\Collections\Collection
+    public function getPrfTeam(): Collection
     {
         return $this->prfTeam;
     }
-
-    /**
-     * @param \Doctrine\Common\Collections\Collection $prfTeam
-     * @return PrfPerson
-     */
-    public function setPrfTeam(\Doctrine\Common\Collections\Collection $prfTeam): PrfPerson
-    {
-        $this->prfTeam = $prfTeam;
-        return $this;
-    }
-
-
 
 }

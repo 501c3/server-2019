@@ -44,7 +44,15 @@ class PrfTeam
     /**
      * @var Collection
      *
-     * @ORM\ManyToMany(targetEntity="App\Entity\Setup\PrfPerson", mappedBy="prfTeam")
+     * @ORM\ManyToMany(targetEntity="App\Entity\Setup\PrfPerson", inversedBy="prfTeam")
+     * @ORM\JoinTable(name="prf_team_has_prf_person",
+     *   joinColumns={
+     *     @ORM\JoinColumn(name="prf_team_id", referencedColumnName="id")
+     *   },
+     *   inverseJoinColumns={
+     *     @ORM\JoinColumn(name="prf_person_id", referencedColumnName="id")
+     *   }
+     * )
      */
     private $prfPerson;
 
@@ -65,13 +73,6 @@ class PrfTeam
         return $this->id;
     }
 
-    /**
-     * @param int $id
-     */
-    public function setId(int $id): void
-    {
-        $this->id = $id;
-    }
 
     /**
      * @return PrfTeamClass
@@ -83,10 +84,12 @@ class PrfTeam
 
     /**
      * @param PrfTeamClass $prfTeamClass
+     * @return PrfTeam
      */
-    public function setPrfTeamClass(PrfTeamClass $prfTeamClass): void
+    public function setPrfTeamClass(PrfTeamClass $prfTeamClass): PrfTeam
     {
         $this->prfTeamClass = $prfTeamClass;
+        return $this;
     }
 
     /**
@@ -97,13 +100,6 @@ class PrfTeam
         return $this->ageTeam;
     }
 
-    /**
-     * @param Collection $ageTeam
-     */
-    public function setAgeTeam(Collection $ageTeam): void
-    {
-        $this->ageTeam = $ageTeam;
-    }
 
     /**
      * @return Collection
@@ -112,15 +108,6 @@ class PrfTeam
     {
         return $this->prfPerson;
     }
-
-    /**
-     * @param Collection $prfPerson
-     */
-    public function setPrfPerson(Collection $prfPerson): void
-    {
-        $this->prfPerson = $prfPerson;
-    }
-
 
 
 }

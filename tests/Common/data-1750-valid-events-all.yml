@@ -121,6 +121,113 @@ ISTD Medal Exams-2019:
 Georgia DanceSport Amateur-2019:
 - proficiency:
     Newcomer:
+      - tag: Qualifier
+        style:
+          American:
+            disposition: multiple-events
+            substyle:
+              Rhythm: [[Rumba,Swing]]
+              Smooth: [[Waltz,Tango]]
+          International:
+            disposition: multiple-events
+            substyle:
+              Latin: [[Cha Cha,Rumba]]
+              Standard: [[Waltz,Quickstep]]
+    Bronze:
+      - tag: Qualifier
+        style:
+          American:
+            disposition: multiple-events
+            substyle:
+              Rhythm: [[Cha Cha,Rumba],[Swing]]
+              Smooth: [[Waltz,Foxtrot],[Tango,Viennese Waltz]]
+          International:
+            disposition: multiple-events
+            substyle:
+              Latin: [[Cha Cha,Rumba]]
+              Standard: [[Waltz,Quickstep]]
+    Silver:
+      - tag: Qualifier
+        style:
+          American:
+            disposition: multiple-events
+            substyle:
+              Rhythm: [[Cha Cha,Rumba,Swing]]
+              Smooth: [[Waltz,Tango,Foxtrot]]
+          International:
+            disposition: multiple-events
+            substyle:
+              Latin: [[Cha Cha,Samba,Rumba]]
+              Standard: [[Waltz,Foxtrot,Quickstep]]
+    Gold:
+      - tag: Qualifier
+        style:
+          American:
+            disposition: multiple-events
+            substyle:
+              Rhythm: [[Cha Cha,Rumba,Swing,Bolero]]
+              Smooth:  [[Waltz,Tango,Foxtrot]]
+          International:
+            disposition: multiple-events
+            substyle:
+              Latin: [[Samba,Cha Cha,Rumba,Jive]]
+              Standard: [[Waltz,Tango,Foxtrot,Quickstep]]
+  age:
+    - Baby
+    - Juvenile
+    - Preteen 1
+    - Preteen 2
+    - Junior 1
+    - Junior 2
+    - Youth
+    - Adult
+    - Senior 1
+    - Senior 2
+    - Senior 3
+    - Senior 4
+    - Senior 5
+  sex: [Male-Female,Same-Sex]
+  type: Amateur
+  status: [Student-Student]
+- proficiency:
+    Newcomer:
+      - tag: Qualifier
+        style:
+          International:
+            disposition: multiple-events
+            substyle:
+              Latin: [[Cha Cha],[Samba],[Rumba],[Paso Doble],[Jive]]
+              Standard: [[Waltz],[Tango],[Viennese Waltz],[Foxtrot],[Quickstep],[Polka]]
+    Bronze:
+      -  tag: Qualifier
+         style:
+           International:
+             disposition: multiple-events
+             substyle:
+               Latin: [[Cha Cha],[Samba],[Rumba],[Paso Doble],[Jive]]
+               Standard: [[Waltz],[Tango],[Viennese Waltz],[Foxtrot],[Quickstep],[Polka]]
+    Silver:
+      - tag: Qualifier
+        style:
+          International:
+            disposition: multiple-events
+            substyle:
+              Latin: [[Cha Cha],[Samba],[Rumba],[Paso Doble],[Jive]]
+              Standard: [[Waltz],[Tango],[Viennese Waltz],[Foxtrot],[Quickstep],[Polka]]
+    Gold:
+      - tag: Qualifier
+        style:
+          International:
+            disposition: multiple-events
+            substyle:
+              Latin: [[Cha Cha],[Samba],[Rumba],[Paso Doble],[Jive]]
+              Standard: [[Waltz],[Tango],[Viennese Waltz],[Foxtrot],[Quickstep],[Polka]]
+  age: [Baby,Juvenile,Preteen 1,Preteen 2,Junior 1,Junior 2,Youth]
+  sex: [Mixed-Sex]
+  type: Amateur
+  status: [Student]
+- proficiency:
+    Newcomer:
     - tag: Qualifier
       style:
         American:
