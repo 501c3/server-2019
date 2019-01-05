@@ -18,6 +18,7 @@ use App\Entity\Setup\PrfPerson;
 use App\Repository\Setup\AgePersonRepository;
 use App\Repository\Setup\PrfPersonRepository;
 use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Component\EventDispatcher\EventDispatcher;
 
 class YamlDbSetupPerson extends YamlDbSetupBase
 {
@@ -25,9 +26,9 @@ class YamlDbSetupPerson extends YamlDbSetupBase
 
     protected $person = [];
 
-    public function __construct(EntityManagerInterface $entityManager)
+    public function __construct(EntityManagerInterface $entityManager, EventDispatcher $dispatcher=null)
     {
-        parent::__construct($entityManager);
+        parent::__construct($entityManager, $dispatcher);
     }
 
     /**
@@ -62,6 +63,7 @@ class YamlDbSetupPerson extends YamlDbSetupBase
                 $cache[$key] = $this->personValuesCheck($file, $key, $dataPosition);
             }
             $this->personValuesBuild($cache);
+            $this->sendWorkingStatus();
         }
         return $this->person;
     }
@@ -217,5 +219,4 @@ class YamlDbSetupPerson extends YamlDbSetupBase
         }
         return $arr;
     }
-
 }

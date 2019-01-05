@@ -17,7 +17,10 @@ use App\Entity\Setup\Event;
 use App\Entity\Setup\Model;
 use App\Repository\Setup\EventRepository;
 use App\Repository\Setup\ModelRepository;
+use App\Signal\ProcessEvent;
+use App\Signal\ProcessStatus;
 use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Component\EventDispatcher\EventDispatcher;
 
 class YamlDbSetupEvent
 {
@@ -40,14 +43,21 @@ class YamlDbSetupEvent
     /** @var array */
     private $event;
 
-    public function __construct(EntityManagerInterface $em)
+    /** @var EventDispatcher */
+    private $dispatcher;
+
+    public function __construct(EntityManagerInterface $em, EventDispatcher $dispatcher)
     {
         $this->entityManager = $em;
-        $em->flush();
+        $this->dispatcher = $dispatcher;
+    }
+
+    public function initialize()
+    {
         /** @var ModelRepository $repository */
         $repository = $this->entityManager->getRepository(Model::class);
         $this->modelValues = $repository->fetchQuickSearch();
-        $this->eventRepository = $em->getRepository(Event::class);
+        $this->eventRepository = $this->entityManager->getRepository(Event::class);
     }
 
     /**
@@ -58,6 +68,7 @@ class YamlDbSetupEvent
     public function parseEvents(string $file)
     {
         $this->file = $file;
+        $this->initialize();
         $modelsPositions = YamlPosition::yamlAddPosition($file);
         if(is_null($this->modelValues)) {
             /** @var ModelRepository $repository */
@@ -279,6 +290,7 @@ class YamlDbSetupEvent
                    $sexList,
                    $ageList,
                    $proficienciesStylesDances);
+               $this->sendWorkingStatus();
            }
        }
     }
@@ -384,5 +396,13 @@ class YamlDbSetupEvent
                }
            }
        }
+    }
+
+    protected function sendWorkingStatus()
+    {
+        if(isset($this->dispatcher)) {
+            $event = new ProcessEvent(new ProcessStatus(ProcessStatus::WORKING, 1));
+            $this->dispatcher->dispatch('process.update',$event);
+        }
     }
 }

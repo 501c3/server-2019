@@ -35,6 +35,9 @@ services:
         tags:
           - {name: 'process.update', event: '\App\Signal\ProcessEvent' }
 
+    App\Common\DbBuildSetupTeamClass:
+        public: true
+
     Symfony\Component\HttpFoundation\Session\Storage\Handler\PdoSessionHandler:
         arguments:
         - 'mysql:dbname=access, host=localhost'

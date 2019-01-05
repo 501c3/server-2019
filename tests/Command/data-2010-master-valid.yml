@@ -1,0 +1,8 @@
+models: /home/mgarber/Projects/symfony/tests/Common/setup-01-models.yml
+domains: /home/mgarber/Projects/symfony/tests/Common/setup-02-domains.yml
+values: /home/mgarber/Projects/symfony/tests/Common/setup-03-values.yml
+model-values: /home/mgarber/Projects/symfony/tests/Common/setup-04-model-values.yml
+persons: /home/mgarber/Projects/symfony/tests/Common/setup-05-persons.yml
+teams: /home/mgarber/Projects/symfony/tests/Common/setup-06-teams.yml
+events: /home/mgarber/Projects/symfony/tests/Common/setup-07-events.yml
+event-teams: /home/mgarber/Projects/symfony/tests/Common/setup-08-event-team.yml

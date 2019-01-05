@@ -24,10 +24,6 @@ class ProcessSubscriber implements EventSubscriberInterface
     /** @var ProgressBar */
     private $progressBar;
 
-
-    private $lastProgress;
-
-
     /**
      * @param OutputInterface $output
      */
@@ -37,13 +33,12 @@ class ProcessSubscriber implements EventSubscriberInterface
     }
 
 
-
     /**
-     * @param $totalLines
+     * @param $sections
      */
-    public function progressBarSetup($totalLines)
+    public function progressBarSetup($sections)
     {
-        $this->progressBar = new ProgressBar($this->cli, $totalLines);
+        $this->progressBar = new ProgressBar($this->cli, $sections);
         $this->progressBar->setBarWidth(60);
         $this->progressBar->clear();
     }
@@ -61,12 +56,11 @@ class ProcessSubscriber implements EventSubscriberInterface
                 $this->start=$status->getTimestamp();
                 $date = sprintf($this->start->format('Y-m-d  H:i:s'));
                 $this->cli->writeln( "<fg=green>Commencing at $date</>" );
-                $this->progressBarSetup( $status->getProgress() );
-                $this->lastProgress = 0;
+                $this->progressBarSetup( $status->getProgress());
                 $this->progressBar->display();
                 break;
             case ProcessStatus::WORKING:
-                $this->progressBar->setProgress($status->getProgress());
+                $this->progressBar->setProgress($this->progressBar->getProgress()+1);
                 break;
             case ProcessStatus::COMPLETE:
                 $this->progressBar->finish();

@@ -22,6 +22,7 @@ use App\Repository\Setup\PrfTeamRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\EntityManagerInterface;
 use Exception;
+use Symfony\Component\EventDispatcher\EventDispatcher;
 
 class YamlDbSetupTeamClass extends YamlDbSetupPerson
 {
@@ -33,9 +34,9 @@ class YamlDbSetupTeamClass extends YamlDbSetupPerson
 
    private $ageTeamClass = [];
 
-   public function __construct(EntityManagerInterface $entityManager)
+   public function __construct(EntityManagerInterface $entityManager, EventDispatcher $dispatcher = null)
    {
-       parent::__construct($entityManager);
+       parent::__construct($entityManager, $dispatcher);
    }
 
     /**
@@ -69,6 +70,7 @@ class YamlDbSetupTeamClass extends YamlDbSetupPerson
                $cache[$key] = $this->teamClassValuesCheck($file, $key, $dataPosition);
            }
            $this->teamClassValuesBuild($cache);
+           $this->sendWorkingStatus();
        }
        return $this->team;
    }

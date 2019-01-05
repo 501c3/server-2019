@@ -70,7 +70,7 @@ class Code06YamlDefineTest extends KernelTestCase
 
     public function testComplete()
     {
-        $this->commandTestBuild('../../tests/Command/master-file.yml');
+        $this->commandTestBuild('../../tests/Command/data-2010-master-valid.yml');
     }
 
 }

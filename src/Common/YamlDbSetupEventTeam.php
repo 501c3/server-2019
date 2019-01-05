@@ -21,8 +21,11 @@ use App\Repository\Setup\EventRepository;
 use App\Repository\Setup\ModelRepository;
 use App\Repository\Setup\TeamClassRepository;
 use App\Repository\Setup\ValueRepository;
+use App\Signal\ProcessEvent;
+use App\Signal\ProcessStatus;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Component\EventDispatcher\EventDispatcher;
 
 class YamlDbSetupEventTeam
 {
@@ -43,14 +46,23 @@ class YamlDbSetupEventTeam
     private $values;
 
     private $file;
+    /**
+     * @var EventDispatcher
+     */
+    private $dispatcher;
 
-    public function __construct(EntityManagerInterface $em)
+    public function __construct(EntityManagerInterface $em, EventDispatcher $dispatcher = null)
     {
         $this->entityManager = $em;
+        $this->dispatcher = $dispatcher;
+    }
+
+    private function initialize()
+    {
         /** @var ModelRepository $modelRepository */
-        $modelRepository = $em->getRepository(Model::class);
+        $modelRepository = $this->entityManager->getRepository(Model::class);
         /** @var EventRepository $eventsRepository */
-        $eventsRepository = $em->getRepository(Event::class);
+        $eventsRepository = $this->entityManager->getRepository(Event::class);
         $allModels = $modelRepository->findAll();
         /** @var Model $model */
         foreach ($allModels as $model) {
@@ -60,10 +72,10 @@ class YamlDbSetupEventTeam
         }
         $this->modelValues = $modelRepository->fetchQuickSearch();
         /** @var TeamClassRepository $teamClassRepository */
-        $teamClassRepository = $em->getRepository(TeamClass::class);
+        $teamClassRepository = $this->entityManager->getRepository(TeamClass::class);
         $this->teamClasses = $teamClassRepository->fetchQuickSearch();
         /** @var ValueRepository $valueRepository */
-        $valueRepository = $em->getRepository(Value::class);
+        $valueRepository = $this->entityManager->getRepository(Value::class);
         $this->values = $valueRepository->fetchQuickSearch();
     }
 
@@ -76,6 +88,7 @@ class YamlDbSetupEventTeam
     public function parseEventsTeams(string $file)
     {
         $this->file = $file;
+        $this->initialize();
         $modelRelations = YamlPosition::yamlAddPosition($file);
         foreach ($modelRelations as $modelPosition => $relationDataPositionList) {
             list($model, $position) = explode('|', $modelPosition);
@@ -141,6 +154,8 @@ class YamlDbSetupEventTeam
 
     /**
      * @param array $preBuild
+     * @throws AppBuildException
+     * @throws \Exception
      */
     private function buildRelation(array $preBuild)
     {
@@ -184,11 +199,21 @@ class YamlDbSetupEventTeam
                         }
                     }
                 }
+                $this->sendWorkingStatus();
             }
         }
         $this->entityManager->flush();
     }
 
+    /**
+     * @param ArrayCollection $eventCollection
+     * @param array $teamClassesHash
+     * @param array $teamTypes
+     * @param array $teamStatuses
+     * @param array $teamSexes
+     * @param array $teamAges
+     * @param array $teamProficiencies
+     */
     private function addTeamsToEventCollection(
         ArrayCollection $eventCollection,
         array $teamClassesHash,
@@ -227,6 +252,14 @@ class YamlDbSetupEventTeam
                 }
             }
             $event = $eventCollection->next();
+        }
+    }
+
+    private function sendWorkingStatus()
+    {
+        if(isset($this->dispatcher)) {
+            $event = new ProcessEvent(new ProcessStatus(ProcessStatus::WORKING, 1));
+            $this->dispatcher->dispatch('process.update',$event);
         }
     }
 }

@@ -19,7 +19,10 @@ use App\Entity\Setup\Value;
 use App\Repository\Setup\ValueRepository;
 use App\Repository\Setup\DomainRepository;
 use App\Repository\Setup\ModelRepository;
+use App\Signal\ProcessEvent;
+use App\Signal\ProcessStatus;
 use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Component\EventDispatcher\EventDispatcher;
 
 class YamlDbSetupBase
 {
@@ -37,13 +40,19 @@ class YamlDbSetupBase
     /** @var EntityManagerInterface */
     protected $entityManager;
 
-    public function __construct(EntityManagerInterface $entityManager) /**
+    /** @var EventDispatcher */
+    protected $dispatcher;
+
+
+    public function __construct(EntityManagerInterface $entityManager, EventDispatcher $dispatcher=null)
+   /**
      * @param string $file
      * @return mixed
      * @throws AppParseException
      */
     {
         $this->entityManager=$entityManager;
+        $this->dispatcher = $dispatcher;
     }
 
 
@@ -62,6 +71,7 @@ class YamlDbSetupBase
           $model=$repository->create($name);
           $this->model[$name] = $model;
       }
+      $this->sendWorkingStatus();
       return $this->model;
     }
 
@@ -82,6 +92,7 @@ class YamlDbSetupBase
             $this->value[$name] = [];
 
         }
+        $this->sendWorkingStatus();
         return $this->domain;
     }
 
@@ -120,6 +131,7 @@ class YamlDbSetupBase
                 $this->value[$domainKey][$valueKey] = $value;
             }
         }
+        $this->sendWorkingStatus();
         return $this->value;
     }
 
@@ -203,7 +215,7 @@ class YamlDbSetupBase
             }
         $this->modelValuesBuild($cache, $model);
         }
-
+        $this->sendWorkingStatus();
         return $this->modelValue;
     }
 
@@ -253,5 +265,14 @@ class YamlDbSetupBase
             }
         }
         $this->entityManager->flush();
+    }
+
+
+    protected function sendWorkingStatus()
+    {
+        if(isset($this->dispatcher)) {
+            $event = new ProcessEvent(new ProcessStatus(ProcessStatus::WORKING, 1));
+            $this->dispatcher->dispatch('process.update',$event);
+        }
     }
 }
