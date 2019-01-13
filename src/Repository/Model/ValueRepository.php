@@ -8,11 +8,12 @@
 
 namespace App\Repository\Model;
 
-use App\Entity\Models\Domain;
+
+use App\Entity\Model\Model;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Common\Persistence\ManagerRegistry;
-use App\Entity\Models\Value;
-use Doctrine\ORM\EntityManagerInterface;
+use App\Entity\Model\Value;
+
 
 class ValueRepository extends ServiceEntityRepository
 {
@@ -22,114 +23,35 @@ class ValueRepository extends ServiceEntityRepository
     }
 
     /**
-     * @param string $name
-     * @param string $abbr
-     * @param Domain $domain
-     * @return Value
-     */
-    public function create(string $name,string $abbr, Domain $domain) : Value
-    {
-        $value = new Value;
-        $value->setName($name)
-                ->setAbbr($abbr)
-                ->setDomain($domain);
-        /** @var EntityManagerInterface $em */
-        $em = $this->getEntityManager();
-        $em->persist($value);
-        $em->flush();
-        return $value;
-    }
-
-    /**
-     * @param int $id
-     * @return Value|null
-     */
-    public function read(int $id) : ?Value
-    {
-        /** @var  Value|null $result */
-        $result = $this->find($id);
-        return $result;
-    }
-
-    /**
-     * @param Domain|null $domain
-     * @return array|null
-     */
-    public function readMulti(Domain $domain=null) : ?array
-    {
-        if(!$domain){
-            $result = $this->findAll();
-            return count($result)>0?$result:null;
-        }
-        $qb = $this->createQueryBuilder('value');
-        $qb->select('value','domain')
-            ->innerJoin('value.domain','domain')
-            ->where('domain=:domain');
-        $query = $qb->getQuery();
-        $query->setParameter(':domain',$domain);
-        $result = $query->getResult();
-        return $result;
-    }
-
-    /**
-     * @param Value $new
-     */
-    public function update(Value $new)
-    {
-        /** @var Value $old */
-        $old = $this->find($new->getId());
-        $old->setName($new->getName())
-            ->setAbbr($new->getAbbr())
-            ->setDomain($new->getDomain());
-        /** @var EntityManagerInterface $em */
-        $em=$this->getEntityManager();
-        $em->persist($old);
-        $em->flush();
-    }
-
-    /**
-     * @param int $id
-     */
-    public function delete(int $id)
-    {
-        $value=$this->find($id);
-        /** @var EntityManagerInterface $em */
-        $em=$this->getEntityManager();
-        $em->remove($value);
-        $em->flush();
-    }
-
-    /**
-     * @param Value $value
-     */
-    public function remove(Value $value)
-    {
-        /** @var EntityManagerInterface $em */
-        $em=$this->getEntityManager();
-        $em->remove($value);
-        $em->flush();
-    }
-
-    /**
      * @return array
      */
-    public function fetchQuickSearch() : array
+    public function fetchQuickSearch()
     {
+        $arr = [];
         $qb = $this->createQueryBuilder('value');
-        $qb->select('value','domain')
+        $qb->select('value','domain','model')
+            ->innerJoin('value.model','model')
             ->innerJoin('value.domain','domain');
-        $query = $qb->getQuery();
+        $query=$qb->getQuery();
         $results = $query->getResult();
-        $hash = [];
-        /** @var Value $result */
-        foreach($results as $result){
-            $domName= $result->getDomain()->getName();
-            if(!isset($hash[$domName])) {
-                $hash[$domName]=[];
+        /** @var Value $valueObj */
+        foreach($results as $valueObj) {
+            $domain = $valueObj->getDomain()->getName();
+            $models=$valueObj->getModel()->toArray();
+            $value = $valueObj->getName();
+            /** @var Model $modelObj */
+            foreach($models as $modelObj) {
+                $model = $modelObj->getName();
+                if(!isset($arr[$model])) {
+                    $arr[$model]=[];
+                }
+                if(!isset($arr[$model][$domain])) {
+                    $arr[$model][$domain]=[];
+                }
+                $arr[$model][$domain][$value]=$valueObj;
+
             }
-            $valName = $result->getName();
-            $hash[$domName][$valName] = $result;
         }
-        return $hash;
+        return $arr;
     }
 }

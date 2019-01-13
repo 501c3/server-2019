@@ -353,7 +353,7 @@ class Code1600SetupEventTest extends KernelTestCase
      */
     public function test1750ValidEventsAll()
     {
-        $this->loadAndIterateThroughDatabase(__DIR__.'/data-1750-valid-events-all.yml');
+        $this->loadAndIterateThroughDatabase(__DIR__.'/setup-07-events.yml');
     }
 
 

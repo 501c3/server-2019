@@ -20,21 +20,24 @@ status:
   Teacher-Student: {abbr: TS}
   Student-Student: {abbr: SS}
   Teacher-Teacher: {abbr: TT}
+  Mixed Status: {abbr: MS}
   Team 8 Person: {abbr: T8}
 type:
   Amateur: {abbr: Am}
   Professional: {abbr: Pro}
   Social: {abbr: Soc}
   Amateur-Amateur: {abbr: Am-Am}
-  Professional-Amateur: {abbr: Pro-Am}
+  Professional-Amateur: {abbr: ProAm}
+  Professional-Professional: {abbr: ProPro}
+  Mixed Type: {abbr: MT}
 sex:
   Male: {abbr: M}
   Female: {abbr: F}
   Male-Male: {abbr: MM}
   Female-Female: {abbr: FF}
   Male-Female: {abbr: MF}
-  Same-Sex: {abbr: SS}
-  Mixed-Sex: {abbr: MS}
+  Same Sex: {abbr: SS}
+  Mixed Sex: {abbr: MS}
 proficiency:
   Social: {abbr: S}
   Newcomer: {abbr: NC}

@@ -8,7 +8,7 @@
 
 namespace App\Repository\Model;
 
-use App\Entity\Models\Domain;
+use App\Entity\Model\Domain;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Common\Persistence\ManagerRegistry;
 use Doctrine\ORM\EntityManagerInterface;
@@ -21,24 +21,6 @@ class DomainRepository extends ServiceEntityRepository
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, Domain::class);
-    }
-
-    /**
-     * @param string $name
-     * @param int $ord
-     * @return Domain
-     */
-    public function create(string $name, int $ord) : Domain
-    {
-        /** @var Domain $domain */
-        $domain = new Domain();
-        $domain->setName($name)
-                ->setOrd($ord);
-        /** @var EntityManagerInterface $em */
-        $em = $this->getEntityManager();
-        $em->persist($domain);
-        $em->flush();
-        return $domain;
     }
 
     /**
@@ -69,9 +51,9 @@ class DomainRepository extends ServiceEntityRepository
      */
     public function update(Domain $new)
     {
+        /** @var Domain $old */
         $old = $this->find($new->getId());
-        $old->setName($new->getName())
-            ->setOrd($new->getOrd());
+        $old->setName($new->getName());
         $em = $this->getEntityManager();
         $em->persist($old);
         $em->flush($old);
@@ -107,6 +89,7 @@ class DomainRepository extends ServiceEntityRepository
     {
         $lookup = [];
         $results = $this->findAll();
+        /** @var Domain $domain */
         foreach($results as $domain) {
             $name = $domain->getName();
             $lookup[$name]=$domain;

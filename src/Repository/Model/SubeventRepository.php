@@ -9,12 +9,10 @@
 namespace App\Repository\Model;
 
 
-use App\Entity\Models\Event;
+use App\Entity\Model\Event;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Common\Persistence\ManagerRegistry;
-use App\Entity\Models\Subevent;
-use Doctrine\ORM\OptimisticLockException;
-use Doctrine\ORM\ORMException;
+use App\Entity\Model\Subevent;
 
 class SubeventRepository extends ServiceEntityRepository
 {
@@ -23,78 +21,22 @@ class SubeventRepository extends ServiceEntityRepository
         parent::__construct($registry, Subevent::class);
     }
 
+
     /**
-     * @param array $description
+     * @param string $substyle
      * @param Event $event
-     * @return Subevent
-     * @throws ORMException
-     * @throws OptimisticLockException
+     * @throws \Doctrine\ORM\ORMException
+     * @throws \Doctrine\ORM\OptimisticLockException
      */
-    public function create(array $description, Event $event)
+    public function create(string $substyle,Event $event)
     {
+        $describe = $event->getDescribe();
+        $describe['substyle']=$substyle;
         $subevent = new Subevent();
-        $subevent->setDescription($description)
-                ->setEvent($event);
-        $em = $this->getEntityManager();
+        $subevent->setEvent($event)
+                 ->setDescribe($describe);
+        $em=$this->getEntityManager();
         $em->persist($subevent);
-        $em->flush();
-        return $subevent;
-    }
-
-    public function read(int $id)
-    {
-        return $this->find($id);
-    }
-
-    public function readMulti(Event $event)
-    {
-        $qb = $this->createQueryBuilder('subevent');
-        $qb->select('subevent','event')
-            ->innerJoin('subevent.event','event')
-            ->where('event = :event');
-        $query = $qb->getQuery();
-        $query->setParameter(':event',$event);
-        $result = $query->getResult();
-        return $result;
-    }
-
-    /**
-     * @param Subevent $new
-     * @throws ORMException
-     * @throws OptimisticLockException
-     */
-    public function update(Subevent $new)
-    {
-        $old = $this->find($new->getId());
-        $old->setDescription($new->getDescription())
-            ->setEvent($new->getEvent());
-        $em = $this->getEntityManager();
-        $em->persist($old);
-        $em->flush();
-    }
-
-    /**
-     * @param int $id
-     * @throws ORMException
-     * @throws OptimisticLockException
-     */
-    public function delete(int $id)
-    {
-        $subevent = $this->find($id);
-        $em = $this->getEntityManager();
-        $em->remove($subevent);
-        $em->flush();
-    }
-
-    /**
-     * @param Subevent $subevent
-     * @throws ORMException
-     * @throws OptimisticLockException
-     */
-    public function remove(Subevent $subevent)
-    {
-        $em = $this->getEntityManager();
-        $em->remove($subevent);
         $em->flush();
     }
 }

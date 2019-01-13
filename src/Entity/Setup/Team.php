@@ -11,7 +11,7 @@ use /** @noinspection PhpUnusedAliasInspection */
  * Team
  *
  * @ORM\Table(name="team", indexes={@ORM\Index(name="fk_team_prf_team1_idx", columns={"prf_team_id"}), @ORM\Index(name="fk_team_team_class1_idx", columns={"team_class_id"}), @ORM\Index(name="fk_team_age_team1_idx", columns={"age_team_id"})})
- * @ORM\Entity(repositoryClass="App\Repository\Setup\TeamRepository")
+ * @ORM\Entity(repositoryClass="App\Repository\Setup\TeamClassRepository")
  */
 class Team
 {

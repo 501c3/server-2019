@@ -8,6 +8,7 @@
         "ext-yaml": "^2.0",
         "api-platform/api-pack": "^1.1",
         "doctrine/doctrine-bundle": "^1.9",
+        "scienta/doctrine-json-functions": "^4.0",
         "symfony/console": "*",
         "symfony/flex": "^1.1",
         "symfony/framework-bundle": "*",

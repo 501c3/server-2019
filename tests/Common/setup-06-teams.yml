@@ -37,7 +37,7 @@
     Full Gold: []
     Open Gold: []
     Gold: []
-- type: Amateur
+- type: Amateur-Amateur
   status: Student-Student
   sex:
   - Male-Female
@@ -96,7 +96,6 @@
     - Open Bronze
     - Bronze
     Pre Silver:
-    - Newcomer
     - Pre Bronze
     - Intermediate Bronze
     - Full Bronze
@@ -104,7 +103,6 @@
     - Bronze
     - Pre Silver
     Intermediate Silver:
-    - Newcomer
     - Pre Bronze
     - Intermediate Bronze
     - Full Bronze
@@ -113,7 +111,6 @@
     - Pre Silver
     - Intermediate Silver
     Full Silver:
-    - Newcomer
     - Pre Bronze
     - Intermediate Bronze
     - Full Bronze
@@ -123,7 +120,6 @@
     - Intermediate Silver
     - Full Silver
     Open Silver:
-    - Newcomer
     - Pre Bronze
     - Intermediate Bronze
     - Full Bronze
@@ -134,7 +130,6 @@
     - Full Silver
     - Open Silver
     Silver:
-    - Newcomer
     - Pre Bronze
     - Intermediate Bronze
     - Full Bronze
@@ -212,6 +207,10 @@
     - Gold Star 1
     - Pre Championship
     Gold Star 1:
+    - Pre Gold
+    - Intermediate Gold
+    - Full Gold
+    - Open Gold
     - Gold
     - Novice
     - Gold Star 1
@@ -226,8 +225,29 @@
     - Pre Championship
     - Gold Star 1
     - Championship
-
-- type: Amateur
+- type: Amateur-Amateur
+  status: Student-Student
+  sex:
+    - Male-Female
+    - Male-Male
+    - Female-Female
+  age:
+    Senior-Youth: [40-75,1-12]
+    Adult-Youth: [19-39,1-12]
+  proficiency:
+    Social:
+    - Social
+    - Pre Bronze
+    - Intermediate Bronze
+    - Full Bronze
+    - Open Bronze
+    - Bronze
+    - Pre Silver
+    - Intermediate Silver
+    - Full Silver
+    - Open Silver
+    - Silver
+- type: Amateur-Amateur
   status: Teacher-Teacher
   sex:
     - Male-Female
@@ -261,7 +281,7 @@
       - Pre Championship
       - Gold Star 2
       - Championship
-- type: Amateur
+- type: Amateur-Amateur
   status: Teacher-Student
   sex:
   - Male-Female
@@ -338,7 +358,6 @@
     Y65-74: [0-0,65-74]
     Y75-99: [0-0,75-99]
   proficiency:
-    Social: [Rising Star,Professional]
     Newcomer: [Rising Star,Professional]
     Pre Bronze: [Rising Star,Professional]
     Intermediate Bronze: [Rising Star,Professional]
@@ -355,12 +374,9 @@
     Full Gold: [Rising Star,Professional]
     Open Gold: [Rising Star,Professional]
     Gold: [Rising Star,Professional]
-    Novice: [Rising Star,Professional]
-    Pre Championship: [Rising Star,Professional]
     Gold Star 1: [Rising Star,Professional]
-    Championship: [Rising Star,Professional]
     Gold Star 2: [Rising Star,Professional]
-- type: Professional
+- type: Professional-Professional
   status: Teacher-Teacher
   sex:
   - Male-Female

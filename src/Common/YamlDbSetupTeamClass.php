@@ -374,11 +374,11 @@ class YamlDbSetupTeamClass extends YamlDbSetupPerson
         $describe = $ageTeamClass->getDescribe();
         $type = $describe['type'];
         $status = $describe['status'];
-        /** @var AgeTeamRepository $repository */
+
+        $typeList = explode('-',$type);
         $statusList = explode('-',$status);
         $collectionOfCollection = [];
         $designateList= ['A','B'];
-        $typeList = $type=='Professional-Amateur'?['Professional','Amateur']:[$type,$type];
         foreach($personAgeRanges as $idx=>$ageRange) {
             list($lower,$upper) = explode('-',$ageRange);
             $lb = intval($lower);
@@ -482,7 +482,7 @@ class YamlDbSetupTeamClass extends YamlDbSetupPerson
         $status = $describe['status'];
         $sex = $describe['sex'];
         $teamProficiency = $describe['proficiency'];
-        $typeList = 'Professional-Amateur'==$type?['Professional','Amateur']:[$type,$type];
+        $typeList = explode('-',$type);
         $statusList = explode('-',$status);
         $sexList = explode('-',$sex);
         switch(count($statusList)) {
@@ -490,7 +490,7 @@ class YamlDbSetupTeamClass extends YamlDbSetupPerson
                 if(!isset($this->person[$typeList[0]][$statusList[0]]['prf'][$sexList[0]][$teamProficiency]['A'])) {
                     $indexing = [$typeList[0], $statusList[0], 'prf', $sexList[0], $teamProficiency, 'A'];
                     throw new AppBuildException(AppExceptionCodes::BAD_INDEX,
-                        [__FILE__, __LINE__ - 3, 'person', $indexing, new \DateTime('now')]);
+                        [__FILE__, __LINE__ - 3, 'person', $indexing]);
                 }
                 $arr[] =  [$this->person[$typeList[0]][$statusList[0]]['prf'][$sexList[0]][$teamProficiency]['A']];
                 break;
@@ -501,12 +501,12 @@ class YamlDbSetupTeamClass extends YamlDbSetupPerson
                     if(!isset($this->person[$typeList[0]][$statusList[0]]['prf'][$sexList[0]][$leftProficiency]['A'])) {
                         $indexing = [$typeList[0], $statusList[0], 'prf', $sexList[0], $leftProficiency, 'A'];
                         throw new AppBuildException(AppExceptionCodes::BAD_INDEX,
-                            [__FILE__, __LINE__ - 3, 'person', $indexing, new \DateTime('now')]);
+                            [__FILE__, __LINE__ - 3, 'person', $indexing]);
                     }
                     if(!isset($this->person[$typeList[1]][$statusList[1]]['prf'][$sexList[1]][$rightProficiency]['B'])) {
                         $indexing = [$typeList[1], $statusList[1], 'prf', $sexList[1], $rightProficiency, 'B'];
                         throw new AppBuildException(AppExceptionCodes::BAD_INDEX,
-                            [__FILE__, __LINE__ - 3, 'person', $indexing, new \DateTime('now')]);
+                            [__FILE__, __LINE__ - 3, 'person', $indexing]);
                     }
                     $a = $this->person[$typeList[0]][$statusList[0]]['prf'][$sexList[0]][$leftProficiency]['A'];
                     $b = $this->person[$typeList[1]][$statusList[1]]['prf'][$sexList[1]][$rightProficiency]['B'];
@@ -542,6 +542,6 @@ class YamlDbSetupTeamClass extends YamlDbSetupPerson
         }
         $indexing=[$status,$teamProficiency,$partnerProficiency];
         throw new AppBuildException(AppExceptionCodes::UNHANDLED_CONDITION,
-            [__FILE__,__LINE__-10, 'proficiencySelection',$indexing,new \DateTime('now')]);
+            [__FILE__,__LINE__-10, 'proficiencySelection',$indexing]);
     }
 }

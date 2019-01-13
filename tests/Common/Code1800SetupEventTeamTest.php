@@ -13,6 +13,8 @@
 namespace App\Tests\Common;
 
 
+use App\Common\AppBuildException;
+use App\Common\AppExceptionCodes;
 use App\Common\YamlDbSetupEventTeam;
 use App\Entity\Setup\Event;
 use App\Kernel;
@@ -242,7 +244,6 @@ HEREDOC;
                         }
                     }
                 }
-
             }
         }
     }
@@ -260,6 +261,7 @@ HEREDOC;
      * @param $expectedTeamAges
      * @param $expectedEventProficiency
      * @param $expectedTeamProficiencies
+     * @throws AppBuildException
      */
 
     private function compareActualExpected(array $actual, string $modelName,
@@ -270,6 +272,13 @@ HEREDOC;
                                            $expectedEventProficiency, $expectedTeamProficiencies)
     {
         /** @var ArrayCollection $actualEventCollection */
+        if(!isset($actual[$modelName][$expectedEventType][$expectedEventStatus]
+                [$expectedEventSex][$expectedEventAge][$expectedEventProficiency])){
+            $index=[$modelName,$expectedEventType,$expectedEventStatus,$expectedEventSex,
+                    $expectedEventAge,$expectedEventProficiency];
+            throw new AppBuildException(AppExceptionCodes::EXPECTED_STRUCTURE,
+                    [__FILE__,__LINE__,'$actual',$index]);
+        }
         $actualEventCollection = $actual[$modelName][$expectedEventType][$expectedEventStatus]
                                         [$expectedEventSex][$expectedEventAge][$expectedEventProficiency];
 

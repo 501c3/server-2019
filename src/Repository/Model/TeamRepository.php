@@ -1,117 +1,80 @@
 <?php
 /**
+ * Copyright (c) 2019. Mark Garber.  All rights reserved.
+ */
+
+/**
  * Created by PhpStorm.
  * User: mgarber
- * Date: 11/10/18
- * Time: 6:28 PM
+ * Date: 1/9/19
+ * Time: 10:57 AM
  */
 
 namespace App\Repository\Model;
 
 
-use App\Entity\Models\Person;
+use App\Entity\Model\Person;
+use App\Entity\Model\Team;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
-use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Persistence\ManagerRegistry;
-use App\Entity\Models\Team;
-use Doctrine\ORM\EntityManagerInterface;
+use Doctrine\ORM\Query;
+use Doctrine\ORM\QueryBuilder;
 
 class TeamRepository extends ServiceEntityRepository
 {
-    /** @var PersonRepository */
-
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, Team::class);
     }
 
-    public function create(array $description) : Team
+    private function queryBuilderBase() : QueryBuilder
     {
-        $team = new Team();
-        $team->setDescription($description);
-        /** @var EntityManagerInterface $em */
-        $em = $this->getEntityManager();
-        $em->persist($team);
-        $em->flush();
-        return $team;
-    }
-
-    public function read(int $id) : ?Team
-    {
-        /** @var Team $team */
-        $team = $this->find($id);
-        return $team;
-    }
-
-    public function readFilter(Person $person1, Person $person2=null) : ?array
-    {
-        $qb = $this->createQueryBuilder('team');
-        $qb->select('team','person','event')
-            ->innerJoin('team.person','person');
-        $description1 = $person1->getDescription();
-        if($person2){
-
-        }
+        $qb=$this->createQueryBuilder('team');
+        $qb->select('team','class')
+            ->from('team')
+            ->innerJoin('team.teamClass','class')
+            ->innerJoin('team.person','pA');
+        return $qb;
     }
 
 
-    public function update(Team $new)
+    /**
+     * @param Person $a
+     * @param Person $b
+     * @return Team
+     * @throws \Doctrine\ORM\NonUniqueResultException
+     */
+    public function getTeamCouple(Person $a,Person $b) : ?Team
     {
-        /** @var Team $old */
-        $old = $this->find($new->getId());
-        $old->setDescription($new->getDescription())
-            ->setPerson($new->getPerson())
-            ->setEvent($new->getEvent());
-        /** @var EntityManagerInterface $em */
-        $em = $this->getEntityManager();
-        $em->persist($old);
-        $em->flush();
+        $qb=$this->queryBuilderBase();
+        $qb->innerJoin('team.person','pB');
+        $qb->where('pA=:A')
+            ->andWhere('pB=:B');
+        $query=$qb->getQuery();
+        $query->setParameters([':A'=>$a,':B'=>$b]);
+        $result = $query->getOneOrNullResult();
+        return $result;
     }
 
-    public function delete(int $id)
+    /**
+     * @param Person $p
+     * @return Team|null
+     * @throws \Doctrine\ORM\NonUniqueResultException
+     */
+    public function getTeamSolo(Person $p) : ?Team
     {
-        /** @var Team $team */
-        $team = $this->find($id);
-        $this->remove($team);
-        /** @var EntityManagerInterface $em */
-        $em = $this->getEntityManager();
-        $em->persist($team);
-        $em->flush();
-    }
-
-    public function remove(Team $team)
-    {
-        /** @var EntityManagerInterface $em */
-        $em = $this->getEntityManager();
-        $em->remove($team);
-    }
-
-    public function fetchQuickSearch()
-    {
-        $results = $this->findAll();
-        /** @var Team $team */
-        $lookup = [];
-        foreach($results as $team) {
-            $data=$team->getDescription();
-            $type = $data['type'];
-            $status = $data['status'];
-            $sex = $data['sex'];
-            $age = $data['age'];
-            $proficiency = $data['proficiency'];
-            if(!isset($lookup[$type])) {
-                $lookup[$type] = [];
-            }
-            if(!isset($lookup[$type][$status])) {
-                $lookup[$type][$status]=[];
-            }
-            if(!isset($lookup[$type][$status][$sex])) {
-                $lookup[$type][$status][$sex]=[];
-            }
-            if(!isset($lookup[$type][$status][$sex][$age])) {
-                $lookup[$type][$status][$sex][$age]=[];
-            }
-            $lookup[$type][$status][$sex][$age][$proficiency] = $team;
-        }
-        return $lookup;
+        $pDescribe = $p->getDescribe();
+        $type = $pDescribe['type'];
+        $status = $pDescribe['status'];
+        /** @var QueryBuilder $qb */
+        $qb = $this->queryBuilderBase();
+        $qb->where('pA=:person')
+            ->andWhere("JSON_EXTRACT(team.`describe`,'$.type)=:type)")
+            ->andWhere("JSON_EXTRACT(team.`describe`,'$.status'=:status");
+        /** @var Query $query */
+        $query = $qb->getQuery();
+        $query->setParameters([':type'=>$type,':status'=>$status,':person'=>$p]);
+        $result=$query->getOneOrNullResult();
+        return $result;
     }
 }

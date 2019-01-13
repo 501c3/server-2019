@@ -11,6 +11,7 @@ use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
+use Symfony\Component\EventDispatcher\Event;
 use Symfony\Component\EventDispatcher\EventDispatcher;
 use Symfony\Component\HttpKernel\KernelInterface;
 
@@ -29,6 +30,9 @@ class DbLoadCommand extends Command
     /** @var EventDispatcher */
     private $dispatcher;
 
+    /** @var ProcessSubscriber */
+    private $subscriber;
+
     private $count;
 
     const HELP = <<<HELPTEXT
@@ -41,7 +45,9 @@ HELPTEXT;
     {
         parent::__construct('DbLoadCommand');
         $this->kernel = $kernel;
-        $this->dispatcher= $kernel->getContainer()->get('event_dispatcher');
+        $this->subscriber = new ProcessSubscriber();
+        $this->dispatcher = new EventDispatcher();
+        $this->dispatcher->addSubscriber($this->subscriber);
 
     }
 
@@ -105,11 +111,9 @@ HELPTEXT;
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-
         $io = new SymfonyStyle($input, $output);
         /** @var ProcessSubscriber $subscriber */
-        $subscriber = $this->kernel->getContainer()->get('App\Signal\ProcessSubscriber');
-        $subscriber->setOutputInterface($output);
+        $this->subscriber->setOutputInterface($output);
         $dbname = $input->getArgument('dbname');
         $dump = $input->getArgument('dump');
         $count = 0;
@@ -121,18 +125,18 @@ HELPTEXT;
                 $conn->query('SET FOREIGN_KEY_CHECKS = 0');
                 foreach($this->dump as $file) {
                     $sql = file_get_contents($file);
+                    $conn->query($sql);
                     $event = new ProcessEvent(new ProcessStatus(ProcessStatus::WORKING, ++$count));
                     $this->dispatcher->dispatch('process.update',$event);
-                    $conn->query($sql);
                 }
-            $conn->query('SET FOREIGN_KEY_CHECKS = 1');
+                $conn->query('SET FOREIGN_KEY_CHECKS = 1');
+                $event = new ProcessEvent(new ProcessStatus(ProcessStatus::COMPLETE,$this->count));
+                $this->dispatcher->dispatch('process.update', $event);
             } else {
                 $io->error(sprintf('Data dump: %s was not located. Check path.',$dump));
             }
         } else {
             $io->error(sprintf('Database: %s was not located.',$dbname));
         }
-        $event = new ProcessEvent(new ProcessStatus(ProcessStatus::COMPLETE, $this->count));
-        $this->dispatcher->dispatch('process.update',$event);
     }
 }

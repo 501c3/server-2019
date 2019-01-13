@@ -24,12 +24,20 @@ class AppBuildException extends \Exception
       parent::__construct($message, $code, $previous);
   }
 
-  private function message(string $pathfile,int $line, string $arrName,array $index,\DateTime $dateTime)
+    /**
+     * @param string $pathfile
+     * @param int $line
+     * @param string $arrName
+     * @param array $index
+     * @return string
+     * @throws \Exception
+     */
+  private function message(string $pathfile,int $line, string $arrName,array $index)
   {
       $parts = pathinfo($pathfile);
       $file = $parts['filename'].'.'.$parts['extension'];
-      $variable = '$this->'.$arrName."['".join("']['",$index)."']";
-      $timeStr = $dateTime->format(\DateTimeInterface::ATOM);
-      return "$variable could not be found in file:$file at line:$line.  Time: $timeStr";
+      $variable = $arrName."['".join("']['",$index)."']";
+      return "$variable could not be found in file:$file at line:$line.  "
+                .(new \DateTime('now'))->format('Y-m-d H:i:s');
   }
 }

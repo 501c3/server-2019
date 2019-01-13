@@ -181,7 +181,7 @@ class YamlDbSetupEventTeam
                                                         [$eventSex][$eventAge][$eventProficiency])) {
                                         $index = [$model,$eventType,$eventStatus,$eventSex,$eventAge,$eventProficiency];
                                         throw new AppBuildException(AppExceptionCodes::BAD_INDEX,
-                                                    [__FILE__,__LINE__-4,'eventHash',$index,new \DateTime('now')]);
+                                                    [__FILE__,__LINE__-4,'eventHash',$index]);
 
                                     }
                                     $eventCollection = $eventHash[$model][$eventType][$eventStatus]
@@ -213,6 +213,7 @@ class YamlDbSetupEventTeam
      * @param array $teamSexes
      * @param array $teamAges
      * @param array $teamProficiencies
+     * @throws AppBuildException
      */
     private function addTeamsToEventCollection(
         ArrayCollection $eventCollection,
@@ -236,16 +237,14 @@ class YamlDbSetupEventTeam
                         foreach($teamAges as $age) {
                             /** @var string $proficiency */
                             foreach($teamProficiencies as $proficiency) {
-//                                if(!isset($teamClassesHash[$type][$status][$sex][$age][$proficiency])) {
-//                                    $index = [$type,$status,$sex,$age,$proficiency];
-//                                    throw new AppBuildException(AppExceptionCodes::BAD_INDEX,
-//                                        [__FILE__,__LINE__-2,'teamClassesHash',$index,new \DateTime('now')]);
-//                                }
-                                if(isset($teamClassesHash[$type][$status][$sex][$age][$proficiency])) {
+                                if(!isset($teamClassesHash[$type][$status][$sex][$age][$proficiency])) {
+                                    $index = [$type,$status,$sex,$age,$proficiency];
+                                    throw new AppBuildException(AppExceptionCodes::BAD_INDEX,
+                                        [__FILE__,__LINE__-2,'teamClassesHash',$index]);
+                                }
                                     /** @var TeamClass $teamClass */
                                     $teamClass = $teamClassesHash[$type][$status][$sex][$age][$proficiency];
                                     $eventTeams->set($teamClass->getId(),$teamClass);
-                                }
                             }
                         }
                     }

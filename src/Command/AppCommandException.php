@@ -19,7 +19,8 @@ class AppCommandException extends \Exception
 {
    const FOUND_BUT_EXPECTED = 2010,
          MISSING_KEYS = 2020,
-         MISSING_FILE = 2030;
+         MISSING_FILE = 2030,
+         MISSING_MASTER = 2040;
 
    public function __construct( int $code = 0, $parameters, Throwable $previous = null)
    {
@@ -37,6 +38,8 @@ class AppCommandException extends \Exception
                 return 'messageMissingKeys';
            case self::MISSING_FILE:
                  return 'messageMissingFile';
+           case self::MISSING_MASTER:
+                 return 'messageMissingMaster';
 
        }
 
@@ -65,6 +68,12 @@ class AppCommandException extends \Exception
     private function messageMissingFile(string $missingFile, string $masterFile)
     {
         return sprintf('Missing %s in %s.',$missingFile,$masterFile);
+    }
+
+    /** @noinspection PhpUnusedPrivateMethodInspection */
+    private function messageMissingMaster(string $masterFile)
+    {
+        return sprintf('Missing master file: %s',$masterFile);
     }
 
 }

@@ -8,14 +8,12 @@
 
 namespace App\Repository\Model;
 
-
-use App\Entity\Models\Model;
-use App\Entity\Models\Team;
+use App\Entity\Model\Team;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Persistence\ManagerRegistry;
-use App\Entity\Models\Event;
-use Doctrine\ORM\Query;
+use App\Entity\Model\Event;
+use Doctrine\ORM\QueryBuilder;
 
 class EventRepository extends ServiceEntityRepository
 {
@@ -24,148 +22,60 @@ class EventRepository extends ServiceEntityRepository
         parent::__construct($registry, Event::class);
     }
 
-    /**
-     * @param array $description
-     * @param Model $model
-     * @param ArrayCollection $values
-     * @return Event
-     * @throws \Doctrine\ORM\ORMException
-     * @throws \Doctrine\ORM\OptimisticLockException
-     */
-    public function create(array $description, Model $model, ArrayCollection $values)
+    private function queryBuilder()
     {
-        $event = new Event();
-        $event->setDescription($description)
-            ->setModel($model)
-            ->setValue($values);
-        $em = $this->getEntityManager();
-        $em->persist($event);
-        $em->flush();
-        return $event;
+        $qb=$this->createQueryBuilder('event');
+        $qb->select('model','event','teamClass')
+            ->innerJoin('team.teamClass','teamClass')
+            ->innerJoin('event.model','model');
     }
 
-    /**
-     * @param int $id
-     * @return Event|null
-     */
-    public function read(int $id) : ?Event
-    {
-        /** @var Event|null $result */
-        $result = $this->find($id);
-        return $result;
-    }
 
-    /**
-     * @param Team $team
-     * @param ArrayCollection $value
-     * @return array|null
-     */
-    public function readFilter(Team $team, ArrayCollection $value) : ?array
-    {
-        $qb = $this->createQueryBuilder('event');
-        $qb->select('event','value')
-            ->innerJoin('event.team','team')
-            ->innerJoin('event.value','value')
-            ->where('team=:team')
-            ->andWhere('value=:value');
-        $array = $value->toArray();
-        $value = array_shift($array);
+    public function getEvents(Team $team,array $models,array $styles) {
+        $class = $team->getTeamClass();
+        /** @var QueryBuilder $qb */
+        $qb = $this->queryBuilder();
+        $qb->where('model IN [:models]')
+            ->andWhere('teamClass=:class')
+            ->andWhere("JSON_EXTRACT(event.`describe`,'$.style') IN (:styles)");
         $query = $qb->getQuery();
-        $query->setParameter(':team',$team);
-        $query->setParameter(':value',$value);
-        $initial = $query->getResult();
-        $qb->andWhere('event in (:list)');
-        $nextQuery = $qb->getQuery();
-        $result = $this->readRecursive($nextQuery,$array,$initial);
-        return $result;
+        $query->setParameters([':models'=>$models,':class'=>$class,':styles'=>$styles]);
+
     }
 
-    /**
-     * @param Query $query
-     * @param array $values
-     * @param array $initial
-     * @return array
-     */
-    private function readRecursive(Query $query, array &$values, array $initial)
+    function fetchQuickSearch()
     {
-        if(count($values) == 0) {
-            return $initial;
+        $arr = [];
+        $results = $this->findAll();
+        /** @var Event $result */
+        foreach($results as $result) {
+            $describe=$result->getDescribe();
+            $status = $describe['status'];
+            $proficiency = $describe['proficiency'];
+            $age = $describe['age'];
+            $style = $describe['style'];
+            $model = $result->getModel()->getName();
+            $dances = $describe['dances'];
+            if(!isset($arr[$model])) {
+                $arr[$model]=[];
+            }
+            if(!isset($arr[$model][$style])) {
+                $arr[$model][$style]=[];
+            }
+            foreach(array_keys($dances) as $substyle) {
+                if(!isset($arr[$model][$style][$substyle])) {
+                    $arr[$model][$style][$substyle]=[];
+                }
+                if(!isset($arr[$model][$style][$substyle][$proficiency])) {
+                    $arr[$model][$style][$substyle][$proficiency]=[];
+                }
+                $arr[$model][$style][$substyle][$proficiency][$age]=new ArrayCollection();
+                /** @var ArrayCollection $collection */
+                $collection = $arr[$model][$style][$substyle][$proficiency][$age];
+                $collection->set($result->getId(),$result);
+            }
         }
-        $value = array_shift($values);
-        $query->setParameter(':value',$value);
-        $query->setParameter(':list',$initial);
-        $nextResults = $query->getResult();
-        $result = $this->readRecursive($query, $values, $nextResults);
-        return $result;
-    }
-
-    /**
-     * @param int $id
-     * @throws \Doctrine\ORM\ORMException
-     * @throws \Doctrine\ORM\OptimisticLockException
-     */
-    public function delete(int $id)
-    {
-        $event=$this->find($id);
-        $em = $this->getEntityManager();
-        $em->remove($event);
-        $em->flush();
-    }
-
-    /**
-     * @param Event $event
-     * @throws \Doctrine\ORM\ORMException
-     * @throws \Doctrine\ORM\OptimisticLockException
-     */
-    public function remove(Event $event)
-    {
-        $em = $this->getEntityManager();
-        $em->remove($event);
-        $em->flush($event);
-    }
-
-    /**
-     * @return array
-     */
-    public function fetchQuickSearch(): array
-    {
-        $lookup = [];
-        $events = $this->findAll();
-        /** @var Event $event */
-        foreach($events as $event) {
-            $description = $event->getDescription();
-            $type = $description['type'];
-            $status = $description['status'];
-            $sex = $description['sex'];
-            $model = $description['model'];
-            $age = $description['age'];
-            $proficiency = $description['proficiency'];
-            $style = $description['style'];
-            if(!isset($lookup[$type])) {
-                $lookup[$type]=[];
-            }
-            if(!isset($lookup[$type][$status])) {
-                $lookup[$type][$status]=[];
-            }
-            if(!isset($lookup[$type][$status][$sex])) {
-                $lookup[$type][$status][$sex]=[];
-            }
-            if(!isset($lookup[$type][$status][$sex][$model])) {
-                $lookup[$type][$status][$sex][$model]=[];
-            }
-            if(!isset($lookup[$type][$status][$sex][$model][$age])) {
-                $lookup[$type][$status][$sex][$model][$age]=[];
-            }
-            if(!isset($lookup[$type][$status][$sex][$model][$age][$proficiency])) {
-                $lookup[$type][$status][$sex][$model][$age][$proficiency]=[];
-            }
-            if(!isset($lookup[$type][$status][$sex][$model][$age][$proficiency][$style])) {
-                $lookup[$type][$status][$sex][$model][$age][$proficiency][$style]=[];
-            }
-            $ptr = & $lookup[$type][$status][$sex][$model][$age][$proficiency];
-            array_push($ptr, $event);
-        }
-        return $lookup;
+        return $arr;
     }
 
 }

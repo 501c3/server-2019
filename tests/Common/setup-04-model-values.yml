@@ -2,9 +2,9 @@ ISTD Medal Exams-2019:
   genre: [Rhythm,Smooth,Latin,Standard]
   style: [International,American]
   substyle: [Rhythm,Smooth,Latin,Standard]
-  type: [Amateur,Professional,Professional-Amateur]
-  status: [Teacher-Teacher,Teacher-Student,Student-Student]
-  sex: [Mixed-Sex]
+  type: [Amateur-Amateur,Professional-Professional,Professional-Amateur,Mixed Type]
+  status: [Teacher-Teacher,Teacher-Student,Student-Student,Mixed Status]
+  sex: [Mixed Sex]
   proficiency: [Pre Bronze,Bronze,Silver,Gold,Gold Star 1,Gold Star 2]
   age: [Under 6,Under 8,Under 12,Junior 12-16,Adult 16-50,Senior 50]
   tag: [Introductory Tests,One Dance Tests,Medal Series,Opposite]
@@ -42,8 +42,8 @@ Georgia DanceSport Amateur-2019:
   substyle: [Rhythm,Smooth,Latin,Standard,Novelty]
   sex:
   - Male-Female
-  - Mixed-Sex
-  - Same-Sex
+  - Mixed Sex
+  - Same Sex
   proficiency:
   - Social
   - Newcomer
@@ -76,8 +76,8 @@ Georgia DanceSport Amateur-2019:
   - Senior-Youth
   - Youth
   - Baby-Preteen 2
-  type: [Amateur]
-  status: [Student,Student-Student]
+  type: [Amateur,Amateur-Amateur]
+  status: [Student,Teacher-Teacher,Student-Student]
   tag:
   - Qualifier
   - Scholarship
@@ -119,12 +119,12 @@ Georgia DanceSport ProAm-2019:
   - Teacher-Student
   - Teacher-Teacher
   type:
-  - Amateur
   - Professional-Amateur
-  - Professional
+  - Professional-Professional
+  - Amateur-Amateur
   sex:
-  - Mixed-Sex
   - Male-Female
+  - Mixed Sex
   proficiency:
   - Newcomer
   - Pre Bronze

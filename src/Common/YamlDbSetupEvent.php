@@ -20,6 +20,8 @@ use App\Repository\Setup\ModelRepository;
 use App\Signal\ProcessEvent;
 use App\Signal\ProcessStatus;
 use Doctrine\ORM\EntityManagerInterface;
+use Doctrine\ORM\OptimisticLockException;
+use Doctrine\ORM\ORMException;
 use Symfony\Component\EventDispatcher\EventDispatcher;
 
 class YamlDbSetupEvent
@@ -46,7 +48,7 @@ class YamlDbSetupEvent
     /** @var EventDispatcher */
     private $dispatcher;
 
-    public function __construct(EntityManagerInterface $em, EventDispatcher $dispatcher)
+    public function __construct(EntityManagerInterface $em, EventDispatcher $dispatcher=null)
     {
         $this->entityManager = $em;
         $this->dispatcher = $dispatcher;
@@ -271,8 +273,8 @@ class YamlDbSetupEvent
 
     /**
      * @param array $data
-     * @throws \Doctrine\ORM\ORMException
-     * @throws \Doctrine\ORM\OptimisticLockException
+     * @throws ORMException
+     * @throws OptimisticLockException
      */
     private function buildEvents(array $data) {
 
@@ -302,8 +304,8 @@ class YamlDbSetupEvent
      * @param array $sexList
      * @param array $ageList
      * @param array $proficienciesStylesDances
-     * @throws \Doctrine\ORM\ORMException
-     * @throws \Doctrine\ORM\OptimisticLockException
+     * @throws ORMException
+     * @throws OptimisticLockException
      */
     private function buildEventBlock(
         string $modelName,
@@ -353,8 +355,8 @@ class YamlDbSetupEvent
      * @param string $age
      * @param string $proficiency
      * @param array $records
-     * @throws \Doctrine\ORM\ORMException
-     * @throws \Doctrine\ORM\OptimisticLockException
+     * @throws ORMException
+     * @throws OptimisticLockException
      */
     private function buildIndividualEvents(
         Model $model,
@@ -368,27 +370,29 @@ class YamlDbSetupEvent
        $describe = ['type'=>$type,'status'=>$status,'sex'=>$sex,'age'=>$age,'proficiency'=>$proficiency];
        $modelName = $model->getName();
        foreach($records as $rec) {
+           $describe1=$describe;
+           $describe1['tag']=$rec['tag'];
            foreach($rec['style'] as $style=>$substyleDances) {
                if(!isset($this->event[$modelName][$type][$status][$sex][$age][$proficiency][$style])){
                    $this->event[$modelName][$type][$status][$sex][$age][$proficiency][$style]=[];
                }
                switch($substyleDances['disposition']) {
                    case 'single-event':
-                       $describe1 = $describe;
-                       $describe1['dances']=$substyleDances['substyle'];
-                       $describe1['style']=$style;
-                       $event=$this->eventRepository->create($model,$describe1,[]);
+                       $describe2 = $describe1;
+                       $describe2['dances']=$substyleDances['substyle'];
+                       $describe2['style']=$style;
+                       $event=$this->eventRepository->create($model,$describe2,[]);
                        array_push($this->event[$modelName][$type][$status]
                                          [$sex][$age][$proficiency][$style],$event);
                        break;
                    case 'multiple-events':
-                        $describe1 = $describe;
+                        $describe2 = $describe1;
                         foreach($substyleDances['substyle'] as $substyle=>$danceCollections) {
                             foreach($danceCollections as $dances) {
-                                $describe2 = $describe1;
-                                $describe2['dances']=[$substyle=>$dances];
-                                $describe2['style']=$style;
-                                $event=$this->eventRepository->create($model,$describe2,[]);
+                                $describe3 = $describe2;
+                                $describe3['dances']=[$substyle=>$dances];
+                                $describe3['style']=$style;
+                                $event=$this->eventRepository->create($model,$describe3,[]);
                                 array_push($this->event[$modelName][$type][$status]
                                         [$sex][$age][$proficiency][$style],$event);
                             }

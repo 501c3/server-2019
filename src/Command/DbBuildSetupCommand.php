@@ -124,8 +124,10 @@ class DbBuildSetupCommand extends Command
     {
 
         $masterFile = $input->getArgument('masterFile');
+        if(!file_exists($masterFile)) {
+            throw new AppCommandException(AppCommandException::MISSING_MASTER,[$masterFile]);
+        }
         $fileList = yaml_parse_file($masterFile);
-
         $filesToParse = [];
         foreach($fileList as $key=>$file) {
             if(!in_array($key,self::KEYS)) {
@@ -179,10 +181,10 @@ class DbBuildSetupCommand extends Command
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $io = new SymfonyStyle($input,$output);
-        try{
+       // try{
             $this->processFiles($io, $input, $output);
-        } catch (AppCommandException $e) {
-            $io->error($e->getMessage());
-        }
+       // } catch (AppCommandException $e) {
+       //     $io->error($e->getMessage());
+       // }
     }
 }
