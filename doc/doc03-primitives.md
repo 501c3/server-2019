@@ -1,4 +1,5 @@
 ##Primitives:Models:Domains,Values
+
 ###Competition Models File
 
 The competition model file is a list of alpha numerics 
@@ -26,6 +27,7 @@ a person are as follows:
 ```
 
 ###Value File
+
 The value file contains a listing of valid values within a domain.
 It is a dictionary of acceptable terms and their abbreviation.  There
 is an optional note field for comments. 

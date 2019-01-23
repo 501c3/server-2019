@@ -28,19 +28,20 @@ designate: <designate selection>
 
 ```
 The years, proficiency and designate fields are lists.  Each value in each of these
-lists are combined to produce meta data for a distinct person.  For example for
-values such as 
+lists are combined to produce meta data for a multiple persons.  Consider the following
+example:
+
 ```
 type: Teacher
 status: Amateur
 years: 20-25
 sex: [Male,Female]
 proficiency: [Pre Championship, Championship]
-designate: ['A','B']
+designate: [A,B]
 
 ```
-will produce 5 years x 2 proficiencies x 2 sexes x 2 designates = 40 possible
-value combinations for Amateur-Teacher meta-data.  The Backus=Nauer
+The above code fragment will produce 5 years x 2 proficiencies x 2 sexes x 2 designates = 40 possible
+value combinations for Amateur-Teacher meta-data.  The Backus-Nauer
 spec below describe the permitted values in each field.
 
 ```
@@ -49,8 +50,11 @@ spec below describe the permitted values in each field.
 <sex selection>::=[<Sex Subset>]
 <years range>::= \d*-\d*
 <proficiency selection>::= <Proficiency Subset>
-<designate selection>::= "A"|"B"
+<designate selection>::= A|B
 ```
+
+We are using regular expression notation indicate the <years range>.  \d*-\d* indicates
+a year range such as 1-15 for 1 year to 15 years.
 
 ```
 <Sex Subset> consists of one or more of the following:

@@ -55,6 +55,7 @@ Examples:
 <person age range>::=[1-15]
 <person age range>::=[40-65,1-15]    
 ```
+
 In the first example meta data is generated for all years 1,2,...15.  In the second
 example above meta data is generated for all possible couples ranging in age from 40-65 
 years for the first partner and 1-15 years for the second partner.  There is a total
@@ -77,6 +78,7 @@ only student age is considered in deciding the age classification of the couple.
     Rising Star|Professional
 
 ```
+
 The subordinate partner proficiency is different from the team proficiency. For 
 Amateur-Amateur/Student-Student events the subordinate partner proficiency is lower
 than the team proficiency.  For Teacher-Student proficiencies, the partner proficiency

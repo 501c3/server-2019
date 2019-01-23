@@ -76,8 +76,8 @@ A sample file implementing this specification may be found at
 <disposition substyle #i>::=
     disposition: <disposition>
     substyle:
-        <substyle #1>: [<dance collection #1>,...,<dance collection #n]
-        <substyle #2>: [<dance collection #2>,...,<dance collection #m]
+        <substyle #1>: [<dance collection #1>,...,<dance collection #1n]
+        <substyle #2>: [<dance collection #2>,...,<dance collection #2m]
             ...
 <disposition>::= single-event|multiple-events
 
@@ -91,6 +91,7 @@ A sample file implementing this specification may be found at
   Quickstep|Argentine Tango|Peabody|Valtz|Melonga|2-Step|Nightclub|Polka|
   Triple Two|Performance
 ```
+
 A disposition of 'single-event' indicates that all dance collections specified in the 
 style field will be aggregated into 1 single event for each proficiency, age, sex etc.  
 A disposition of multiple-events indicates that each dance collection will constitute 

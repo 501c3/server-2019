@@ -1,4 +1,5 @@
 #Introduction
+
 The Georgia DanceSport Competition Registration Project is 
 open source system for classifying competitors and determine 
 their eligibility for various events in DanceSport. Georgia
@@ -157,6 +158,7 @@ The last JSON meta-data definition generated from the above block would be
 ```
 
 ####Generating Team Meta-Data from Yaml Definition File
+
 A typical team definition file would have an entry as follows:
 ```
 - type: Amateur-Amateur
@@ -185,7 +187,8 @@ form a team with the above classification.
 
 
 The last JSON record generated for a team class would look as follows:
-```$xslt
+
+```
 {"type": "Amateur-Amateur", "status": "Student-Student", "sex": "Female-Female", 
 "age": "Adult-Youth", "proficiency: "Pre Bronze"}
 ```
@@ -231,6 +234,7 @@ in the next section.
 ####Determining Team Eligibility for Events
 
 An entry in an event team specification would look as follows:
+
 ```
 ISTD Medal Exams-2019:
   - proficiency:
@@ -251,6 +255,4 @@ The above entry defines a collection of events and the teams eligible to enter t
 Any Bronze, Under 6 event can have teams of Pre Bronze, with Youth ages 1 to 4 years 
 and Male-Female combinations.  Youth ages 5 years and 6 years are also permitted ages
 to enter this event category.
-
-
 

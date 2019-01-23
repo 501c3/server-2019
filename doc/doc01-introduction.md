@@ -1,4 +1,5 @@
 #Georgia DanceSport Competition Registration Project
+
 In a DanceSport competition, the entities and their relationships are as follows:
 
 1. A **Person** is described by type (Professional or Amateur), status (Teacher or Student), 
