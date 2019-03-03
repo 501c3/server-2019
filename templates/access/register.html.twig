@@ -1,0 +1,270 @@
+{% extends 'base.html.twig' %}
+{% form_theme registerForm _self %}
+
+{% block title %}Register{% endblock %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    <link rel="stylesheet" href="{{ asset('css/register.css') }}">
+{% endblock %}
+
+{%- block form_row -%}
+    {%- set widget_attr = {} -%}
+    {%- if form.vars.errors|length>0 -%}
+        {% set widget_attr = {style: "background-color: yellow"} %}
+    {%- endif -%}
+    {%- if help is not empty -%}
+        {%- set widget_attr = {attr: {'aria-describedby': id ~"_help"}} -%}
+    {%- endif -%}
+    {{- form_label(form,null, {
+        label_attr: { class: 'sr-only' }
+    }) -}}
+    {{- form_errors(form) -}}
+    {{- form_widget(form, widget_attr) -}}
+    {{- form_help(form) -}}
+{%- endblock form_row -%}
+
+
+{% block _register_form_address_row %}
+    <div>{{ form_row(form.children.street) }}</div>
+    <div>{{ form_row(form.children.department) }}</div>
+    <div>{{ form_row(form.children.country) }}</div>
+    <div>
+        {{ form_row(form.children.city) }}
+        {{ form_row(form.children.state) }}
+        {{ form_row(form.children.postal) }}
+    </div>
+{% endblock %}
+
+
+{% block _register_form_contact_row %}
+  <div>{{ form_row(form.children.phone) }} {{ form_row(form.children.mobile) }}</div>
+  <div>{{ form_row(form.children.email) }}</div>
+  <div>{{ form_row(form.children.username) }}</div>
+  <div>{{ form_row(form.children.password) }}</div>
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script>
+    function focusMobilePrefix(id) {
+        var phone = document.getElementById(id);
+
+        if (phone.value.length == 0) {
+            phone.value = '(';
+        }
+    }
+
+    function blurMobilePrefix(id) {
+        var phone = document.getElementById(id);
+
+        if (phone.value === '(') {
+            phone.value = '';
+        }
+    }
+
+    function keyPress(e, id) {
+        var phone = document.getElementById(id);
+
+        if (phone.value.length === 0) {
+            phone.value = '(';
+        } else {
+            var prefix = phone.value.slice(0, 1);
+            if (prefix != '(') {
+                phone.value = '(' + phone.value;
+            }
+        }
+
+        if (e.key !== "Backspace") {
+            if (phone.value.length === 4) {
+                phone.value = phone.value + ')';
+            }
+            if (phone.value.length === 5) {
+                phone.value = phone.value + ' ';
+            }
+            if (phone.value.length === 9) {
+                phone.value = phone.value + '-';
+            }
+        }
+    }
+    </script>
+{% endblock javascripts %}
+
+
+
+{% block body %}
+    <div class="container">
+        <div class="row">
+            <div class="col-sm-12">
+                {{ form_start(registerForm,{'attr': {'class': 'form-register','novalidate': 'novalidate'}}) }}
+                <h1 class="h3 mb-3 font-weight-normal" align="center">Register</h1>
+                {% set errorBackground = {attr: {style: "background-color: lightyellow"}} %}
+                {% set emptyBackground = {} %}
+                <fieldset><legend>{{ form_label(registerForm.name) }}</legend>
+                        {% set children = registerForm.name.children %}
+                        {% if not registerForm.name.vars.valid %}
+                        <div class = "alert alert-danger" role="alert">
+                        {{ form_errors(children.first) }}
+                        {{ form_errors(children.last) }}
+                        </div>
+                        {% endif %}
+                        <div style="display: inline-flex">
+                        {{ form_widget(registerForm.name.children.title) }}
+                        {% if children.first.vars.valid %}
+                            {% set background=emptyBackground %}
+                        {% else %}
+                            {% set background=errorBackground %}
+                        {% endif %}
+                        {{ form_widget(children.first,background) }}
+                        {{ form_widget(children.middle) }}
+                        {% if children.last.vars.valid %}
+                            {% set background=emptyBackground %}
+                        {% else %}
+                            {% set background=errorBackground %}
+                        {% endif %}
+                        {{ form_widget(children.last,background) }}
+                        {{ form_widget(children.suffix) }}
+                        </div>
+                    </fieldset>
+
+                    <fieldset><legend>{{ form_label(registerForm.address)}}</legend>
+                        {% set children = registerForm.address.children %}
+                        {% if not registerForm.address.vars.valid %}
+                        <div class = "alert alert-danger" role="alert">
+                            {{ form_errors(children.street) }}
+                            {{ form_errors(children.country) }}
+                            {{ form_errors(children.city) }}
+                            {{ form_errors(children.state) }}
+                            {{ form_errors(children.postal) }}
+                        </div>
+                        {% endif %}
+                        <div style="display: inline-block">
+                            {% if children.street.vars.valid %}
+                                {% set background=emptyBackground %}
+                            {% else %}
+                                {% set background=errorBackground %}
+                            {% endif %}
+                            {{ form_widget(children.street,background) }}
+                            {{ form_widget(children.department) }}
+
+                            {% if children.country.vars.valid %}
+                                {% set background=emptyBackground %}
+                            {% else %}
+                                {% set background=errorBackground %}
+                            {% endif %}
+                            {{ form_widget(children.country,background) }}
+                        </div>
+                        <div style="display: inline-flex">
+                            {% if children.city.vars.valid %}
+                                {% set background=emptyBackground %}
+                            {% else %}
+                                {% set background=errorBackground %}
+                            {% endif %}
+                            {{ form_widget(children.city,background) }}
+                            {% if children.state.vars.valid %}
+                                {% set background=emptyBackground %}
+                            {% else %}
+                                {% set background=errorBackground %}
+                            {% endif %}
+                            {{ form_widget(children.state,background) }}
+                            {% if children.postal.vars.valid %}
+                                {% set background=emptyBackground %}
+                            {% else %}
+                                {% set background=errorBackground %}
+                            {% endif %}
+                            {{ form_widget(children.postal,background) }}
+                        </div>
+                    </fieldset>
+                    <fieldset><legend>{{ form_label(registerForm.contact, "Contact/Login") }}</legend>
+                        {% set children = registerForm.contact.children %}
+                        {% if not registerForm.contact.vars.valid %}
+                            <div class = "alert alert-danger" role="alert">
+                                {{ form_errors(children.phone) }}
+                                {{ form_errors(children.email) }}
+                                {{ form_errors(children.username) }}
+                                {{ form_errors(children.password.first) }}
+                                {{ form_errors(children.password.second) }}
+                                {{ form_errors(registerForm) }}
+                            </div>
+                        {% endif %}
+                        {% if app.session.flashbag.peek('error')|length>0 %}
+                            <div class = "alert alert-danger" role="alert">
+                                {% for message in app.flashes('error') %}
+                                    {{ message }}
+                                {% endfor %}
+                            </div>
+                        {% endif %}
+                        <div style="display: inline-flex">
+                            {% if children.phone.vars.valid %}
+                                {% set background=emptyBackground %}
+                            {% else %}
+                                {% set background=errorBackground %}
+                            {% endif %}
+                            {{ form_widget(children.phone,
+                                {'attr': {
+                                    'placeholder': 'Phone (XXX) XXX-XXXX',
+                                    'id': 'register_form_contact_phone',
+                                    'onfocus':'focusMobilePrefix("register_form_contact_phone")',
+                                    'onblur':'blurMobilePrefix("register_form_contact_phone")',
+                                    'onkeypress': 'keyPress(event,"register_form_contact_phone")',
+                                    'maxlength':14}}
+                                )}}
+                            {{ form_widget(children.mobile,
+                                {'attr': {
+                                    'placeholder': 'Mobile (XXX) XXX-XXXX',
+                                    'id': 'register_form_contact_mobile',
+                                    'onfocus':'focusMobilePrefix("register_form_contact_mobile")',
+                                    'onblur':'blurMobilePrefix("register_form_contact_mobile")',
+                                    'onkeypress': 'keyPress(event,"register_form_contact_mobile")',
+                                    'maxlength':14}}
+                            )}}
+                       </div>
+                        <div style="display: inline-block">
+                            {% if children.email.vars.valid %}
+                                {% set background=emptyBackground %}
+                            {% else %}
+                                {% set background=errorBackground %}
+                            {% endif %}
+                            {{ form_widget(children.email,background) }}
+                            {% if children.username.vars.valid %}
+                                {% set background=emptyBackground %}
+                            {% else %}
+                                {% set background=errorBackground %}
+                            {% endif %}
+                            {{ form_widget(children.username,background) }}
+                        </div>
+                        <div style="display: inline-flex">
+                            {% if children.password.first.vars.valid %}
+                                {% set background=emptyBackground %}
+                            {% else %}
+                                {% set background=errorBackground %}
+                            {% endif %}
+                            {{ form_widget(children.password.first,background) }}
+                            {% if children.password.second.vars.valid %}
+                                {% set background=emptyBackground %}
+                            {% else %}
+                                {% set background=errorBackground %}
+                            {% endif %}
+                            {{ form_widget(children.password.second,background) }}
+                        </div>
+                    </fieldset>
+                        {{ form_widget(registerForm.agree,background) }}
+                        {{ form_label(registerForm.agree,'Agree to terms.') }}
+                        {% if registerForm.agree.vars.valid %}
+                            {% set background=emptyBackground %}
+                        {% else %}
+                            {% set background=errorBackground %}
+                        {% endif %}
+                        {% if not registerForm.agree.vars.valid %}
+                        <div class = "alert alert-danger" role="alert">
+                        {{ form_errors(registerForm.agree, background) }}
+                        </div>
+                        {% endif %}
+                    <button class="btn btn-lg btn-primary btn-block" type="submit">
+                       Register
+                    </button>
+                {{ form_end(registerForm) }}
+            </div>
+        </div>
+    </div>
+{% endblock %}

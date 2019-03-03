@@ -256,3 +256,4 @@ Any Bronze, Under 6 event can have teams of Pre Bronze, with Youth ages 1 to 4 y
 and Male-Female combinations.  Youth ages 5 years and 6 years are also permitted ages
 to enter this event category.
 
+[Prev](./doc01-introduction.md) [Next](./doc03-primitives.md)

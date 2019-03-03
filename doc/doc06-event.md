@@ -93,7 +93,8 @@ A sample file implementing this specification may be found at
 ```
 
 A disposition of 'single-event' indicates that all dance collections specified in the 
-style field will be aggregated into 1 single event for each proficiency, age, sex etc.  
+substyle field will be aggregated into 1 single event for each proficiency, age, sex etc.  
 A disposition of multiple-events indicates that each dance collection will constitute 
 its own event for each proficiency, sex, age etc. 
 
+[Pref](./doc05-team.md) [Next](./doc07-event-team.md)

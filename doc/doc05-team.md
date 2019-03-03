@@ -85,3 +85,4 @@ than the team proficiency.  For Teacher-Student proficiencies, the partner profi
 is always higher then the team proficiency and the team proficiency corresponds to
 the proficiency of the student.
 
+[Prev](./doc04-person.md) [Next](./doc06-event.md)

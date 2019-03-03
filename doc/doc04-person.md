@@ -68,7 +68,8 @@ a year range such as 1-15 for 1 year to 15 years.
   Professional
 
 ```
-The meta data is generated from all combinations of domain values.  Example:
+The meta data is generated from all combinations of domain values.  
+Example:
 
 ```
 One particular combination would be 
@@ -80,3 +81,5 @@ years: 21
 designate: A
 
 ```
+
+[Pref](./doc03-primitives.md) [Next](./doc05-team.md)

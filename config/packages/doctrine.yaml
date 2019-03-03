@@ -12,7 +12,7 @@ doctrine:
             access:
                 dbname:   access
                 driver:   'pdo_mysql'
-                server_version: '7.2'
+                server_version: '8.0'
                 host:     '%env(DATABASE_HOST)%'
                 port: 3306
                 password: '%env(DATABASE_PASSWORD)%'
@@ -20,7 +20,7 @@ doctrine:
             competition:
                 dbname:   competition
                 driver:   'pdo_mysql'
-                server_version: '7.2'
+                server_version: '8.0'
                 host:     '%env(DATABASE_HOST)%'
                 port:     3306
                 user:     '%env(DATABASE_USER)%'
@@ -29,7 +29,7 @@ doctrine:
             model:
                 dbname:   model
                 driver:   'pdo_mysql'
-                server_version: '7.2'
+                server_version: '8.0'
                 host:     '%env(DATABASE_HOST)%'
                 port:     3306
                 user:     '%env(DATABASE_USER)%'
@@ -38,7 +38,7 @@ doctrine:
             sales:
                 dbname:   sales
                 driver:   'pdo_mysql'
-                server_version: '7.2'
+                server_version: '8.0'
                 host:     '%env(DATABASE_HOST)%'
                 port:     3306
                 user:     '%env(DATABASE_USER)%'
@@ -47,7 +47,7 @@ doctrine:
             setup:
                 dbname:   setup
                 driver:   'pdo_mysql'
-                server_version: '7.2'
+                server_version: '8.0'
                 host:     '%env(DATABASE_HOST)%'
                 port:     3306
                 user:     '%env(DATABASE_USER)%'
@@ -56,7 +56,7 @@ doctrine:
             score:
                 dbname:   score
                 driver:   'pdo_mysql'
-                server_version: '7.2'
+                server_version: '8.0'
                 host:     '%env(DATABASE_HOST)%'
                 port:     3306
                 user:     '%env(DATABASE_USER)%'

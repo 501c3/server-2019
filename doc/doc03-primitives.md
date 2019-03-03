@@ -50,6 +50,7 @@ and American styles of Ballroom.   Within International
 there are substyles of Standard and Latin.  These items
 would be described in the dictionary as follows:
 
+
 ```
 style:
     - {name: American, abbr: A, note: American Style}
@@ -60,3 +61,4 @@ substyle:
     
 ```
 
+[Prev](./doc02-overview.md) [Next](./doc04-person.md)

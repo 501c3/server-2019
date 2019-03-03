@@ -27,7 +27,8 @@ is defined which specifies which **Team Class** can enter a specific event.
 
 
 
-####Table of Contants
+####Table of Contents
+
 
 * [Overview](./doc02-overview.md)
 * [Primitives:Models,Domains,Values](./doc03-primitives.md)
@@ -35,3 +36,5 @@ is defined which specifies which **Team Class** can enter a specific event.
 * [Team Entity Generation File](./doc05-team.md)
 * [Event Entity Generation File](./doc06-event.md)
 * [Event-Team Relationship File](./doc07-event-team.md)
+
+[Next](./doc02-overview.md)

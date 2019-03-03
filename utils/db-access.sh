@@ -1,3 +1,3 @@
 #!/bin/bash
-./bin/console doctrine:mapping:convert --from-database 	--em=access --namespace='Entity\Access\' annotation ./src > /dev/null
+./bin/console doctrine:mapping:convert --from-database --filter=User --em=access --namespace='Entity\Access\' annotation ./src > /dev/null
 for i in $(ls src/Entity/Access/); do sed -i  's/Entity\\Access/App\\Entity\\Access/g' src/Entity/Access/${i}; done > /dev/null

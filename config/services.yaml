@@ -40,5 +40,5 @@ services:
 
     Symfony\Component\HttpFoundation\Session\Storage\Handler\PdoSessionHandler:
         arguments:
-        - 'mysql:dbname=access, host=localhost'
-        - { db_username: myuser, db_password: mypassword }
+        - 'mysql:dbname=access; host=localhost; port=3306'
+        - { db_username: root, db_password: root }

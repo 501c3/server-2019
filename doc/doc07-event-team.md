@@ -114,3 +114,5 @@ Pre Championship, Adult, Same Sex, Student-Student, Amateur-Amateur
 
 Teams with a proficiency of Gold Star 2 and Pre Championship and ages Y19-34, Y35-44
 and sex Male-Male and Female-Female may enter this event.
+
+[Prev](./doc06-event.md)

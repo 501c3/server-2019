@@ -43,7 +43,7 @@ class Sessions
     private $sessTime;
 
     /**
-     * @var \App\Entity\Access\User
+     * @var App\Entity\Access\User
      *
      * @ORM\ManyToOne(targetEntity="App\Entity\Access\User")
      * @ORM\JoinColumns({
