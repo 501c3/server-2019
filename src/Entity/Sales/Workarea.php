@@ -8,7 +8,7 @@ use Doctrine\ORM\Mapping as ORM;
  * Workarea
  *
  * @ORM\Table(name="workarea", indexes={@ORM\Index(name="fk_workarea_channel1_idx", columns={"channel_id"}), @ORM\Index(name="fk_workarea_tag1_idx", columns={"tag_id"})})
- * @ORM\Entity
+ * @ORM\Entity(repositoryClass="App\Repository\Sales\WorkareaRepository")
  */
 class Workarea
 {

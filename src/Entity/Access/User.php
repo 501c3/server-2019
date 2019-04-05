@@ -2,25 +2,14 @@
 
 namespace App\Entity\Access;
 
-use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
-use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Security\Core\User\UserInterface;
-use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
  * User
  *
- * @ORM\Table(name="user",
- *     uniqueConstraints={@ORM\UniqueConstraint(name="email_UNIQUE", columns={"email"}),
- *     @ORM\UniqueConstraint(name="username_UNIQUE", columns={"username"})},
- *     indexes={@ORM\Index(name="authenticator_UNIQUE", columns={"authenticator", "authenticator_id"})})
+ * @ORM\Table(name="user")
  * @ORM\Entity(repositoryClass="App\Repository\Access\UserRepository")
- *
- * @UniqueEntity(
- *     fields = {"email","username"},
- *     message = "Previously registered."
- * )
  */
 class User implements UserInterface
 {
@@ -36,47 +25,23 @@ class User implements UserInterface
     /**
      * @var string
      *
-     * @ORM\Column(name="username", type="string", length=180, nullable=false)
+     * @ORM\Column(name="username", type="string", length=80, nullable=false)
      */
     private $username;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="email", type="string", length=180, nullable=false)
-     *
-     * @Groups("main")
-     *
+     * @ORM\Column(name="password", type="string", length=180, nullable=false)
      */
-    private $email;
+    private $password;
 
     /**
      * @var bool
      *
      * @ORM\Column(name="enabled", type="boolean", nullable=false)
      */
-    private $enabled;
-
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="password", type="string", length=255, nullable=false)
-     */
-    private $password;
-
-    /**
-     * @var \DateTime|null
-     *
-     * @ORM\Column(name="password_requested_at", type="datetime", nullable=true)
-     */
-    private $passwordRequestedAt;
-
-    /**
-     * @var \DateTime|null
-     *
-     * @ORM\Column(name="last_login", type="datetime", nullable=true)
-     */
-    private $lastLogin;
+    private $enabled = '0';
 
     /**
      * @var \DateTime|null
@@ -84,6 +49,13 @@ class User implements UserInterface
      * @ORM\Column(name="expire_at", type="datetime", nullable=true)
      */
     private $expireAt;
+
+    /**
+     * @var \DateTime|null
+     *
+     * @ORM\Column(name="created_at", type="datetime", nullable=true)
+     */
+    private $createdAt;
 
     /**
      * @var string|null
@@ -95,54 +67,40 @@ class User implements UserInterface
     /**
      * @var string|null
      *
-     * @ORM\Column(name="authenticator_id", type="string", length=60, nullable=true)
+     * @ORM\Column(name="authenticator_id", type="string", length=80, nullable=true)
      */
     private $authenticatorId;
 
     /**
      * @var string|null
      *
-     * @ORM\Column(name="confirmation_token", type="string", length=255, nullable=true)
+     * @ORM\Column(name="confirm_token", type="string", length=120, nullable=true)
      */
-    private $confirmationToken;
+    private $confirmToken;
 
     /**
      * @var string|null
      *
-     * @ORM\Column(name="access_token", type="string", length=255, nullable=true)
+     * @ORM\Column(name="access_token", type="string", length=120, nullable=true)
      */
     private $accessToken;
 
     /**
      * @var string|null
      *
-     * @ORM\Column(name="refresh_token", type="string", length=255, nullable=true)
+     * @ORM\Column(name="refresh_token", type="string", length=120, nullable=true)
      */
     private $refreshToken;
 
     /**
-     * @var array|null
+     * @var array
      *
      * @ORM\Column(name="roles", type="json", nullable=true)
      */
     private $roles;
 
     /**
-     * @var array|null
-     *
-     * @ORM\Column(name="info", type="json", nullable=true)
-     */
-    private $info;
-
-    /**
-     * @var \DateTime|null
-     *
-     * @ORM\Column(name="created_at", type="datetime", nullable=true)
-     */
-    private $createdAt;
-
-    /**
-     * @var Collection
+     * @var \Doctrine\Common\Collections\Collection
      *
      * @ORM\ManyToMany(targetEntity="App\Entity\Access\Channel", inversedBy="user")
      * @ORM\JoinTable(name="user_has_channel",
@@ -150,14 +108,14 @@ class User implements UserInterface
      *     @ORM\JoinColumn(name="user_id", referencedColumnName="id")
      *   },
      *   inverseJoinColumns={
-     *     @ORM\JoinColumn(name="channel_channel", referencedColumnName="channel")
+     *     @ORM\JoinColumn(name="channel_id", referencedColumnName="id")
      *   }
      * )
      */
     private $channel;
 
     /**
-     * @var Collection
+     * @var \Doctrine\Common\Collections\Collection
      *
      * @ORM\ManyToMany(targetEntity="App\Entity\Access\Controller", inversedBy="user")
      * @ORM\JoinTable(name="user_has_controller",
@@ -172,7 +130,7 @@ class User implements UserInterface
     private $controller;
 
     /**
-     * @var Collection
+     * @var \Doctrine\Common\Collections\Collection
      *
      * @ORM\ManyToMany(targetEntity="App\Entity\Access\Workarea", inversedBy="user")
      * @ORM\JoinTable(name="user_has_workarea",
@@ -225,18 +183,18 @@ class User implements UserInterface
     /**
      * @return string
      */
-    public function getEmail(): string
+    public function getPassword(): string
     {
-        return $this->email;
+        return $this->password;
     }
 
     /**
-     * @param string $email
+     * @param string $password
      * @return User
      */
-    public function setEmail(string $email): User
+    public function setPassword(string $password): User
     {
-        $this->email = $email;
+        $this->password = $password;
         return $this;
     }
 
@@ -259,60 +217,6 @@ class User implements UserInterface
     }
 
     /**
-     * @return string
-     */
-    public function getPassword(): string
-    {
-        return $this->password;
-    }
-
-    /**
-     * @param string $password
-     * @return User
-     */
-    public function setPassword(string $password): User
-    {
-        $this->password = $password;
-        return $this;
-    }
-
-    /**
-     * @return \DateTime|null
-     */
-    public function getPasswordRequestedAt(): ?\DateTime
-    {
-        return $this->passwordRequestedAt;
-    }
-
-    /**
-     * @param \DateTime|null $passwordRequestedAt
-     * @return User
-     */
-    public function setPasswordRequestedAt(?\DateTime $passwordRequestedAt): User
-    {
-        $this->passwordRequestedAt = $passwordRequestedAt;
-        return $this;
-    }
-
-    /**
-     * @return \DateTime|null
-     */
-    public function getLastLogin(): ?\DateTime
-    {
-        return $this->lastLogin;
-    }
-
-    /**
-     * @param \DateTime|null $lastLogin
-     * @return User
-     */
-    public function setLastLogin(?\DateTime $lastLogin): User
-    {
-        $this->lastLogin = $lastLogin;
-        return $this;
-    }
-
-    /**
      * @return \DateTime|null
      */
     public function getExpireAt(): ?\DateTime
@@ -331,55 +235,21 @@ class User implements UserInterface
     }
 
     /**
-     * @return array
+     * @return \DateTime|null
      */
-    public function getRoles(): array
+    public function getCreatedAt(): ?\DateTime
     {
-        return $this->roles;
+        return $this->createdAt;
     }
 
     /**
-     * @param array $roles
+     * @param \DateTime|null $createdAt
      * @return User
      */
-    public function setRoles(array $roles): User
+    public function setCreatedAt(?\DateTime $createdAt): User
     {
-        $this->roles = $roles;
+        $this->createdAt = $createdAt;
         return $this;
-    }
-
-    /**
-     * Returns the salt that was originally used to encode the password.
-     *
-     * This can return null if the password was not encoded using a salt.
-     *
-     * @return string|null The salt
-     */
-    public function getSalt()
-    {
-       return null;
-    }
-
-    /**
-     * Removes sensitive data from the user.
-     *
-     * This is important if, at any given point, sensitive information like
-     * the plain-text password is stored on this object.
-     */
-    public function eraseCredentials()
-    {
-        // TODO: Implement eraseCredentials() method.
-    }
-
-    public function getAvatarUrl(int $size=null):string
-    {
-        $url = 'https://robohash.org/'.$this->getEmail();
-
-        if ($size) {
-            $url .= sprintf('?size=%dx%d',$size,$size);
-        }
-
-        return $url;
     }
 
     /**
@@ -421,18 +291,18 @@ class User implements UserInterface
     /**
      * @return string|null
      */
-    public function getConfirmationToken(): ?string
+    public function getConfirmToken(): ?string
     {
-        return $this->confirmationToken;
+        return $this->confirmToken;
     }
 
     /**
-     * @param string|null $confirmationToken
+     * @param string|null $confirmToken
      * @return User
      */
-    public function setConfirmationToken(?string $confirmationToken): User
+    public function setConfirmToken(?string $confirmToken): User
     {
-        $this->confirmationToken = $confirmationToken;
+        $this->confirmToken = $confirmToken;
         return $this;
     }
 
@@ -473,99 +343,91 @@ class User implements UserInterface
     }
 
     /**
-     * @return array|null
+     * @return array
      */
-    public function getInfo(): ?array
+    public function getRoles(): array
     {
-        return $this->info;
+        return $this->roles;
     }
 
     /**
-     * @param array|null $info
+     * @param array $roles
      * @return User
      */
-    public function setInfo(?array $info): User
+    public function setRoles(array $roles): User
     {
-        $this->info = $info;
+        $this->roles = $roles;
         return $this;
     }
 
-    /**
-     * @return \DateTime|null
-     */
-    public function getCreatedAt(): ?\DateTime
+    public function getSalt()
     {
-        return $this->createdAt;
+    }
+
+    public function eraseCredentials()
+    {
+        // TODO: Implement eraseCredentials() method.
     }
 
     /**
-     * @param \DateTime|null $createdAt
-     * @return User
+     * @return \Doctrine\Common\Collections\Collection
      */
-    public function setCreatedAt(?\DateTime $createdAt): User
-    {
-        $this->createdAt = $createdAt;
-        return $this;
-    }
-
-    /**
-     * @return Collection
-     */
-    public function getChannel(): Collection
+    public function getChannel(): \Doctrine\Common\Collections\Collection
     {
         return $this->channel;
     }
 
     /**
-     * @param Collection $channel
+     * @param \Doctrine\Common\Collections\Collection $channel
      * @return User
      */
-    public function setChannel(Collection $channel): User
+    public function setChannel(\Doctrine\Common\Collections\Collection $channel): User
     {
         $this->channel = $channel;
         return $this;
     }
 
     /**
-     * @return Collection
+     * @return \Doctrine\Common\Collections\Collection
      */
-    public function getController(): Collection
+    public function getController(): \Doctrine\Common\Collections\Collection
     {
         return $this->controller;
     }
 
     /**
-     * @param Collection $controller
+     * @param \Doctrine\Common\Collections\Collection $controller
      * @return User
      */
-    public function setController(Collection $controller): User
+    public function setController(\Doctrine\Common\Collections\Collection $controller): User
     {
         $this->controller = $controller;
         return $this;
     }
 
     /**
-     * @return Collection
+     * @return \Doctrine\Common\Collections\Collection
      */
-    public function getWorkarea(): Collection
+    public function getWorkarea(): \Doctrine\Common\Collections\Collection
     {
         return $this->workarea;
     }
 
     /**
-     * @param Collection $workarea
+     * @param \Doctrine\Common\Collections\Collection $workarea
      * @return User
      */
-    public function setWorkarea(Collection $workarea): User
+    public function setWorkarea(\Doctrine\Common\Collections\Collection $workarea): User
     {
         $this->workarea = $workarea;
         return $this;
     }
 
 
-    /** @return string */
-    public function getName() : string
-    {
-        return "This name.";
-    }
+
+
+     public function __toString()
+     {
+         return $this->username;
+     }
 }

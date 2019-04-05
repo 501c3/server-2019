@@ -2,13 +2,14 @@
 
 namespace App\Entity\Sales;
 
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
  * Picture
  *
  * @ORM\Table(name="picture")
- * @ORM\Entity
+ * @ORM\Entity(repositoryClass="App\Repository\Sales\PictureRepository")
  */
 class Picture
 {
@@ -40,7 +41,7 @@ class Picture
      */
     public function __construct()
     {
-        $this->form = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->form = new ArrayCollection();
     }
 
 }

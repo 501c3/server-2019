@@ -20,7 +20,7 @@
         </div>
     {% endif %}
     <nav class="navbar navbar-expand-lg navbar-dark navbar-bg mb-5">
-        <img src="/images/dancers-icon.png" width="50px", height="auto" >
+        <img src="/image/dancers-icon.png')" width="50px", height="auto" >
         <a style="margin-left: 75px;" class="navbar-brand space-brand" href="#{# path('app_homepage') #}">Georgia DanceSport</a>
         <button class="navbar-toggler"
                 type="button"
@@ -36,7 +36,7 @@
                {% if is_granted('ROLE_USER') %}
                     <li class="nav-item dropdown" style="margin-right: 75px;">
                         <a class="nav-link dropdown-toggle" href="http://example.com" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                            <img class="nav-profile-img rounded-circle" src="{{ app.user.avatarUrl(100) }}">
+                            <img class="nav-profile-img " src="{{asset('images/gear-icon.png') }}">
                         </a>
                         <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
                             <a class="dropdown-item" href="{{ path('access_profile') }}">Profile</a>

@@ -8,7 +8,7 @@ use Doctrine\ORM\Mapping as ORM;
  * Receipts
  *
  * @ORM\Table(name="receipts", indexes={@ORM\Index(name="fk_receipts_processor1_idx", columns={"processor_id"}), @ORM\Index(name="fk_receipts_workarea1_idx", columns={"workarea_id"})})
- * @ORM\Entity
+ * @ORM\Entity(repositoryClass="App\Repository\Sales\ReceiptsRepository")
  */
 class Receipts
 {

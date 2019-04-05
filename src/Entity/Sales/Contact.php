@@ -8,7 +8,7 @@ use Doctrine\ORM\Mapping as ORM;
  * Contact
  *
  * @ORM\Table(name="contact", indexes={@ORM\Index(name="idx_email", columns={"email"}), @ORM\Index(name="idx_send_elink", columns={"pin"})})
- * @ORM\Entity
+ * @ORM\Entity(repositoryClass="App\Repository\Sales\ContactRepository")
  */
 class Contact
 {

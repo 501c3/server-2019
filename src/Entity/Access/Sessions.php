@@ -31,19 +31,19 @@ class Sessions
     /**
      * @var int
      *
-     * @ORM\Column(name="sess_lifetime", type="integer", nullable=false, options={"unsigned"=true})
-     */
-    private $sessLifetime;
-
-    /**
-     * @var int
-     *
      * @ORM\Column(name="sess_time", type="integer", nullable=false, options={"unsigned"=true})
      */
     private $sessTime;
 
     /**
-     * @var App\Entity\Access\User
+     * @var int
+     *
+     * @ORM\Column(name="sess_lifetime", type="integer", nullable=false, options={"unsigned"=true})
+     */
+    private $sessLifetime;
+
+    /**
+     * @var \App\Entity\Access\User
      *
      * @ORM\ManyToOne(targetEntity="App\Entity\Access\User")
      * @ORM\JoinColumns({
@@ -51,6 +51,101 @@ class Sessions
      * })
      */
     private $user;
+
+    /**
+     * @return binary
+     */
+    public function getSessId(): binary
+    {
+        return $this->sessId;
+    }
+
+    /**
+     * @param binary $sessId
+     * @return Sessions
+     */
+    public function setSessId(binary $sessId): Sessions
+    {
+        $this->sessId = $sessId;
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getSessData(): string
+    {
+        return $this->sessData;
+    }
+
+    /**
+     * @param string $sessData
+     * @return Sessions
+     */
+    public function setSessData(string $sessData): Sessions
+    {
+        $this->sessData = $sessData;
+        return $this;
+    }
+
+    /**
+     * @return int
+     */
+    public function getSessTime(): int
+    {
+        return $this->sessTime;
+    }
+
+    /**
+     * @param int $sessTime
+     * @return Sessions
+     */
+    public function setSessTime(int $sessTime): Sessions
+    {
+        $this->sessTime = $sessTime;
+        return $this;
+    }
+
+    /**
+     * @return int
+     */
+    public function getSessLifetime(): int
+    {
+        return $this->sessLifetime;
+    }
+
+    /**
+     * @param int $sessLifetime
+     * @return Sessions
+     */
+    public function setSessLifetime(int $sessLifetime): Sessions
+    {
+        $this->sessLifetime = $sessLifetime;
+        return $this;
+    }
+
+    /**
+     * @return User
+     */
+    public function getUser(): User
+    {
+        return $this->user;
+    }
+
+    /**
+     * @param User $user
+     * @return Sessions
+     */
+    public function setUser(User $user): Sessions
+    {
+        $this->user = $user;
+        return $this;
+    }
+
+    public function __string()
+    {
+        return $this->sessId;
+    }
 
 
 }

@@ -25,17 +25,11 @@ class UniqueUserValidator extends ConstraintValidator
         /* @var $constraint App\Validator\UniqueUser */
         /** @var  Registration $value */
         $contact = $value->getContact();
-        $email = $contact->getEmail();
         $username = $contact->getUsername();
         $userByName = $this->userRepository->findOneBy(['username'=>$username]);
-        $userByEmail = $this->userRepository->findOneBy(['email'=>$email]);
         if($userByName) {
             $this->context->buildViolation($constraint->message)
                 ->setParameter('{{value}}', $username)->addViolation();
-        }
-        if($userByEmail) {
-            $this->context->buildViolation($constraint->message)
-                ->setParameter('{{value}}', $email)->addViolation();
         }
     }
 }

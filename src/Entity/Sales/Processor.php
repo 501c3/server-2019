@@ -8,7 +8,7 @@ use Doctrine\ORM\Mapping as ORM;
  * Processor
  *
  * @ORM\Table(name="processor", indexes={@ORM\Index(name="fk_processor_channel1_idx", columns={"channel_id"})})
- * @ORM\Entity
+ * @ORM\Entity(repositoryClass="App\Repository\Sales\ProcessorRepository")
  */
 class Processor
 {

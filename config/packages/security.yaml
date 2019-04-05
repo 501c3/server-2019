@@ -48,5 +48,5 @@ security:
         - { path: ^/$, roles: IS_AUTHENTICATED_ANONYMOUSLY}
         - { path: ^/access/(login|register)$, roles: IS_AUTHENTICATED_ANONYMOUSLY}
         - { path: ^/access/profile, roles: [IS_AUTHENTICATED_FULLY] }
-        - { path: ^/access/admin, roles: IS_AUTHENTICATED_FULLY}
+        - { path: ^/admin, roles: IS_AUTHENTICATED_FULLY}
         # - { path: ^/profile, roles: ROLE_USER }

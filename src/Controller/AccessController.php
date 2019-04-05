@@ -13,16 +13,15 @@
 namespace App\Controller;
 
 
-use App\DataTransformer\RegistrationToUserTransformer;
+
 use App\Form\RegisterFormType;
+use App\Repository\Access\PersonRepository;
 use App\Repository\Access\UserRepository;
 use App\Security\AccessAuthenticator;
-use Doctrine\DBAL\Exception\UniqueConstraintViolationException;
+use EasyCorp\Bundle\EasyAdminBundle\Search\Paginator;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpFoundation\Session\Flash\FlashBag;
 use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 use Symfony\Component\Security\Guard\GuardAuthenticatorHandler;
 use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
 
@@ -35,6 +34,8 @@ class AccessController extends BaseController
      */
     public function login(AuthenticationUtils $authenticationUtils) : Response
     {
+
+
         // get the login error if there is one
         $error = $authenticationUtils->getLastAuthenticationError();
 
@@ -53,6 +54,7 @@ class AccessController extends BaseController
      *
      * @param Request $request
      * @param UserRepository $userRepository
+     * @param PersonRepository $personRepository
      * @param GuardAuthenticatorHandler $guardHandler
      * @param AccessAuthenticator $accessAuthenticator
      * @return Response
@@ -61,6 +63,8 @@ class AccessController extends BaseController
      */
     public  function register(Request $request,
                               UserRepository $userRepository,
+                              PersonRepository $personRepository,
+
                               GuardAuthenticatorHandler $guardHandler,
                               AccessAuthenticator $accessAuthenticator) : Response
     {
@@ -68,20 +72,26 @@ class AccessController extends BaseController
         $form->handleRequest($request);
         if($form->isSubmitted() && $form->isValid()) {
             $registration = $form->getData();
-//            try{
-                $user = $userRepository->register($registration);
-                return $guardHandler->authenticateUserAndHandleSuccess(
-                    $user,
-                    $request,
-                    $accessAuthenticator,
-                    'main');
-//            } catch (UniqueConstraintViolationException $e) {
-//                $this->addFlash('error',"Username or email was previously used.  Please choose another.");
-//            }
+            $user = $userRepository->register($registration);
+            $personRepository->register($registration,$user);
+            return $guardHandler->authenticateUserAndHandleSuccess(
+                                    $user,
+                                    $request,
+                                    $accessAuthenticator,
+                                    'main');
         }
         return $this->render('access/register.html.twig',[
             'registerForm'=>$form->createView()
         ]);
+    }
+
+    /**
+     * @Route("/access/home", name = "access_home")
+     */
+
+
+    public function home(){
+        return $this->render('access/home.html.twig');
     }
 
 

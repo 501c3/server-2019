@@ -35,7 +35,7 @@ services:
         tags:
           - {name: 'process.update', event: '\App\Signal\ProcessEvent' }
 
-    App\Common\DbBuildSetupTeamClass:
+    App\Common\YamlDbSetupTeamClass:
         public: true
 
     Symfony\Component\HttpFoundation\Session\Storage\Handler\PdoSessionHandler:

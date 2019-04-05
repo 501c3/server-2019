@@ -15,22 +15,27 @@ namespace App\Repository\Access;
 
 use App\DataTransformer\RegistrationToUserTransformer;
 use App\Entity\Access\User;
+use App\Form\Model\Address;
+use App\Form\Model\Contact;
+use App\Form\Model\Name;
 use App\Form\Model\Registration;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Common\Persistence\ManagerRegistry;
+use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 
 class UserRepository extends ServiceEntityRepository
 {
+
     /**
-     * @var RegistrationToUserTransformer
+     * @var UserPasswordEncoderInterface
      */
-    private $transformer;
+    private $userPasswordEncoder;
 
     public function __construct(ManagerRegistry $registry,
-                                RegistrationToUserTransformer $transformer)
+                                UserPasswordEncoderInterface $userPasswordEncoder)
     {
         parent::__construct($registry,User::class);
-        $this->transformer = $transformer;
+        $this->userPasswordEncoder = $userPasswordEncoder;
     }
 
     /**
@@ -41,15 +46,17 @@ class UserRepository extends ServiceEntityRepository
      */
     public function register(Registration $registration) : User
     {
-        $user = $this->transformer->transform($registration);
-        $em = $this->getEntityManager();
+        $contact = $registration->getContact();
+        $user = new User();
+        $user->setUsername($contact->getUsername());
+        $user->setCreatedAt(new \DateTime('now'))
+            ->setEnabled(true)
+            ->setRoles(['ROLE_USER']);
+        $user->setPassword($this->userPasswordEncoder->encodePassword($user,$contact->getPassword()))
+            ->setEnabled(false);
+        $em=$this->getEntityManager();
         $em->persist($user);
         $em->flush();
         return $user;
-    }
-
-    public function getEntityManager()
-    {
-        return parent::getEntityManager();
     }
 }

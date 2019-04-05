@@ -2,13 +2,14 @@
 
 namespace App\Entity\Sales;
 
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
  * Form
  *
  * @ORM\Table(name="form", indexes={@ORM\Index(name="fk_form_tag1_idx", columns={"tag_id"}), @ORM\Index(name="fk_form_workarea1_idx", columns={"workarea_id"})})
- * @ORM\Entity
+ * @ORM\Entity(repositoryClass="App\Repository\Sales\FormRepository")
  */
 class Form
 {
@@ -53,7 +54,7 @@ class Form
     private $tag;
 
     /**
-     * @var \App\Entity\Sales\Workarea
+     * @var \App\App\Entity\Sales\Workarea
      *
      * @ORM\ManyToOne(targetEntity="App\Entity\Sales\Workarea")
      * @ORM\JoinColumns({
@@ -82,7 +83,7 @@ class Form
      */
     public function __construct()
     {
-        $this->picture = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->picture = new ArrayCollection();
     }
 
 }

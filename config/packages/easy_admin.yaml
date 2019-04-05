@@ -1,10 +1,25 @@
 easy_admin:
-    entities:
-         User:
-             class: App\Entity\Access\User
-             list:
-               fields: ['id','name','username','email','enabled']
+    site_name: Access Administration
+    design:
+        brand_color: darkblue
+        assets:
+            css: ['css/admin.css']
+    list:
+      title: 'List of %%entity_name%%s'
 
-#        - App\Entity\Product
+    entities:
+      User:
+        class: App\Entity\Access\User
+        label: Access/Users
+        help: Users with administrative access.
+        search:
+          help: Search using last name.
+      Person:
+        class: App\Entity\Access\Person
+        label: Access/Persons
+        help: Users with administrative access.
+
+
+
 #        - App\Entity\Category
 #        - App\Entity\User

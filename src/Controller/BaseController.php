@@ -26,8 +26,13 @@ abstract class BaseController extends AbstractController
         return $this->render('base.html.twig');
     }
 
-    public function getUser() : User
+
+    /**
+     * @return \Symfony\Component\HttpFoundation\Response
+     * @Route("/api/sales", name="api_sales")
+     */
+    public function sales()
     {
-        return parent::getUser();
+        return $this->render('base');
     }
 }

@@ -1,0 +1,15 @@
+parameters:
+    env(DATABASE_HOST): localhost
+    env(DATABASE_PASSWORD): root
+    env(DATABASE_USER): user
+
+services:
+    _defaults:
+        autowire: true
+        autoconfigure: true
+
+    App\Api\SalesContext:
+        public: true
+        arguments:
+            - "@kernel"
+

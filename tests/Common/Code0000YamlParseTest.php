@@ -28,13 +28,14 @@ class Code0000YamlParseTest extends KernelTestCase
 
 
     /**
-     * @expectedException  \Exception
-     * @expectedExceptionMessage file_get_contents(): Filename cannot be empty
-     * @expectedExceptionCode 2
+     * @expectedException  \App\Common\AppParseException
+     * @expectedExceptionMessage Unhandled condition in source file: YamlPosition.php.
+     * @expectedExceptionCode \App\Common\AppExceptionCodes::UNHANDLED_CONDITION
+     * @throws \Exception
      */
     public function test0010EmptyString()
     {
-        YamlPosition::yamlAddPosition( "" );
+        YamlPosition::yamlAddPosition( "non_exist" );
     }
 
     /**
@@ -68,6 +69,7 @@ class Code0000YamlParseTest extends KernelTestCase
      */
     public function test0040PositionCorrect()
     {
+
         $file= __DIR__ . '/data-0040-position-isolate.yml';
         $actual = YamlPosition::yamlAddPosition($file);
         $expectedIsolatedData = Yaml::parseFile($file);
@@ -91,7 +93,7 @@ class Code0000YamlParseTest extends KernelTestCase
 
     /**
      * @expectedException \App\Common\AppParseException
-     * @expectedExceptionMessage  Found 'key99' at (row:10,col:10) in file unavailable.  Expected [key1|key2|key3].
+     * @expectedExceptionMessage Found 'key99' at (row:10,col:10) but expected [key1|key2|key3] in file:
      * @expectedExceptionCode \App\Common\AppExceptionCodes::FOUND_BUT_EXPECTED
      * @throws AppParseException
      */

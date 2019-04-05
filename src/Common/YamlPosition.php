@@ -7,7 +7,6 @@
  */
 
 namespace App\Common;
-use Symfony\Component\Yaml\Yaml;
 
 class YamlPosition
 {
@@ -46,13 +45,16 @@ class YamlPosition
      */
     public static function yamlAddPosition(string $file)
     {
-        $string=file_get_contents($file);
-        $data=Yaml::parse($string);
+        $string = file_exists($file)?file_get_contents($file):false;
+        if(!$string) {
+            throw new AppParseException(AppExceptionCodes::UNHANDLED_CONDITION,[__FILE__]);
+        }
+        $data=yaml_parse_file($file);
         if(is_null($data)) {
             throw new AppParseException(AppExceptionCodes::UNHANDLED_CONDITION, [__FILE__]);
         }
         $rowColumns=self::rowColumn($string);
-        $positions=Yaml::parse($rowColumns);
+        $positions=yaml_parse($rowColumns);
         $stringPosition = self::stringPosition($data,$positions);
         return $stringPosition;
     }
@@ -143,7 +145,7 @@ class YamlPosition
                 }
                 return $result;
             }
-        } elseif (is_string($data) && is_string($positions)) {
+        } elseif ((is_string($data)||is_numeric($data)||is_bool($data)) && is_string($positions)) {
             return $data.'|'.$positions;
         }
         return null;
@@ -192,19 +194,25 @@ class YamlPosition
         $match=[];
         $char=substr($string,$col,1);
         $rest=substr($string,$col);
+        if(preg_match('/state/',$string)){
+            $a=$string;
+        }
         while($col<$len){
             if(in_array($char, [' ',',','{','}','[',']','-',':'])){
                 $col++;
                 array_push($array,$char);
-            }elseif (preg_match('/#.*/', $rest, $match)){
-                $size = strlen( $match[0] );
-                $position = sprintf( 'R%dC%d',$row,$col+1);
-                array_push( $array, $position );
+            }elseif (preg_match('/#.*/', $rest, $match)) {
+                $size = strlen($match[0]);
+                $position = sprintf('R%dC%d', $row, $col + 1);
+                array_push($array, $position);
                 $col += $size;
-            }elseif (preg_match('/[\<]*\w+([\s\-\.\@\<\>\+\&]*\w?)*/',$rest, $match)) {
-                $size = strlen( $match[0] );
-                $position = sprintf( 'R%dC%d',$row,$col+1);
-                array_push( $array, $position );
+            }elseif (preg_match('/[\<]*\w+([\s\-\/\.\@\<\>\+\&]*\w?)*/',$rest, $match)) {
+                $size = strlen($match[0]);
+                if($size==1 and $match[0]==$rest){
+                  return;
+                }
+                $position = sprintf('R%dC%d',$row,$col+1);
+                array_push($array, $position);
                 $col += $size;
             }else{
                 $col++;
